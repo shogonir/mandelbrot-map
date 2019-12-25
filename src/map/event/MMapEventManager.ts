@@ -8,35 +8,103 @@ export default class MMapEventManager {
   previousX: number | undefined
   previousY: number | undefined
 
+  canvas: HTMLCanvasElement
+  onMove: (motion: Vector2) => void | undefined
+
+  onMouseDown: () => void | undefined
+  onContextMenu: () => void | undefined
+  onMouseUp: () => void | undefined
+  onMouseOut: () => void | undefined
+  onMouseMove: (event: MouseEvent) => void | undefined
+
   constructor(canvas: HTMLCanvasElement, onMove: (motion: Vector2) => void) {
+    this.canvas = canvas
+    this.onMove = onMove
     this.isMouseDown = false
     this.isMouseDoubleDown = false
     this.previousX = undefined
     this.previousY = undefined
 
+    this.canvas.oncontextmenu = () => false
+
+    this.setupMouseEvents()
+  }
+
+  setupMouseEvents() {
+    this.setupMouseDownEvent()
+    this.setupContextMenuEvent()
+    this.setupMouseUpEvent()
+    this.setupMouseOutEvent()
+    this.setupMouseMoveEvent()
+  }
+
+  setupMouseDownEvent() {
+    if (this.onMouseDown !== undefined) {
+      return
+    }
+  
     const self = this
-    canvas.oncontextmenu = () => false
-    canvas.addEventListener('mousedown', () => {
+    this.onMouseDown = () => {
       self.isMouseDown = true
       self.previousX = undefined
       self.previousY = undefined
-    })
-    canvas.addEventListener('contextmenu', () => {
+    }
+
+    this.canvas.addEventListener('mousedown', this.onMouseDown)
+  }
+
+  setupContextMenuEvent() {
+    if (this.onContextMenu !== undefined) {
+      return
+    }
+
+    const self = this
+    this.onContextMenu = () => {
       if (self.isMouseDown) {
         self.isMouseDoubleDown = true
         self.previousX = undefined
         self.previousY = undefined
       }
-    })
-    canvas.addEventListener('mouseup', () => {
+    }
+    
+    this.canvas.addEventListener('contextmenu', this.onContextMenu)
+  }
+
+  setupMouseUpEvent() {
+    if (this.onMouseUp !== undefined) {
+      return
+    }
+
+    const self = this
+    this.onMouseUp = () => {
       self.isMouseDown = false
       self.isMouseDoubleDown = false
-    })
-    canvas.addEventListener('mouseout', () => {
+    }
+
+    this.canvas.addEventListener('mouseup', this.onMouseUp)
+  }
+
+  setupMouseOutEvent() {
+    if (this.onMouseOut !== undefined) {
+      return
+    }
+
+    const self = this
+    this.onMouseOut = () => {
       self.isMouseDown = false
       self.isMouseDoubleDown = false
-    })
-    canvas.addEventListener('mousemove', (event: MouseEvent) => {
+    }
+
+    this.canvas.addEventListener('mouseout', this.onMouseOut)
+  }
+
+  setupMouseMoveEvent() {
+    if (this.onMouseMove !== undefined) {
+      return
+    }
+
+    const self = this
+    this.onMouseMove = (event: MouseEvent) => {
       if (self.isMouseDown) {
 
         if (self.previousX === undefined || self.previousY === undefined) {
@@ -48,11 +116,15 @@ export default class MMapEventManager {
         const moveX = event.offsetX - self.previousX
         const moveY = event.offsetY - self.previousY
 
-        onMove(new Vector2(moveX, moveY))
+        if (self.onMove !== undefined) {
+          self.onMove(new Vector2(moveX, moveY))
+        }
 
         self.previousX = event.offsetX
         self.previousY = event.offsetY
       }
-    })
+    }
+
+    this.canvas.addEventListener('mousemove', this.onMouseMove)
   }
 }
