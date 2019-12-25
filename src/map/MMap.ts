@@ -3,24 +3,23 @@ import Vector2 from '../common/Vector2'
 import MMapController from './control/MMapController'
 import MMapStatus from './status/MMapStatus'
 import MMapEventManager from './event/MMapEventManager'
+import MMapCanvasController from './canvas/MMapCanvasController'
 
 export default class MMap {
 
   status: MMapStatus
+
   controller: MMapController
   eventManager: MMapEventManager
+  canvasController: MMapCanvasController
 
   canvas: HTMLCanvasElement
-  context: CanvasRenderingContext2D
 
   constructor(canvasId: string, center: Vector2, zoom: number) {
     this.status = new MMapStatus(center, zoom)
     this.setupCanvas(canvasId)
-    
-    const onMove = (motion: Vector2) => {
-      console.log('onMove', motion)
-    }
-    this.eventManager = new MMapEventManager(this.canvas, onMove)
+    this.setupEventManager()
+    this.setupCanvasController()
   }
 
   setupCanvas(canvasId: string) {
@@ -32,6 +31,16 @@ export default class MMap {
     const element: HTMLElement = mayBeElement
 
     this.canvas = element as HTMLCanvasElement
-    this.context = this.canvas.getContext('2d')
+  }
+
+  setupEventManager() {
+    const onMove = (motion: Vector2) => {
+      console.log('onMove', motion)
+    }
+    this.eventManager = new MMapEventManager(this.canvas, onMove)
+  }
+
+  setupCanvasController() {
+    this.canvasController = new MMapCanvasController(this.canvas)
   }
 }

@@ -6,7 +6,10 @@ module.exports = {
       {
         test: /\.ts$/,
         use: 'ts-loader'
-      }
+      },
+      {
+        test: /.glsl$/,
+        use: 'ts-shader-loader',}
     ]
   },
   resolve: {
