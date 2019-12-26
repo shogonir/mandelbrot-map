@@ -21,17 +21,36 @@ export default class MMapCanvasController {
   }
 
   setupProgram() {
+    const axisWidth = 0.001
+
+    // x-axis
     this.polygonProgram = new SingleColorPolygonProgram(this.gl)
     this.polygonProgram.setup()
     this.polygonProgram.setAttribute(
-      new Color(0, 0, 1.0, 1.0),
+      new Color(0, 0, 0, 1.0),
       [
-        -0.5, 0.5, 0.0,
-        -0.5, -0.5, 0.0,
-        0.5, 0.5, 0.0,
-        -0.5, -0.5, 0.0,
-        0.5, -0.5, 0.0,
-        0.5, 0.5, 0.0
+        -1, axisWidth, 0.0,
+        -1, -axisWidth, 0.0,
+        1, axisWidth, 0.0,
+        -1, -axisWidth, 0.0,
+        1, -axisWidth, 0.0,
+        1, axisWidth, 0.0
+      ]
+    )
+    this.polygonProgram.draw()
+
+    // y-axis
+    this.polygonProgram = new SingleColorPolygonProgram(this.gl)
+    this.polygonProgram.setup()
+    this.polygonProgram.setAttribute(
+      new Color(0, 0, 0, 1.0),
+      [
+        -axisWidth, 1, 0.0,
+        -axisWidth, -1, 0.0,
+        axisWidth, 1, 0.0,
+        -axisWidth, -1, 0.0,
+        axisWidth, -1, 0.0,
+        axisWidth, 1, 0.0
       ]
     )
     this.polygonProgram.draw()
