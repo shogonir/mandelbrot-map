@@ -5,15 +5,15 @@ import Numbers from '../util/Numbers'
 
 export default class MandelbrotSet {
 
-  static willConverge(c: ComplexNumber, iteration: number): boolean {
+  static willConverge(c: ComplexNumber, iteration: number): number {
     let z = new ComplexNumber(0, 0)
     for (let index of Numbers.range(0, iteration)) {
       z = z.multiply(z).add(c)
       if (z.abs() > 2) {
-        return false
+        return index / iteration
       }
     }
-    return true
+    return 1.0
   }
 
   static draw(id: string, tile: TileNumber, iteration: number) {
@@ -40,17 +40,21 @@ export default class MandelbrotSet {
       for (let x = tile.left(); x < tile.right(); x += tile.side / canvas.width) {
         const z = new ComplexNumber(x, y)
         const willConverge = MandelbrotSet.willConverge(z, iteration)
-        if (willConverge) {
-          data[pixelIndex * 4 + 0] = 255
-          data[pixelIndex * 4 + 1] = 255
-          data[pixelIndex * 4 + 2] = 255
-          data[pixelIndex * 4 + 3] = 255
-        } else {
-          data[pixelIndex * 4 + 0] = 0
-          data[pixelIndex * 4 + 1] = 0
-          data[pixelIndex * 4 + 2] = 0
-          data[pixelIndex * 4 + 3] = 255
-        }
+        data[pixelIndex * 4 + 0] = 255 * willConverge  // r
+        data[pixelIndex * 4 + 1] = 255 * willConverge  // g
+        data[pixelIndex * 4 + 2] = 255 * willConverge  // b
+        data[pixelIndex * 4 + 3] = 255  // a
+        // if (willConverge) {
+        //   data[pixelIndex * 4 + 0] = 255
+        //   data[pixelIndex * 4 + 1] = 255
+        //   data[pixelIndex * 4 + 2] = 255
+        //   data[pixelIndex * 4 + 3] = 255
+        // } else {
+        //   data[pixelIndex * 4 + 0] = 0
+        //   data[pixelIndex * 4 + 1] = 0
+        //   data[pixelIndex * 4 + 2] = 0
+        //   data[pixelIndex * 4 + 3] = 255
+        // }
         pixelIndex++;
       }
     }

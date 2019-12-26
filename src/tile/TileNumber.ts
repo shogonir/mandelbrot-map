@@ -15,7 +15,7 @@ export default class TileNumber {
     this.y = y
     this.z = z
 
-    this.half = 2 ** (-z - 1)
+    this.half = 2 ** (-z + 1)
     this.side = this.half * 2
     this.centerCoord = new Vector2(x * this.side, y * this.side)
   }
