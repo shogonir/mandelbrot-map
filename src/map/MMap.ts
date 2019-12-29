@@ -3,6 +3,8 @@ import Vector2 from '../common/Vector2'
 import MMapStatus from './status/MMapStatus'
 import MMapEventManager from './event/MMapEventManager'
 import MMapCanvasController from './canvas/MMapCanvasController'
+import MMapRenderer from './render/MMapRenderer'
+import CanvasUtils from '../util/CanvasUtils'
 
 export default class MMap {
 
@@ -10,14 +12,27 @@ export default class MMap {
 
   eventManager: MMapEventManager
   canvasController: MMapCanvasController
+  renderer: MMapRenderer | undefined
 
   canvas: HTMLCanvasElement
+
+  update: () => void | undefined
 
   constructor(canvasId: string, center: Vector2, zoom: number) {
     this.status = new MMapStatus(center, zoom)
     this.setupCanvas(canvasId)
-    this.setupEventManager()
     this.setupCanvasController()
+
+    const self = this
+    this.update = () => {
+      if (this.renderer === undefined) {
+        return
+      }
+      this.renderer.update(self.status)
+    }
+
+    this.setupEventManager()
+    this.setupRenderer()
   }
 
   setupCanvas(canvasId: string) {
@@ -29,16 +44,27 @@ export default class MMap {
     const element: HTMLElement = mayBeElement
 
     this.canvas = element as HTMLCanvasElement
+    this.status.clientWidth = this.canvas.width
+    this.status.clientHeight = this.canvas.height
   }
 
   setupEventManager() {
-    const onMove = (motion: Vector2) => {
-      console.log('onMove', motion)
+    const self = this
+    const onMove = (motionInPixel: Vector2) => {
+      const ppu = CanvasUtils.calculatePixelPerUnit(self.status.zoom)
+      self.status.center = self.status.center.add(motionInPixel.multiply(ppu))
+      if (self.update !== undefined) {
+        self.update()
+      }
     }
     this.eventManager = new MMapEventManager(this.canvas, onMove)
   }
 
   setupCanvasController() {
     this.canvasController = new MMapCanvasController(this.canvas)
+  }
+
+  setupRenderer() {
+    this.renderer = new MMapRenderer()
   }
 }
