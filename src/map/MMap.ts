@@ -1,6 +1,5 @@
 import Vector2 from '../common/Vector2'
 
-import MMapController from './control/MMapController'
 import MMapStatus from './status/MMapStatus'
 import MMapEventManager from './event/MMapEventManager'
 import MMapCanvasController from './canvas/MMapCanvasController'
@@ -9,7 +8,6 @@ export default class MMap {
 
   status: MMapStatus
 
-  controller: MMapController
   eventManager: MMapEventManager
   canvasController: MMapCanvasController
 
