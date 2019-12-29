@@ -10,16 +10,23 @@ export default class MMapEventManager {
 
   canvas: HTMLCanvasElement
   onMove: (motion: Vector2) => void | undefined
+  onZoom: (delta: number) => void | undefined
 
   onMouseDown: () => void | undefined
   onContextMenu: () => void | undefined
   onMouseUp: () => void | undefined
   onMouseOut: () => void | undefined
   onMouseMove: (event: MouseEvent) => void | undefined
+  onMouseWheel: (event: WheelEvent) => void | undefined
 
-  constructor(canvas: HTMLCanvasElement, onMove: (motion: Vector2) => void) {
+  constructor(
+    canvas: HTMLCanvasElement,
+    onMove: (motion: Vector2) => void,
+    onZoom: (delta: number) => void,
+  ) {
     this.canvas = canvas
     this.onMove = onMove
+    this.onZoom = onZoom
     this.isMouseDown = false
     this.isMouseDoubleDown = false
     this.previousX = undefined
@@ -36,6 +43,7 @@ export default class MMapEventManager {
     this.setupMouseUpEvent()
     this.setupMouseOutEvent()
     this.setupMouseMoveEvent()
+    this.setupMouseWheelEvent()
   }
 
   setupMouseDownEvent() {
@@ -126,5 +134,20 @@ export default class MMapEventManager {
     }
 
     this.canvas.addEventListener('mousemove', this.onMouseMove)
+  }
+
+  setupMouseWheelEvent() {
+    if (this.onMouseWheel !== undefined) {
+      return
+    }
+
+    const self = this
+    this.onMouseWheel = (event: WheelEvent) => {
+      if (self.onZoom !== undefined) {
+        self.onZoom(event.deltaY)
+      }
+    }
+
+    this.canvas.addEventListener('wheel', this.onMouseWheel)
   }
 }

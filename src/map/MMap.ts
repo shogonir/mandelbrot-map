@@ -50,14 +50,30 @@ export default class MMap {
 
   setupEventManager() {
     const self = this
+    
     const onMove = (motionInPixel: Vector2) => {
       const ppu = CanvasUtils.calculatePixelPerUnit(self.status.zoom)
       self.status.center = self.status.center.add(motionInPixel.multiply(ppu))
+      
       if (self.update !== undefined) {
         self.update()
       }
     }
-    this.eventManager = new MMapEventManager(this.canvas, onMove)
+
+    const zoomCoeffient = 0.01
+    const onZoom = (delta: number) => {
+      if (delta === 0) {
+        return
+      }
+      
+      self.status.zoom += delta * zoomCoeffient
+      
+      if (self.update !== undefined) {
+        self.update()
+      }
+    }
+
+    this.eventManager = new MMapEventManager(this.canvas, onMove, onZoom)
   }
 
   setupCanvasController() {
