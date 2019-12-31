@@ -41,4 +41,8 @@ export default class Vector3 {
   isZero(): boolean {
     return this.x === 0 && this.y === 0 && this.z === 0
   }
+
+  toArray(): number[] {
+    return [ this.x, this.y, this.z ]
+  }
 }

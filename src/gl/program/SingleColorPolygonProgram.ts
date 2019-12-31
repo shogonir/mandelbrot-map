@@ -54,42 +54,45 @@ export default class SingleColorPolygonProgram {
 
   setAttribute(color: Color, vertices: number[], indices: number[]) {
     if (indices.length % 3 !== 0) {
-      console.log('no')
       return
     }
 
     const scale = mat4.create()
-    mat4.scale(scale, scale, [1, 1, 1]);
-    const rotation = mat4.create();
-    mat4.rotateZ(rotation, rotation, Math.PI / 8);
-    const translation = mat4.create();
-    mat4.translate(translation, translation, [1, 0, -1]);
-    const model = mat4.create();
-    mat4.multiply(model, model, translation);
-    mat4.multiply(model, model, rotation);
-    mat4.multiply(model, model, scale);
+    mat4.scale(scale, scale, [1, 1, 1])
 
-    const cameraPosition = [0, 60, 90];
-    const lookAtPosition = [0, 0, 0];
-    const upDirection    = [0, 1, 0];
-    const view  = mat4.create();
-    mat4.lookAt(view, cameraPosition, lookAtPosition, upDirection);
+    const rotation = mat4.create()
+    // mat4.rotateZ(rotation, rotation, Math.PI / 8)
+    mat4.rotateZ(rotation, rotation, 0)
+    
+    const translation = mat4.create()
+    mat4.translate(translation, translation, [0, 0, 0])
+    
+    const model = mat4.create()
+    mat4.multiply(model, model, translation)
+    mat4.multiply(model, model, rotation)
+    mat4.multiply(model, model, scale)
 
-    const left   = -40;
-    const right  = 40;
-    const top    = 40;
-    const bottom = -40;
-    const near   = 30;    // nearとfarは「Z座標」ではなく「距離」を表す。
-    const far    = 150;  // つまり、0 < near < far を満たす値を設定する。
-    const projection = mat4.create();
-    mat4.frustum(projection, left, right, bottom, top, near, far);
+    const cameraPosition = [0, 0, 80]
+    const lookAtPosition = [0, 0, 0]
+    const upDirection    = [0, 1, 0]
+    const view  = mat4.create()
+    mat4.lookAt(view, cameraPosition, lookAtPosition, upDirection)
 
-    const modelLocation      = this.gl.getUniformLocation(this.program, 'model');
-    const viewLocation       = this.gl.getUniformLocation(this.program, 'view');
-    const projectionLocation = this.gl.getUniformLocation(this.program, 'projection');
-    this.gl.uniformMatrix4fv(modelLocation, false, model);
-    this.gl.uniformMatrix4fv(viewLocation, false, view);
-    this.gl.uniformMatrix4fv(projectionLocation, false, projection);
+    const left = -40
+    const right = 40
+    const bottom = -40
+    const top = 40
+    const near = 40
+    const far = 150
+    const projection = mat4.create()
+    mat4.frustum(projection, left, right, bottom, top, near, far)
+
+    const modelLocation      = this.gl.getUniformLocation(this.program, 'model')
+    const viewLocation       = this.gl.getUniformLocation(this.program, 'view')
+    const projectionLocation = this.gl.getUniformLocation(this.program, 'projection')
+    this.gl.uniformMatrix4fv(modelLocation, false, model)
+    this.gl.uniformMatrix4fv(viewLocation, false, view)
+    this.gl.uniformMatrix4fv(projectionLocation, false, projection)
 
     this.numberIndices = indices.length
 
@@ -124,8 +127,8 @@ export default class SingleColorPolygonProgram {
     this.gl.bindBuffer(this.gl.ARRAY_BUFFER, vertexBuffer)
     this.gl.bufferData(this.gl.ARRAY_BUFFER, typedVertices, this.gl.STATIC_DRAW)
 
-    this.gl.bindBuffer(this.gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
-    this.gl.bufferData(this.gl.ELEMENT_ARRAY_BUFFER, typedIndices, this.gl.STATIC_DRAW);
+    this.gl.bindBuffer(this.gl.ELEMENT_ARRAY_BUFFER, indexBuffer)
+    this.gl.bufferData(this.gl.ELEMENT_ARRAY_BUFFER, typedIndices, this.gl.STATIC_DRAW)
 
     this.gl.bindBuffer(this.gl.ARRAY_BUFFER, colorBuffer)
     this.gl.bufferData(this.gl.ARRAY_BUFFER, typedColors, this.gl.STATIC_DRAW)
