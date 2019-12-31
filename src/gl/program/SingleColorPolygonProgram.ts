@@ -8,7 +8,7 @@ export default class SingleColorPolygonProgram {
   gl: WebGL2RenderingContext
   program: WebGLProgram
 
-  numberVertices: number
+  numberIndices: number
 
   constructor(gl: WebGL2RenderingContext) {
     this.gl = gl
@@ -50,14 +50,16 @@ export default class SingleColorPolygonProgram {
     this.gl.useProgram(this.program)
   }
 
-  setAttribute(color: Color, vertices: number[]) {
-    if (vertices.length % 3 !== 0) {
+  setAttribute(color: Color, vertices: number[], indices: number[]) {
+    if (indices.length % 3 !== 0) {
+      console.log('no')
       return
     }
 
-    this.numberVertices = vertices.length / 3
+    this.numberIndices = indices.length
 
     const vertexBuffer = this.gl.createBuffer()
+    const indexBuffer = this.gl.createBuffer()
     const colorBuffer = this.gl.createBuffer()
 
     const vertexAttribLocation = this.gl.getAttribLocation(this.program, 'vertexPosition')
@@ -75,9 +77,10 @@ export default class SingleColorPolygonProgram {
     this.gl.vertexAttribPointer(colorAttribLocation, COLOR_SIZE, this.gl.FLOAT, false, 0, 0)
 
     const typedVertices = new Float32Array(vertices)
+    const typedIndices = new Uint16Array(indices)
 
     const colors: number[] = []
-    Numbers.range(0, this.numberVertices)
+    Numbers.range(0, vertices.length)
       .forEach(() => {
         colors.push(...[color.r, color.g, color.b, color.a])
       })
@@ -86,12 +89,15 @@ export default class SingleColorPolygonProgram {
     this.gl.bindBuffer(this.gl.ARRAY_BUFFER, vertexBuffer)
     this.gl.bufferData(this.gl.ARRAY_BUFFER, typedVertices, this.gl.STATIC_DRAW)
 
+    this.gl.bindBuffer(this.gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
+    this.gl.bufferData(this.gl.ELEMENT_ARRAY_BUFFER, typedIndices, this.gl.STATIC_DRAW);
+
     this.gl.bindBuffer(this.gl.ARRAY_BUFFER, colorBuffer)
     this.gl.bufferData(this.gl.ARRAY_BUFFER, typedColors, this.gl.STATIC_DRAW)
   }
 
   draw() {
-    this.gl.drawArrays(this.gl.TRIANGLES, 0, this.numberVertices)
+    this.gl.drawElements(this.gl.TRIANGLES, this.numberIndices, this.gl.UNSIGNED_SHORT, 0)
 
     this.gl.flush()
   }

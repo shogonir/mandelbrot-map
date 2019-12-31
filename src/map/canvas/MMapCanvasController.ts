@@ -32,9 +32,11 @@ export default class MMapCanvasController {
         -1, axisWidth, 0.0,
         -1, -axisWidth, 0.0,
         1, axisWidth, 0.0,
-        -1, -axisWidth, 0.0,
         1, -axisWidth, 0.0,
-        1, axisWidth, 0.0
+      ],
+      [
+        0, 2, 1,
+        1, 2, 3
       ]
     )
     this.polygonProgram.draw()
@@ -48,9 +50,11 @@ export default class MMapCanvasController {
         -axisWidth, 1, 0.0,
         -axisWidth, -1, 0.0,
         axisWidth, 1, 0.0,
-        -axisWidth, -1, 0.0,
         axisWidth, -1, 0.0,
-        axisWidth, 1, 0.0
+      ],
+      [
+        0, 1, 2,
+        1, 3, 2
       ]
     )
     this.polygonProgram.draw()
