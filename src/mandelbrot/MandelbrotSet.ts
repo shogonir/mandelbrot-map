@@ -1,4 +1,4 @@
-import ComplexNumber from '../complex/ComplexNumber'
+import ComplexNumber from '../common/ComplexNumber'
 import TileNumber from '../tile/TileNumber'
 
 import Numbers from '../util/Numbers'
