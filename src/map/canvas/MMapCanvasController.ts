@@ -16,6 +16,8 @@ export default class MMapCanvasController {
     this.initialized = false
     this.canvas = canvas
     this.gl = this.canvas.getContext('webgl2')
+    this.gl.enable(this.gl.DEPTH_TEST);
+    this.gl.enable(this.gl.CULL_FACE);
 
     this.setupProgram()
   }
@@ -51,6 +53,24 @@ export default class MMapCanvasController {
         -axisWidth, -1, 0.0,
         axisWidth, 1, 0.0,
         axisWidth, -1, 0.0,
+      ],
+      [
+        0, 1, 2,
+        1, 3, 2
+      ]
+    )
+    this.polygonProgram.draw()
+
+    // sample
+    this.polygonProgram = new SingleColorPolygonProgram(this.gl)
+    this.polygonProgram.setup()
+    this.polygonProgram.setAttribute(
+      new Color(0, 0, 0, 1.0),
+      [
+        -30.0, 30.0, 0.0,  // 座標
+        -30.0, -30.0, 0.0,
+        30.0, 30.0, 0.0,
+        30.0, -30.0, 0.0,
       ],
       [
         0, 1, 2,

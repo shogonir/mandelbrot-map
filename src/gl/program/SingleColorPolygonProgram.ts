@@ -1,3 +1,5 @@
+import { mat4 } from 'gl-matrix'
+
 import vertexShaderSource from '../shader/VertexShader.glsl'
 import fragmentShaderSource from '../shader/FragmentShader.glsl'
 import Color from '../../common/Color'
@@ -55,6 +57,39 @@ export default class SingleColorPolygonProgram {
       console.log('no')
       return
     }
+
+    const scale = mat4.create()
+    mat4.scale(scale, scale, [1, 1, 1]);
+    const rotation = mat4.create();
+    mat4.rotateZ(rotation, rotation, Math.PI / 8);
+    const translation = mat4.create();
+    mat4.translate(translation, translation, [1, 0, -1]);
+    const model = mat4.create();
+    mat4.multiply(model, model, translation);
+    mat4.multiply(model, model, rotation);
+    mat4.multiply(model, model, scale);
+
+    const cameraPosition = [0, 60, 90];
+    const lookAtPosition = [0, 0, 0];
+    const upDirection    = [0, 1, 0];
+    const view  = mat4.create();
+    mat4.lookAt(view, cameraPosition, lookAtPosition, upDirection);
+
+    const left   = -40;
+    const right  = 40;
+    const top    = 40;
+    const bottom = -40;
+    const near   = 30;    // nearとfarは「Z座標」ではなく「距離」を表す。
+    const far    = 150;  // つまり、0 < near < far を満たす値を設定する。
+    const projection = mat4.create();
+    mat4.frustum(projection, left, right, bottom, top, near, far);
+
+    const modelLocation      = this.gl.getUniformLocation(this.program, 'model');
+    const viewLocation       = this.gl.getUniformLocation(this.program, 'view');
+    const projectionLocation = this.gl.getUniformLocation(this.program, 'projection');
+    this.gl.uniformMatrix4fv(modelLocation, false, model);
+    this.gl.uniformMatrix4fv(viewLocation, false, view);
+    this.gl.uniformMatrix4fv(projectionLocation, false, projection);
 
     this.numberIndices = indices.length
 
