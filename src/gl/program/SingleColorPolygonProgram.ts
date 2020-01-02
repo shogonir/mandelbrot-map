@@ -72,18 +72,18 @@ export default class SingleColorPolygonProgram {
     mat4.multiply(model, model, rotation)
     mat4.multiply(model, model, scale)
 
-    const cameraPosition = [0, 0, 80]
+    const cameraPosition = [0, 0, 40]
     const lookAtPosition = [0, 0, 0]
     const upDirection    = [0, 1, 0]
     const view  = mat4.create()
     mat4.lookAt(view, cameraPosition, lookAtPosition, upDirection)
 
-    const left = -40
-    const right = 40
-    const bottom = -40
-    const top = 40
-    const near = 40
-    const far = 150
+    const left = -20
+    const right = 20
+    const bottom = -20
+    const top = 20
+    const near = 20
+    const far = 100
     const projection = mat4.create()
     mat4.frustum(projection, left, right, bottom, top, near, far)
 

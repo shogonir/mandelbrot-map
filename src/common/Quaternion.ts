@@ -1,3 +1,5 @@
+import { mat4 } from 'gl-matrix'
+
 import Vector3 from './Vector3'
 
 export default class Quaternion {
@@ -50,6 +52,22 @@ export default class Quaternion {
 
   inverse(): Quaternion {
     return this.conjugate().scalarTimes(1 / this.squaredNorm())
+  }
+
+  toMat4(): mat4 {
+    const matrix = mat4.create()
+    const a = this.a
+    const b = this.b
+    const c = this.c
+    const d = this.d
+    mat4.set(
+      matrix, 
+      2 * a**2 + 2 * b**2 - 1, 2 * (b * c - d * a), 2 * (b * d + a * c), 0,
+      2 * (b * c + a * d), 2 * b**2 + 2 * d**2 - 1, 2 * (c * d - a * b), 0,
+      2 * (b * d - a * c), 2 * (a * b + c * d), 2 * a**2 + 2 * d**2 - 1, 0,
+      0, 0, 0, 1
+    )
+    return matrix
   }
 
   static fromRadianAndVector3(radian: number, vector: Vector3): Quaternion | undefined {
