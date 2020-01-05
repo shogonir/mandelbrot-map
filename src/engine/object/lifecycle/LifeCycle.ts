@@ -1,4 +1,6 @@
+import GameObject from '../GameObject';
+
 export default interface LifeCycle {
 
-  onUpdate(): void
+  onUpdate(gameObject: GameObject): void
 }

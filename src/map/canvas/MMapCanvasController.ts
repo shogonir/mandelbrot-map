@@ -21,7 +21,7 @@ export default class MMapCanvasController {
     this.canvas = canvas
     this.gl = this.canvas.getContext('webgl2')
     this.gl.enable(this.gl.DEPTH_TEST);
-    this.gl.enable(this.gl.CULL_FACE);
+    // this.gl.enable(this.gl.CULL_FACE);
 
     const mainCamera = new PerspectiveCamera(
       new Vector3(0, 0, 40),
@@ -29,7 +29,7 @@ export default class MMapCanvasController {
       new Vector3(0, 1, 0),
       90,
       1.0,
-      20,
+      0.1,
       100
     )
 
@@ -39,5 +39,8 @@ export default class MMapCanvasController {
     world.addLayer(xyAxisLayer)
 
     world.update()
+    setInterval(() => {
+      world.update()
+    }, 100)
   }
 }

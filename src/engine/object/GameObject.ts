@@ -32,7 +32,7 @@ export default class GameObject {
   }
 
   update(camera: Camera) {
-    this.lifeCycle.onUpdate()
+    this.lifeCycle.onUpdate(this)
     this.material.update(this, camera)
   }
 
