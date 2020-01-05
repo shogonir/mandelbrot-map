@@ -33,6 +33,7 @@ export default class MMapEventManager {
     this.previousY = undefined
 
     this.canvas.oncontextmenu = () => false
+    this.canvas.onwheel = () => false
 
     this.setupMouseEvents()
   }

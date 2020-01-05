@@ -53,7 +53,9 @@ export default class MMap {
     
     const onMove = (motionInPixel: Vector2) => {
       const ppu = CanvasUtils.calculatePixelPerUnit(self.status.zoom)
-      self.status.center = self.status.center.add(motionInPixel.multiply(ppu))
+      const motion = motionInPixel.multiply(ppu)
+      motion.x *= -1
+      self.status.center = self.status.center.add(motion)
       
       if (self.update !== undefined) {
         self.update()
