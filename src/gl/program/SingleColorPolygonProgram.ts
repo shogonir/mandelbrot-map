@@ -1,7 +1,7 @@
 import { mat4 } from 'gl-matrix'
 
-import vertexShaderSource from '../shader/VertexShader.glsl'
-import fragmentShaderSource from '../shader/FragmentShader.glsl'
+import vertexShaderSource from '../../engine/object/material/shader/VertexShader.glsl'
+import fragmentShaderSource from '../../engine/object/material/shader/FragmentShader.glsl'
 import Color from '../../common/Color'
 import Numbers from '../../util/Numbers'
 

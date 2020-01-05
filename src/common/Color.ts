@@ -11,4 +11,8 @@ export default class Color {
     this.b = b
     this.a = a
   }
+
+  static black(): Color {
+    return new Color(0, 0, 0, 1.0)
+  }
 }

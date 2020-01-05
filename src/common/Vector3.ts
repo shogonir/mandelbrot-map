@@ -45,4 +45,8 @@ export default class Vector3 {
   toArray(): number[] {
     return [ this.x, this.y, this.z ]
   }
+
+  static zero(): Vector3 {
+    return new Vector3(0, 0, 0)
+  }
 }

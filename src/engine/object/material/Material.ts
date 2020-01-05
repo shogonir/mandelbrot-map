@@ -6,6 +6,7 @@ import Program from './program/Program';
 export default interface Material {
 
   program: Program
+  geometry: Geometry
 
   setup(geometry: Geometry): void
 

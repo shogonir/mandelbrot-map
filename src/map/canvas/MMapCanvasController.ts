@@ -2,6 +2,10 @@ import vertexShaderSource from '../../gl/shader/VertexShader.glsl'
 import fragmentShaderSource from '../../gl/shader/FragmentShader.glsl'
 import SingleColorPolygonProgram from '../../gl/program/SingleColorPolygonProgram'
 import Color from '../../common/Color'
+import World from '../../engine/world/World'
+import PerspectiveCamera from '../../engine/world/camera/PerspectiveCamera'
+import Vector3 from '../../common/Vector3'
+import XYAxisLayer from '../../engine/world/layer/XYAxisLayer'
 
 export default class MMapCanvasController {
 
@@ -19,64 +23,21 @@ export default class MMapCanvasController {
     this.gl.enable(this.gl.DEPTH_TEST);
     this.gl.enable(this.gl.CULL_FACE);
 
-    this.setupProgram()
-  }
-
-  setupProgram() {
-    const axisWidth = 0.001
-
-    // x-axis
-    this.polygonProgram = new SingleColorPolygonProgram(this.gl)
-    this.polygonProgram.setup()
-    this.polygonProgram.setAttribute(
-      new Color(0, 0, 0, 1.0),
-      [
-        -1, axisWidth, 0.0,
-        -1, -axisWidth, 0.0,
-        1, axisWidth, 0.0,
-        1, -axisWidth, 0.0,
-      ],
-      [
-        0, 2, 1,
-        1, 2, 3
-      ]
+    const mainCamera = new PerspectiveCamera(
+      new Vector3(0, 0, 40),
+      new Vector3(0, 0, 0),
+      new Vector3(0, 1, 0),
+      90,
+      1.0,
+      20,
+      100
     )
-    this.polygonProgram.draw()
 
-    // y-axis
-    this.polygonProgram = new SingleColorPolygonProgram(this.gl)
-    this.polygonProgram.setup()
-    this.polygonProgram.setAttribute(
-      new Color(0, 0, 0, 1.0),
-      [
-        -axisWidth, 1, 0.0,
-        -axisWidth, -1, 0.0,
-        axisWidth, 1, 0.0,
-        axisWidth, -1, 0.0,
-      ],
-      [
-        0, 1, 2,
-        1, 3, 2
-      ]
-    )
-    this.polygonProgram.draw()
+    const xyAxisLayer = new XYAxisLayer(this.gl)
 
-    // sample
-    this.polygonProgram = new SingleColorPolygonProgram(this.gl)
-    this.polygonProgram.setup()
-    this.polygonProgram.setAttribute(
-      new Color(0, 0, 0, 1.0),
-      [
-        -30.0, 30.0, 0.0,  // 座標
-        -40.0, -40.0, 0.0,
-        40.0, 40.0, 0.0,
-        40.0, -40.0, 0.0,
-      ],
-      [
-        0, 1, 2,
-        1, 3, 2
-      ]
-    )
-    this.polygonProgram.draw()
+    const world = new World(mainCamera)
+    world.addLayer(xyAxisLayer)
+
+    world.update()
   }
 }
