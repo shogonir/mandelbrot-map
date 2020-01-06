@@ -52,11 +52,10 @@ export default class MMapEventManager {
       return
     }
   
-    const self = this
     this.onMouseDown = () => {
-      self.isMouseDown = true
-      self.previousX = undefined
-      self.previousY = undefined
+      this.isMouseDown = true
+      this.previousX = undefined
+      this.previousY = undefined
     }
 
     this.canvas.addEventListener('mousedown', this.onMouseDown)
@@ -67,12 +66,11 @@ export default class MMapEventManager {
       return
     }
 
-    const self = this
     this.onContextMenu = () => {
-      if (self.isMouseDown) {
-        self.isMouseDoubleDown = true
-        self.previousX = undefined
-        self.previousY = undefined
+      if (this.isMouseDown) {
+        this.isMouseDoubleDown = true
+        this.previousX = undefined
+        this.previousY = undefined
       }
     }
     
@@ -84,10 +82,9 @@ export default class MMapEventManager {
       return
     }
 
-    const self = this
     this.onMouseUp = () => {
-      self.isMouseDown = false
-      self.isMouseDoubleDown = false
+      this.isMouseDown = false
+      this.isMouseDoubleDown = false
     }
 
     this.canvas.addEventListener('mouseup', this.onMouseUp)
@@ -98,10 +95,9 @@ export default class MMapEventManager {
       return
     }
 
-    const self = this
     this.onMouseOut = () => {
-      self.isMouseDown = false
-      self.isMouseDoubleDown = false
+      this.isMouseDown = false
+      this.isMouseDoubleDown = false
     }
 
     this.canvas.addEventListener('mouseout', this.onMouseOut)
@@ -112,25 +108,24 @@ export default class MMapEventManager {
       return
     }
 
-    const self = this
     this.onMouseMove = (event: MouseEvent) => {
-      if (self.isMouseDown) {
+      if (this.isMouseDown) {
 
-        if (self.previousX === undefined || self.previousY === undefined) {
-          self.previousX = event.offsetX
-          self.previousY = event.offsetY
+        if (this.previousX === undefined || this.previousY === undefined) {
+          this.previousX = event.offsetX
+          this.previousY = event.offsetY
           return
         }
 
-        const moveX = event.offsetX - self.previousX
-        const moveY = event.offsetY - self.previousY
+        const moveX = event.offsetX - this.previousX
+        const moveY = event.offsetY - this.previousY
 
-        if (self.onMove !== undefined) {
-          self.onMove(new Vector2(moveX, moveY))
+        if (this.onMove !== undefined) {
+          this.onMove(new Vector2(moveX, moveY))
         }
 
-        self.previousX = event.offsetX
-        self.previousY = event.offsetY
+        this.previousX = event.offsetX
+        this.previousY = event.offsetY
       }
     }
 
@@ -142,10 +137,9 @@ export default class MMapEventManager {
       return
     }
 
-    const self = this
     this.onMouseWheel = (event: WheelEvent) => {
-      if (self.onZoom !== undefined) {
-        self.onZoom(event.deltaY)
+      if (this.onZoom !== undefined) {
+        this.onZoom(event.deltaY)
       }
     }
 

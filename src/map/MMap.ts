@@ -28,13 +28,11 @@ export default class MMap {
 
     this.setupCanvasController()
 
-    const self = this
     this.update = () => {
       if (this.renderer === undefined) {
         return
       }
       this.status.update()
-      // this.renderer.update(self.status)
       this.canvasController.update(this.status)
     }
 
@@ -54,16 +52,15 @@ export default class MMap {
   }
 
   setupEventManager() {
-    const self = this
     
     const onMove = (motionInPixel: Vector2) => {
-      const ptu = CanvasUtils.calculatePixelToUnit(self.status.zoom)
+      const ptu = CanvasUtils.calculatePixelToUnit(this.status.zoom)
       const motion = motionInPixel.multiply(ptu)
       motion.x *= -1
-      self.status.center = self.status.center.add(motion)
+      this.status.center = this.status.center.add(motion)
       
-      if (self.update !== undefined) {
-        self.update()
+      if (this.update !== undefined) {
+        this.update()
       }
     }
 
@@ -73,13 +70,13 @@ export default class MMap {
         return
       }
       
-      self.status.zoom += delta * zoomCoeffient
-      if (self.status.zoom < MMap.MinZoom) {
+      this.status.zoom += delta * zoomCoeffient
+      if (this.status.zoom < MMap.MinZoom) {
         this.status.zoom = MMap.MinZoom
       }
       
-      if (self.update !== undefined) {
-        self.update()
+      if (this.update !== undefined) {
+        this.update()
       }
     }
 
