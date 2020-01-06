@@ -1,9 +1,8 @@
-import SingleColorPolygonProgram from '../../gl/program/SingleColorPolygonProgram'
 import World from '../../engine/world/World'
 import PerspectiveCamera from '../../engine/world/camera/PerspectiveCamera'
 import Vector3 from '../../common/Vector3'
 import MMapStatus from '../status/MMapStatus'
-import XYAxisLayer from './layer/XYAxisLayer'
+import XYAxisLayer from './layer/axis/XYAxisLayer'
 import CanvasUtils from '../../util/CanvasUtils'
 import EngineMath from '../../engine/common/EngineMath'
 
