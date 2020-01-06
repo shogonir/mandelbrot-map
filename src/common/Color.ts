@@ -15,4 +15,8 @@ export default class Color {
   static black(): Color {
     return new Color(0, 0, 0, 1.0)
   }
+
+  static blue(): Color {
+    return new Color(0, 0, 1.0, 1.0)
+  }
 }

@@ -18,9 +18,12 @@ export default class SingleColorProgram implements Program {
   fragmentShader: WebGLShader | null
   program: WebGLProgram | null
 
+  color: Color | undefined
+
   setup(gl: WebGL2RenderingContext, geometry: Geometry) {
     this.gl = gl
     this.geometry = geometry
+    this.color = undefined
     this.setupProgram()
     this.setupGeometry(geometry)
   }
@@ -86,6 +89,8 @@ export default class SingleColorProgram implements Program {
   }
 
   setColor(color: Color) {
+    this.color = color
+
     this.gl.useProgram(this.program)
 
     const colorBuffer = this.gl.createBuffer()
@@ -144,6 +149,10 @@ export default class SingleColorProgram implements Program {
   }
 
   draw() {
+    if (this.color !== undefined) {
+      this.setColor(this.color)
+    }
+
     this.gl.drawElements(this.gl.TRIANGLES, this.geometry.indices.length, this.gl.UNSIGNED_SHORT, 0)
 
     this.gl.flush()

@@ -5,6 +5,7 @@ import MMapStatus from '../status/MMapStatus'
 import XYAxisLayer from './layer/axis/XYAxisLayer'
 import CanvasUtils from '../../util/CanvasUtils'
 import EngineMath from '../../engine/common/EngineMath'
+import TileLayer from './layer/tile/TileLayer'
 
 export default class MMapCanvasController {
 
@@ -14,6 +15,7 @@ export default class MMapCanvasController {
   previousZoom: number
 
   xyAxisLayer: XYAxisLayer
+  tileLayer: TileLayer
 
   world: World
 
@@ -30,6 +32,7 @@ export default class MMapCanvasController {
     const halfVerticalFovRadian = Math.atan(status.clientHeight * ptu * toHalf / cameraPosition.z)
 
     const mainCamera = new PerspectiveCamera(
+      this.gl,
       cameraPosition,
       new Vector3(0, 0, 0),
       new Vector3(0, 1, 0),
@@ -39,9 +42,11 @@ export default class MMapCanvasController {
       100
     )
 
+    this.tileLayer = new TileLayer(this.gl, status)
     this.xyAxisLayer = new XYAxisLayer(this.gl, status)
 
     this.world = new World(mainCamera)
+    this.world.addLayer(this.tileLayer)
     this.world.addLayer(this.xyAxisLayer)
 
     this.world.update()
