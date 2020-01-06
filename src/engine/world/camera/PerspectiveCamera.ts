@@ -15,10 +15,23 @@ export default class PerspectiveCamera implements Camera {
   near: number
   far: number
 
+  gl: WebGL2RenderingContext
+
   viewMatrix: mat4
   projectionMatrix: mat4
 
-  constructor(position: Vector3, target: Vector3, upVector: Vector3, verticalFov: number, aspect: number, near: number, far: number) {
+  constructor(
+    gl: WebGL2RenderingContext,
+    position: Vector3,
+    target: Vector3,
+    upVector: Vector3,
+    verticalFov: number,
+    aspect: number,
+    near: number,
+    far: number
+  ) {
+    this.gl = gl
+
     this.position = position
     this.target = target
     this.upVector = upVector
@@ -50,6 +63,8 @@ export default class PerspectiveCamera implements Camera {
   }
 
   draw(layers: Layer[]) {
+    this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT)
+
     for (const layer of layers) {
       for (const gameObject of layer.gameObjects) {
         gameObject.update(this)
