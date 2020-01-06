@@ -43,4 +43,10 @@ export default class XYAxisLayer implements Layer {
     this.gameObjects.push(this.xAxis)
     this.gameObjects.push(this.yAxis)
   }
+
+  update(status: MMapStatus) {
+    this.xAxis.position = new Vector3(-status.center.x, -status.center.y, 0)
+    this.yAxis.position = new Vector3(-status.center.x, -status.center.y, 0)
+
+  }
 }

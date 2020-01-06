@@ -32,7 +32,8 @@ export default class MMap {
         return
       }
       this.status.update()
-      this.renderer.update(self.status)
+      // this.renderer.update(self.status)
+      this.canvasController.update(this.status)
     }
 
     this.setupEventManager()

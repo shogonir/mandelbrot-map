@@ -12,12 +12,11 @@ export default class MMapCanvasController {
   canvas: HTMLCanvasElement
   gl: WebGL2RenderingContext
 
-  initialized: boolean
+  xyAxisLayer: XYAxisLayer
 
-  polygonProgram: SingleColorPolygonProgram
+  world: World
 
   constructor(canvas: HTMLCanvasElement, status: MMapStatus) {
-    this.initialized = false
     this.canvas = canvas
     this.gl = this.canvas.getContext('webgl2')
     this.gl.enable(this.gl.DEPTH_TEST);
@@ -38,14 +37,19 @@ export default class MMapCanvasController {
       100
     )
 
-    const xyAxisLayer = new XYAxisLayer(this.gl, status)
+    this.xyAxisLayer = new XYAxisLayer(this.gl, status)
 
-    const world = new World(mainCamera)
-    world.addLayer(xyAxisLayer)
+    this.world = new World(mainCamera)
+    this.world.addLayer(this.xyAxisLayer)
 
-    world.update()
+    this.world.update()
     // setInterval(() => {
     //   world.update()
     // }, 16)
+  }
+
+  update(status: MMapStatus) {
+    this.xyAxisLayer.update(status)
+    this.world.update()
   }
 }
