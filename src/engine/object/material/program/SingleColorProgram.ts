@@ -62,6 +62,8 @@ export default class SingleColorProgram implements Program {
   }
 
   setupGeometry(geometry: Geometry) {
+    this.gl.useProgram(this.program)
+    
     const vertexBuffer = this.gl.createBuffer()
     const indexBuffer = this.gl.createBuffer()
 
@@ -84,8 +86,9 @@ export default class SingleColorProgram implements Program {
   }
 
   setColor(color: Color) {
-    const colorBuffer = this.gl.createBuffer()
+    this.gl.useProgram(this.program)
 
+    const colorBuffer = this.gl.createBuffer()
     const colorAttribLocation = this.gl.getAttribLocation(this.program, 'color')
 
     const COLOR_SIZE = 4
@@ -131,6 +134,7 @@ export default class SingleColorProgram implements Program {
     // projection
     const projection = camera.projectionMatrix
 
+    this.gl.useProgram(this.program)
     const modelLocation      = this.gl.getUniformLocation(this.program, 'model')
     const viewLocation       = this.gl.getUniformLocation(this.program, 'view')
     const projectionLocation = this.gl.getUniformLocation(this.program, 'projection')

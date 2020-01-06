@@ -17,11 +17,11 @@ export default class World {
   }
 
   update() {
-    for (const layer of this.layers) {
-      for (const gameObject of layer.gameObjects) {
-        gameObject.update(this.mainCamera)
-      }
-    }
+    // for (const layer of this.layers) {
+    //   for (const gameObject of layer.gameObjects) {
+    //     gameObject.update(this.mainCamera)
+    //   }
+    // }
     this.mainCamera.draw(this.layers)
   }
 }

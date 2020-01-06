@@ -1,6 +1,10 @@
 export default class CanvasUtils {
 
-  static calculatePixelPerUnit(zoom: number): number {
+  static calculatePixelToUnit(zoom: number): number {
     return 2 ** (-zoom - 6)
+  }
+
+  static calculateUnitToPixel(zoom: number): number {
+    return 1.0 / CanvasUtils.calculatePixelToUnit(zoom)
   }
 }

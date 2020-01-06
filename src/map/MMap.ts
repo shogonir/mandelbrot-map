@@ -19,8 +19,11 @@ export default class MMap {
   update: () => void | undefined
 
   constructor(canvasId: string, center: Vector2, zoom: number) {
-    this.status = new MMapStatus(center, zoom)
     this.setupCanvas(canvasId)
+
+    this.status = new MMapStatus(center, zoom, this.canvas.width, this.canvas.height)
+    this.status.update()
+
     this.setupCanvasController()
 
     const self = this
@@ -28,6 +31,7 @@ export default class MMap {
       if (this.renderer === undefined) {
         return
       }
+      this.status.update()
       this.renderer.update(self.status)
     }
 
@@ -44,16 +48,14 @@ export default class MMap {
     const element: HTMLElement = mayBeElement
 
     this.canvas = element as HTMLCanvasElement
-    this.status.clientWidth = this.canvas.width
-    this.status.clientHeight = this.canvas.height
   }
 
   setupEventManager() {
     const self = this
     
     const onMove = (motionInPixel: Vector2) => {
-      const ppu = CanvasUtils.calculatePixelPerUnit(self.status.zoom)
-      const motion = motionInPixel.multiply(ppu)
+      const ptu = CanvasUtils.calculatePixelToUnit(self.status.zoom)
+      const motion = motionInPixel.multiply(ptu)
       motion.x *= -1
       self.status.center = self.status.center.add(motion)
       
@@ -79,7 +81,7 @@ export default class MMap {
   }
 
   setupCanvasController() {
-    this.canvasController = new MMapCanvasController(this.canvas)
+    this.canvasController = new MMapCanvasController(this.canvas, this.status)
   }
 
   setupRenderer() {

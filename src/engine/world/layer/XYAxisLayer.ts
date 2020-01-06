@@ -23,7 +23,7 @@ export default class XYAxisLayer implements Layer {
     this.xAxis = new GameObject(
       Vector3.zero(),
       Quaternion.fromRadianAndVector3(0, new Vector3(0, 1, 0)),
-      new Vector3(80, 80, 80),
+      new Vector3(20, 20, 20),
       xAxisBlackMaterial,
       // lifeCycle
     )

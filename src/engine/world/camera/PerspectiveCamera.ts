@@ -51,6 +51,7 @@ export default class PerspectiveCamera implements Camera {
   draw(layers: Layer[]) {
     for (const layer of layers) {
       for (const gameObject of layer.gameObjects) {
+        gameObject.update(this)
         gameObject.draw()
       }
     }
