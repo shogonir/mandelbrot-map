@@ -8,6 +8,8 @@ import CanvasUtils from '../util/CanvasUtils'
 
 export default class MMap {
 
+  private static MinZoom: number = 0
+
   status: MMapStatus
 
   eventManager: MMapEventManager
@@ -72,6 +74,9 @@ export default class MMap {
       }
       
       self.status.zoom += delta * zoomCoeffient
+      if (self.status.zoom < MMap.MinZoom) {
+        this.status.zoom = MMap.MinZoom
+      }
       
       if (self.update !== undefined) {
         self.update()
