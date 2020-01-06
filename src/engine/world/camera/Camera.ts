@@ -10,6 +10,11 @@ export default interface Camera {
   target: Vector3
   upVector: Vector3
 
+  verticalFov: number
+  aspect: number          // width / height
+  near: number
+  far: number
+
   viewMatrix: mat4
   projectionMatrix: mat4
 

@@ -45,8 +45,7 @@ export default class XYAxisLayer implements Layer {
   }
 
   update(status: MMapStatus) {
-    this.xAxis.position = new Vector3(-status.center.x, -status.center.y, 0)
-    this.yAxis.position = new Vector3(-status.center.x, -status.center.y, 0)
-
+    this.xAxis.position.y = status.mappingY(0)
+    this.yAxis.position.x = status.mappingX(0)
   }
 }

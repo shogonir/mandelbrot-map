@@ -12,12 +12,15 @@ export default class MMapCanvasController {
   canvas: HTMLCanvasElement
   gl: WebGL2RenderingContext
 
+  previousZoom: number
+
   xyAxisLayer: XYAxisLayer
 
   world: World
 
   constructor(canvas: HTMLCanvasElement, status: MMapStatus) {
     this.canvas = canvas
+    this.previousZoom = status.zoom
     this.gl = this.canvas.getContext('webgl2')
     this.gl.enable(this.gl.DEPTH_TEST);
     // this.gl.enable(this.gl.CULL_FACE);
@@ -49,7 +52,21 @@ export default class MMapCanvasController {
   }
 
   update(status: MMapStatus) {
+    this.updateCameraIfNeeded(status)
     this.xyAxisLayer.update(status)
     this.world.update()
+  }
+
+  updateCameraIfNeeded(status: MMapStatus) {
+    if (this.previousZoom === status.zoom) {
+      return
+    }
+
+    const camera = this.world.mainCamera
+    const ptu = CanvasUtils.calculatePixelToUnit(status.zoom)
+    const toHalf = 0.5
+    const halfVerticalFovRadian = Math.atan(status.clientHeight * ptu * toHalf / camera.position.z)
+    camera.verticalFov = halfVerticalFovRadian * 2 * EngineMath.rad2Deg
+    camera.update()
   }
 }

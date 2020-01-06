@@ -45,7 +45,8 @@ export default class PerspectiveCamera implements Camera {
   }
 
   update() {
-
+    this.updateView()
+    this.updateProjection()
   }
 
   draw(layers: Layer[]) {
