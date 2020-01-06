@@ -14,25 +14,25 @@ export default class GameObject {
   material: Material
   geometry: Geometry
 
-  lifeCycle: LifeCycle
+  // lifeCycle: LifeCycle
 
   constructor(
     position: Vector3,
     rotation: Quaternion,
     scale: Vector3,
-    material: Material,
-    lifeCycle: LifeCycle
+    material: Material
+    // lifeCycle: LifeCycle
   ) {
     this.position = position
     this.rotation = rotation
     this.scale = scale
     this.material = material
     this.geometry = material.geometry
-    this.lifeCycle = lifeCycle
+    // this.lifeCycle = lifeCycle
   }
 
   update(camera: Camera) {
-    this.lifeCycle.onUpdate(this)
+    // this.lifeCycle.onUpdate(this)
     this.material.update(this, camera)
   }
 

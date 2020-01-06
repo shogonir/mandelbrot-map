@@ -19,14 +19,13 @@ export default class XYAxisLayer implements Layer {
 
     const plane = new PlaneGeometry(1.0)
     const xAxisBlackMaterial = new SingleColorMaterial(gl, plane, Color.black())
-    const lifeCycle = new LifeCycleRotateY()
-    const root2inverse = 1.0 / Math.sqrt(2.0)
+    // const lifeCycle = new LifeCycleRotateY()
     this.xAxis = new GameObject(
       Vector3.zero(),
       Quaternion.fromRadianAndVector3(0, new Vector3(0, 1, 0)),
       new Vector3(80, 80, 80),
       xAxisBlackMaterial,
-      lifeCycle
+      // lifeCycle
     )
     this.gameObjects.push(this.xAxis)
   }
