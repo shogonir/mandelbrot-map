@@ -67,9 +67,9 @@ export default class MMapCanvasController {
     camera.position = status.polar.toVector3()
 
     const polar = status.polar
-    const x = -polar.radius * Math.sin(polar.theta) * Math.cos(polar.phi)
-    const y = -polar.radius * Math.sin(polar.theta) * Math.sin(polar.phi)
-    const z = polar.radius * Math.sin(polar.theta)
+    const x = -Math.cos(polar.theta) * Math.cos(polar.phi)
+    const y = -Math.cos(polar.theta) * Math.sin(polar.phi)
+    const z = Math.sin(polar.theta)
     camera.upVector = new Vector3(x, y, z).normalize()
 
     const ptu = CanvasUtils.calculatePixelToUnit(status.zoom)
