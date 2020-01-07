@@ -5,7 +5,7 @@ import MMapStatus from '../status/MMapStatus'
 import XYAxisLayer from './layer/axis/XYAxisLayer'
 import CanvasUtils from '../../util/CanvasUtils'
 import EngineMath from '../../engine/common/EngineMath'
-import TileLayer from './layer/tile/TileLayer'
+import TileSheetLayer from './layer/tile/TileSheetLayer'
 
 export default class MMapCanvasController {
 
@@ -15,7 +15,7 @@ export default class MMapCanvasController {
   previousZoom: number
 
   xyAxisLayer: XYAxisLayer
-  tileLayer: TileLayer
+  tileSheetLayer: TileSheetLayer
 
   world: World
 
@@ -23,7 +23,7 @@ export default class MMapCanvasController {
     this.canvas = canvas
     this.previousZoom = status.zoom
     this.gl = this.canvas.getContext('webgl2')
-    this.gl.enable(this.gl.DEPTH_TEST);
+    // this.gl.enable(this.gl.DEPTH_TEST);
     // this.gl.enable(this.gl.CULL_FACE);
 
     const cameraPosition = new Vector3(0, 0, 10)
@@ -42,11 +42,11 @@ export default class MMapCanvasController {
       100
     )
 
-    this.tileLayer = new TileLayer(this.gl, status)
+    this.tileSheetLayer = new TileSheetLayer(this.gl, status)
     this.xyAxisLayer = new XYAxisLayer(this.gl, status)
 
     this.world = new World(mainCamera)
-    this.world.addLayer(this.tileLayer)
+    this.world.addLayer(this.tileSheetLayer)
     this.world.addLayer(this.xyAxisLayer)
 
     this.world.update()
@@ -57,6 +57,7 @@ export default class MMapCanvasController {
 
   update(status: MMapStatus) {
     this.updateCameraIfNeeded(status)
+    this.tileSheetLayer.update(status)
     this.xyAxisLayer.update(status)
     this.world.update()
   }

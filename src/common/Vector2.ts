@@ -21,4 +21,8 @@ export default class Vector2 {
   toVector3(): Vector3 {
     return new Vector3(this.x, this.y, 0)
   }
+
+  static zero(): Vector2 {
+    return new Vector2(0, 0)
+  }
 }

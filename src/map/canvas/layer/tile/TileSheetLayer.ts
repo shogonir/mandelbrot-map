@@ -6,12 +6,14 @@ import Vector3 from '../../../../common/Vector3';
 import SingleColorMaterial from '../../../../engine/object/material/SingleColorMaterial';
 import PlaneGeometry from '../../../../engine/object/geometry/PlaneGeometry';
 import Color from '../../../../common/Color';
+import SheetObject from './SheetObject';
+import Vector2 from '../../../../common/Vector2';
 
-export default class TileLayer implements Layer {
+export default class TileSheetLayer implements Layer {
 
   gameObjects: GameObject[]
 
-  tile: GameObject
+  sheet: SheetObject
 
   constructor(gl: WebGL2RenderingContext, status: MMapStatus) {
     this.gameObjects = []
@@ -19,13 +21,16 @@ export default class TileLayer implements Layer {
     const planeGeometry = new PlaneGeometry(1.0)
     const blueMaterial = new SingleColorMaterial(gl, planeGeometry, Color.blue())
 
-    this.tile = new GameObject(
-      Vector3.zero(),
-      Quaternion.fromRadianAndVector3(0, new Vector3(0, 1, 0)),
-      Vector3.one(),
-      blueMaterial
-    )
+    this.sheet = new SheetObject(Vector3.zero(), blueMaterial)
 
-    this.gameObjects.push(this.tile)
+    this.gameObjects.push(this.sheet)
+  }
+
+  update(status: MMapStatus) {
+    this.updatePosition(status)
+  }
+
+  updatePosition(status: MMapStatus) {
+    this.sheet.position = status.mappingVector2(Vector2.zero()).toVector3()
   }
 }
