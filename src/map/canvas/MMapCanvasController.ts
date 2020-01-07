@@ -21,12 +21,12 @@ export default class MMapCanvasController {
 
   constructor(canvas: HTMLCanvasElement, status: MMapStatus) {
     this.canvas = canvas
-    this.previousZoom = status.zoom
+    this.previousZoom = -1
     this.gl = this.canvas.getContext('webgl2')
     // this.gl.enable(this.gl.DEPTH_TEST);
     // this.gl.enable(this.gl.CULL_FACE);
 
-    const cameraPosition = new Vector3(0, 0, 10)
+    const cameraPosition = status.polar.toVector3()
     const ptu = CanvasUtils.calculatePixelToUnit(status.zoom)
     const toHalf = 0.5
     const halfVerticalFovRadian = Math.atan(status.clientHeight * ptu * toHalf / cameraPosition.z)
@@ -49,28 +49,32 @@ export default class MMapCanvasController {
     this.world.addLayer(this.tileSheetLayer)
     this.world.addLayer(this.xyAxisLayer)
 
+    this.updateCamera(status)
+
     this.world.update()
-    // setInterval(() => {
-    //   world.update()
-    // }, 16)
   }
 
   update(status: MMapStatus) {
-    this.updateCameraIfNeeded(status)
+    this.updateCamera(status)
     this.tileSheetLayer.update(status)
     this.xyAxisLayer.update(status)
     this.world.update()
   }
 
-  updateCameraIfNeeded(status: MMapStatus) {
-    if (this.previousZoom === status.zoom) {
-      return
-    }
-
+  updateCamera(status: MMapStatus) {
     const camera = this.world.mainCamera
+
+    camera.position = status.polar.toVector3()
+
+    const polar = status.polar
+    const x = -polar.radius * Math.sin(polar.theta) * Math.cos(polar.phi)
+    const y = -polar.radius * Math.sin(polar.theta) * Math.sin(polar.phi)
+    const z = polar.radius * Math.sin(polar.theta)
+    camera.upVector = new Vector3(x, y, z).normalize()
+
     const ptu = CanvasUtils.calculatePixelToUnit(status.zoom)
     const toHalf = 0.5
-    const halfVerticalFovRadian = Math.atan(status.clientHeight * ptu * toHalf / camera.position.z)
+    const halfVerticalFovRadian = Math.atan(status.clientHeight * ptu * toHalf / camera.position.magnitude())
     camera.verticalFov = halfVerticalFovRadian * 2 * EngineMath.rad2Deg
     camera.update()
   }

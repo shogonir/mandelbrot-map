@@ -1,4 +1,4 @@
-import Vector2 from "../../common/Vector2"
+import Vector2 from '../../common/Vector2'
 
 export default class MMapEventManager {
 
@@ -11,6 +11,7 @@ export default class MMapEventManager {
   canvas: HTMLCanvasElement
   onMove: (motion: Vector2) => void | undefined
   onZoom: (delta: number) => void | undefined
+  onRotate: (motion: Vector2) => void | undefined
 
   onMouseDown: () => void | undefined
   onContextMenu: () => void | undefined
@@ -23,10 +24,12 @@ export default class MMapEventManager {
     canvas: HTMLCanvasElement,
     onMove: (motion: Vector2) => void,
     onZoom: (delta: number) => void,
+    onRotate: (motion: Vector2) => void
   ) {
     this.canvas = canvas
     this.onMove = onMove
     this.onZoom = onZoom
+    this.onRotate = onRotate
     this.isMouseDown = false
     this.isMouseDoubleDown = false
     this.previousX = undefined
@@ -117,11 +120,13 @@ export default class MMapEventManager {
           return
         }
 
-        const moveX = event.offsetX - this.previousX
-        const moveY = event.offsetY - this.previousY
+        const motion = new Vector2(event.offsetX - this.previousX, event.offsetY - this.previousY)
 
-        if (this.onMove !== undefined) {
-          this.onMove(new Vector2(moveX, moveY))
+        if (this.isMouseDoubleDown && this.onRotate !== undefined) {
+          this.onRotate(motion)
+        }
+        else if (this.isMouseDoubleDown === false && this.onMove !== undefined) {
+          this.onMove(motion)
         }
 
         this.previousX = event.offsetX

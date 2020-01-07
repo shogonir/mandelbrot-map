@@ -18,6 +18,12 @@ export default class Vector2 {
     return new Vector2(this.x * scalar, this.y * scalar)
   }
 
+  rotate(theta: number): Vector2 {
+    const x = this.x * Math.cos(theta) - this.y * Math.sin(theta)
+    const y = this.x * Math.sin(theta) + this.y * Math.cos(theta)
+    return new Vector2(x, y)
+  }
+
   toVector3(): Vector3 {
     return new Vector3(this.x, this.y, 0)
   }

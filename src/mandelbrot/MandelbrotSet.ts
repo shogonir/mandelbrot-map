@@ -44,17 +44,6 @@ export default class MandelbrotSet {
         data[pixelIndex * 4 + 1] = 255 * willConverge  // g
         data[pixelIndex * 4 + 2] = 255 * willConverge  // b
         data[pixelIndex * 4 + 3] = 255  // a
-        // if (willConverge) {
-        //   data[pixelIndex * 4 + 0] = 255
-        //   data[pixelIndex * 4 + 1] = 255
-        //   data[pixelIndex * 4 + 2] = 255
-        //   data[pixelIndex * 4 + 3] = 255
-        // } else {
-        //   data[pixelIndex * 4 + 0] = 0
-        //   data[pixelIndex * 4 + 1] = 0
-        //   data[pixelIndex * 4 + 2] = 0
-        //   data[pixelIndex * 4 + 3] = 255
-        // }
         pixelIndex++;
       }
     }

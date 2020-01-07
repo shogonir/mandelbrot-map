@@ -3,8 +3,9 @@ import Vector2 from '../common/Vector2'
 import MMapStatus from './status/MMapStatus'
 import MMapEventManager from './event/MMapEventManager'
 import MMapCanvasController from './canvas/MMapCanvasController'
-import MMapRenderer from './render/MMapRenderer'
 import CanvasUtils from '../util/CanvasUtils'
+import PolarCoordinate from '../common/PolarCoordinate'
+import EngineMath from '../engine/common/EngineMath'
 
 export default class MMap {
 
@@ -14,7 +15,6 @@ export default class MMap {
 
   eventManager: MMapEventManager
   canvasController: MMapCanvasController
-  renderer: MMapRenderer | undefined
 
   canvas: HTMLCanvasElement
 
@@ -23,21 +23,18 @@ export default class MMap {
   constructor(canvasId: string, center: Vector2, zoom: number) {
     this.setupCanvas(canvasId)
 
-    this.status = new MMapStatus(center, zoom, this.canvas.width, this.canvas.height)
+    const polar = new PolarCoordinate(10, -Math.PI / 2, 1 * EngineMath.deg2Rad)
+    this.status = new MMapStatus(center, zoom, this.canvas.width, this.canvas.height, polar)
     this.status.update()
 
     this.setupCanvasController()
 
     this.update = () => {
-      if (this.renderer === undefined) {
-        return
-      }
       this.status.update()
       this.canvasController.update(this.status)
     }
 
     this.setupEventManager()
-    this.setupRenderer()
   }
 
   setupCanvas(canvasId: string) {
@@ -55,10 +52,29 @@ export default class MMap {
     
     const onMove = (motionInPixel: Vector2) => {
       const ptu = CanvasUtils.calculatePixelToUnit(this.status.zoom)
-      const motion = motionInPixel.multiply(ptu)
+      let motion = motionInPixel.multiply(ptu)
       motion.x *= -1
+      motion = motion.rotate(this.status.polar.phi + Math.PI / 2)
       this.status.center = this.status.center.add(motion)
       
+      if (this.update !== undefined) {
+        this.update()
+      }
+    }
+
+    const onRotate = (motionInPixel: Vector2) => {
+      const ptu = CanvasUtils.calculatePixelToUnit(this.status.zoom)
+      const motion = motionInPixel.multiply(ptu)
+      this.status.polar.phi -= motion.x
+      this.status.polar.theta -= motion.y
+
+      if (this.status.polar.theta < 1 * EngineMath.deg2Rad) {
+        this.status.polar.theta = 1 * EngineMath.deg2Rad
+      }
+      if (this.status.polar.theta > 60 * EngineMath.deg2Rad) {
+        this.status.polar.theta = 60 * EngineMath.deg2Rad
+      }
+
       if (this.update !== undefined) {
         this.update()
       }
@@ -69,7 +85,7 @@ export default class MMap {
       if (delta === 0) {
         return
       }
-      
+
       this.status.zoom += delta * zoomCoeffient
       if (this.status.zoom < MMap.MinZoom) {
         this.status.zoom = MMap.MinZoom
@@ -80,14 +96,10 @@ export default class MMap {
       }
     }
 
-    this.eventManager = new MMapEventManager(this.canvas, onMove, onZoom)
+    this.eventManager = new MMapEventManager(this.canvas, onMove, onZoom, onRotate)
   }
 
   setupCanvasController() {
     this.canvasController = new MMapCanvasController(this.canvas, this.status)
-  }
-
-  setupRenderer() {
-    this.renderer = new MMapRenderer()
   }
 }

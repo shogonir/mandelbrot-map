@@ -1,13 +1,12 @@
 import Layer from '../../../../engine/world/layer/Layer';
 import GameObject from '../../../../engine/object/GameObject';
 import MMapStatus from '../../../status/MMapStatus';
-import Quaternion from '../../../../common/Quaternion';
-import Vector3 from '../../../../common/Vector3';
-import SingleColorMaterial from '../../../../engine/object/material/SingleColorMaterial';
-import PlaneGeometry from '../../../../engine/object/geometry/PlaneGeometry';
-import Color from '../../../../common/Color';
-import SheetObject from './SheetObject';
-import Vector2 from '../../../../common/Vector2';
+import Vector3 from '../../../../common/Vector3'
+import SingleColorMaterial from '../../../../engine/object/material/SingleColorMaterial'
+import PlaneGeometry from '../../../../engine/object/geometry/PlaneGeometry'
+import Color from '../../../../common/Color'
+import SheetObject from './SheetObject'
+import Vector2 from '../../../../common/Vector2'
 
 export default class TileSheetLayer implements Layer {
 

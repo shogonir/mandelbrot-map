@@ -1,12 +1,12 @@
-import Layer from '../../../../engine/world/layer/Layer';
-import GameObject from '../../../../engine/object/GameObject';
-import Vector3 from '../../../../common/Vector3';
-import Quaternion from '../../../../common/Quaternion';
-import PlaneGeometry from '../../../../engine/object/geometry/PlaneGeometry';
-import SingleColorMaterial from '../../../../engine/object/material/SingleColorMaterial';
-import Color from '../../../../common/Color';
-import MMapStatus from '../../../status/MMapStatus';
-import CanvasUtils from '../../../../util/CanvasUtils';
+import Layer from '../../../../engine/world/layer/Layer'
+import GameObject from '../../../../engine/object/GameObject'
+import Vector3 from '../../../../common/Vector3'
+import Quaternion from '../../../../common/Quaternion'
+import PlaneGeometry from '../../../../engine/object/geometry/PlaneGeometry'
+import SingleColorMaterial from '../../../../engine/object/material/SingleColorMaterial'
+import Color from '../../../../common/Color'
+import MMapStatus from '../../../status/MMapStatus'
+import CanvasUtils from '../../../../util/CanvasUtils'
 
 export default class XYAxisLayer implements Layer {
 

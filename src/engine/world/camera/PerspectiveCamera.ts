@@ -50,11 +50,8 @@ export default class PerspectiveCamera implements Camera {
   }
 
   updateProjection() {
-    const horizontalFov = this.verticalFov * this.aspect
-    const halfHeight = this.near * Math.tan(this.verticalFov / 2 * EngineMath.deg2Rad)
-    const halfWidth = this.near * Math.tan(horizontalFov / 2 * EngineMath.deg2Rad)
     this.projectionMatrix = mat4.create()
-    mat4.frustum(this.projectionMatrix, -halfWidth, halfWidth, -halfHeight, halfHeight, this.near, this.far)
+    mat4.perspective(this.projectionMatrix, this.verticalFov * EngineMath.deg2Rad, this.aspect, this.near, this.far)
   }
 
   update() {

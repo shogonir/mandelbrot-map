@@ -1,5 +1,5 @@
-import GameObject from '../../GameObject';
-import Camera from '../../../world/camera/Camera';
+import GameObject from '../../GameObject'
+import Camera from '../../../world/camera/Camera'
 import Geometry from '../../geometry/Geometry'
 
 export default interface Program {

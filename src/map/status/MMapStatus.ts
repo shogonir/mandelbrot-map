@@ -1,5 +1,6 @@
 import Vector2 from "../../common/Vector2";
 import CanvasUtils from "../../util/CanvasUtils";
+import PolarCoordinate from "../../common/PolarCoordinate";
 
 export default class MMapStatus {
 
@@ -9,14 +10,17 @@ export default class MMapStatus {
   clientWidth: number
   clientHeight: number
 
-  minUnit: Vector2
-  maxUnit: Vector2
+  polar: PolarCoordinate
 
-  constructor(center: Vector2, zoom: number, clientWidth: number, clientHeight: number) {
+  minUnit: Vector2  // deprecated
+  maxUnit: Vector2  // deprecated
+
+  constructor(center: Vector2, zoom: number, clientWidth: number, clientHeight: number, polar: PolarCoordinate) {
     this.center = center
     this.zoom = zoom
     this.clientWidth = clientWidth
     this.clientHeight = clientHeight
+    this.polar = polar
   }
 
   update() {
