@@ -6,6 +6,7 @@ import XYAxisLayer from './layer/axis/XYAxisLayer'
 import CanvasUtils from '../../util/CanvasUtils'
 import EngineMath from '../../engine/common/EngineMath'
 import TileSheetLayer from './layer/tile/TileSheetLayer'
+import ViewAreaLayer from './layer/viewarea/ViewAreaLayer'
 
 export default class MMapCanvasController {
 
@@ -14,6 +15,7 @@ export default class MMapCanvasController {
 
   previousZoom: number
 
+  viewAreaLayer: ViewAreaLayer
   xyAxisLayer: XYAxisLayer
   tileSheetLayer: TileSheetLayer
 
@@ -42,12 +44,14 @@ export default class MMapCanvasController {
       100
     )
 
-    this.tileSheetLayer = new TileSheetLayer(this.gl, status)
+    this.viewAreaLayer = new ViewAreaLayer(this.gl, status)
     this.xyAxisLayer = new XYAxisLayer(this.gl, status)
+    this.tileSheetLayer = new TileSheetLayer(this.gl, status)
 
     this.world = new World(mainCamera)
     this.world.addLayer(this.tileSheetLayer)
     this.world.addLayer(this.xyAxisLayer)
+    this.world.addLayer(this.viewAreaLayer)
 
     this.updateCamera(status)
 
@@ -56,26 +60,21 @@ export default class MMapCanvasController {
 
   update(status: MMapStatus) {
     this.updateCamera(status)
-    this.tileSheetLayer.update(status)
+
+    this.viewAreaLayer.update(status)
     this.xyAxisLayer.update(status)
+    this.tileSheetLayer.update(status)
+    
     this.world.update()
   }
 
   updateCamera(status: MMapStatus) {
     const camera = this.world.mainCamera
 
-    camera.position = status.polar.toVector3()
-
-    const polar = status.polar
-    const x = -Math.cos(polar.theta) * Math.cos(polar.phi)
-    const y = -Math.cos(polar.theta) * Math.sin(polar.phi)
-    const z = Math.sin(polar.theta)
-    camera.upVector = new Vector3(x, y, z).normalize()
-
-    const ptu = CanvasUtils.calculatePixelToUnit(status.zoom)
-    const toHalf = 0.5
-    const halfVerticalFovRadian = Math.atan(status.clientHeight * ptu * toHalf / camera.position.magnitude())
-    camera.verticalFov = halfVerticalFovRadian * 2 * EngineMath.rad2Deg
+    camera.position = status.cameraPosition.clone()
+    camera.upVector = status.cameraUp.clone()
+    camera.verticalFov = status.verticalFov
+    
     camera.update()
   }
 }

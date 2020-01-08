@@ -4,8 +4,9 @@ import MMapStatus from './status/MMapStatus'
 import MMapEventManager from './event/MMapEventManager'
 import MMapCanvasController from './canvas/MMapCanvasController'
 import CanvasUtils from '../util/CanvasUtils'
-import PolarCoordinate from '../common/PolarCoordinate'
+import PolarCoordinate3 from '../common/PolarCoordinate'
 import EngineMath from '../engine/common/EngineMath'
+import Vector3 from '../common/Vector3'
 
 export default class MMap {
 
@@ -23,8 +24,8 @@ export default class MMap {
   constructor(canvasId: string, center: Vector2, zoom: number) {
     this.setupCanvas(canvasId)
 
-    const polar = new PolarCoordinate(10, -Math.PI / 2, 1 * EngineMath.deg2Rad)
-    this.status = new MMapStatus(center, zoom, this.canvas.width, this.canvas.height, polar)
+    const polar = new PolarCoordinate3(10, -Math.PI / 2, 1 * EngineMath.deg2Rad)
+    this.status = new MMapStatus(center, zoom, this.canvas.width, this.canvas.height, polar, Vector3.zero())
     this.status.update()
 
     this.setupCanvasController()

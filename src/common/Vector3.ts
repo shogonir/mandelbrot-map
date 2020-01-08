@@ -1,3 +1,5 @@
+import Vector2 from "./Vector2"
+
 export default class Vector3 {
 
   x: number
@@ -8,6 +10,10 @@ export default class Vector3 {
     this.x = x
     this.y = y
     this.z = z
+  }
+
+  clone(): Vector3 {
+    return new Vector3(this.x, this.y, this.z)
   }
 
   add(other: Vector3): Vector3 {
@@ -40,6 +46,10 @@ export default class Vector3 {
 
   isZero(): boolean {
     return this.x === 0 && this.y === 0 && this.z === 0
+  }
+
+  toVector2(): Vector2 {
+    return new Vector2(this.x, this.y)
   }
 
   toArray(): number[] {

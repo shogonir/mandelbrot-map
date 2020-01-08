@@ -16,6 +16,14 @@ export default class Color {
     return new Color(0, 0, 0, 1.0)
   }
 
+  static red(): Color {
+    return new Color(1.0, 0, 0, 1.0)
+  }
+
+  static green(): Color {
+    return new Color(0, 1.0, 0, 1.0)
+  }
+
   static blue(): Color {
     return new Color(0, 0, 1.0, 1.0)
   }
