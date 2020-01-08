@@ -28,12 +28,19 @@ export default class PolarCoordinate3 {
   }
 
   /**
-   * vector from this point to z-axis
+   * vector from this point to z-axis (0 < theta < pi/2)
    */
   toUpVector3(): Vector3 {
     const x = -Math.cos(this.theta) * Math.cos(this.phi)
     const y = -Math.cos(this.theta) * Math.sin(this.phi)
     const z = Math.sin(this.theta)
     return  new Vector3(x, y, z).normalize()
+  }
+
+  /**
+   * vector from this point to right (0 < theta < pi/2)
+   */
+  toRightVector3(): Vector3 {
+    return new Vector3(-Math.sin(this.phi), Math.cos(this.phi), 0)
   }
 }
