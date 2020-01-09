@@ -1,35 +1,124 @@
-import Layer from '../../../../engine/world/layer/Layer';
-import GameObject from '../../../../engine/object/GameObject';
-import MMapStatus from '../../../status/MMapStatus';
+import Layer from '../../../../engine/world/layer/Layer'
+import GameObject from '../../../../engine/object/GameObject'
+import MMapStatus from '../../../status/MMapStatus'
 import Vector3 from '../../../../common/Vector3'
 import SingleColorMaterial from '../../../../engine/object/material/SingleColorMaterial'
 import PlaneGeometry from '../../../../engine/object/geometry/PlaneGeometry'
 import Color from '../../../../common/Color'
 import SheetObject from './SheetObject'
 import Vector2 from '../../../../common/Vector2'
+import Numbers from '../../../../util/Numbers'
+import Material from '../../../../engine/object/material/Material'
+import NumberRange from '../../../../common/NumberRange'
+import Ray3 from '../../../../common/Ray3'
 
 export default class TileSheetLayer implements Layer {
 
+  private static MaxY: number = 2
+  private static MinY: number = -2
+
   gameObjects: GameObject[]
 
-  sheet: SheetObject
+  sheets: SheetObject[]
+
+  sharedMaterial: Material
 
   constructor(gl: WebGL2RenderingContext, status: MMapStatus) {
     this.gameObjects = []
+    this.sheets = []
 
     const planeGeometry = new PlaneGeometry(1.0)
-    const blueMaterial = new SingleColorMaterial(gl, planeGeometry, Color.blue())
+    this.sharedMaterial = new SingleColorMaterial(gl, planeGeometry, Color.blue())
 
-    this.sheet = new SheetObject(Vector3.zero(), blueMaterial)
-
-    this.gameObjects.push(this.sheet)
+    this.update(status)
   }
 
   update(status: MMapStatus) {
-    this.updatePosition(status)
+    const rangeX = this.calculateRangeX(status)
+    const minXMulti4 = 4 * Math.floor(rangeX.min / 4)
+    const maxXMulti4 = 4 * Math.ceil(rangeX.max / 4)
+    const xsMulti4 = Numbers.range(minXMulti4, maxXMulti4 + 4, 4)
+    this.updateNumberOfSheets(xsMulti4.length)
+    this.updatePosition(status, xsMulti4)
+    this.gameObjects = this.sheets
   }
 
-  updatePosition(status: MMapStatus) {
-    this.sheet.position = status.mappingVector2(Vector2.zero()).toVector3()
+  calculateRangeX(status: MMapStatus): NumberRange {
+    const xs: number[] = []
+    const points = status.viewArea.points
+    Numbers.range(0, points.length - 1).forEach((index: number) => {
+      const mayBeRangeX = this.calculateLineSegmentRangeX(points[index], points[index + 1])
+      if (mayBeRangeX === undefined) {
+        return
+      }
+      const rangeX = mayBeRangeX
+      xs.push(rangeX.min)
+      xs.push(rangeX.max)
+    })
+    const mayBeRangeX = this.calculateLineSegmentRangeX(points[points.length - 1], points[0])
+    if (mayBeRangeX !== undefined) {
+      const rangeX = mayBeRangeX
+      xs.push(rangeX.min)
+      xs.push(rangeX.max)
+    }
+    if (xs.length === 0) {
+      return new NumberRange(0, 0)
+    }
+    return new NumberRange(Math.min(...xs), Math.max(...xs))
+  }
+
+  calculateLineSegmentRangeX(s: Vector3, t: Vector3): NumberRange | undefined {
+    const xs: number[] = []
+    const minY = TileSheetLayer.MinY
+    const maxY = TileSheetLayer.MaxY
+    if (minY <= s.y && s.y <= maxY) {
+      xs.push(s.x)
+    }
+    if (minY <= t.y && t.y <= maxY) {
+      xs.push(t.x)
+    }
+    if ((s.y <= minY && t.y >= minY) || (s.y >= minY && t.y <= minY)) {
+      const ray = new Ray3(s, t.subtract(s))
+      const mayBeIntersection = ray.intersectsWithPlaneYEqualsParameter(minY)
+      if (mayBeIntersection !== undefined) {
+        xs.push(mayBeIntersection.x)
+      }
+    }
+    if ((s.y <= maxY && t.y >= maxY) || (s.y >= maxY && t.y <= maxY)) {
+      const ray = new Ray3(s, t.subtract(s))
+      const mayBeIntersection = ray.intersectsWithPlaneYEqualsParameter(maxY)
+      if (mayBeIntersection !== undefined) {
+        xs.push(mayBeIntersection.x)
+      }
+    }
+    if (xs.length === 0) {
+      return undefined
+    }
+    return new NumberRange(Math.min(...xs), Math.max(...xs))
+  }
+
+  updateNumberOfSheets(targetLength: number) {
+    if (targetLength <= this.sheets.length) {
+      this.sheets.length = targetLength
+      return
+    }
+
+    while (this.sheets.length < targetLength) {
+      this.sheets.push(this.createSheetObject())
+    }
+  }
+
+  private createSheetObject(): SheetObject {
+    return new SheetObject(Vector3.zero(), this.sharedMaterial)
+  }
+
+  updatePosition(status: MMapStatus, xsMulti4: number[]) {
+    if (this.sheets.length !== xsMulti4.length) {
+      return
+    }
+
+    this.sheets.forEach((sheet: SheetObject, index: number) => {
+      sheet.position = status.mappingVector2(new Vector2(xsMulti4[index], 0)).toVector3()  
+    })
   }
 }

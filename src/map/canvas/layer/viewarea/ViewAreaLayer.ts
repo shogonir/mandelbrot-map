@@ -105,21 +105,21 @@ export default class ViewAreaLayer implements Layer {
       gameObject.scale = new Vector3(side, side, side)
     })
 
-    this.topLeft.position = status.viewArea.topLeft
-    this.topTopLeft.position = status.viewArea.topTopLeft
-    this.top.position = status.viewArea.top
-    this.topTopRight.position = status.viewArea.topTopRight
-    this.topRight.position = status.viewArea.topRight
-    this.rightTopRight.position = status.viewArea.rightTopRight
-    this.right.position = status.viewArea.right
-    this.rightBottomRight.position = status.viewArea.rightBottomRight
-    this.bottomRight.position = status.viewArea.bottomRight
-    this.bottomBottomRight.position = status.viewArea.bottomBottomRight
-    this.bottom.position = status.viewArea.bottom
-    this.bottomBottomLeft.position = status.viewArea.bottomBottomLeft
-    this.bottomLeft.position = status.viewArea.bottomLeft
-    this.leftBottomLeft.position = status.viewArea.leftBottomLeft
-    this.left.position = status.viewArea.left
-    this.leftTopLeft.position = status.viewArea.leftTopLeft
+    this.topLeft.position = status.mappingVector2(status.viewArea.topLeft.toVector2()).toVector3()
+    this.topTopLeft.position = status.mappingVector2(status.viewArea.topTopLeft.toVector2()).toVector3()
+    this.top.position = status.mappingVector2(status.viewArea.top.toVector2()).toVector3()
+    this.topTopRight.position = status.mappingVector2(status.viewArea.topTopRight.toVector2()).toVector3()
+    this.topRight.position = status.mappingVector2(status.viewArea.topRight.toVector2()).toVector3()
+    this.rightTopRight.position = status.mappingVector2(status.viewArea.rightTopRight.toVector2()).toVector3()
+    this.right.position = status.mappingVector2(status.viewArea.right.toVector2()).toVector3()
+    this.rightBottomRight.position = status.mappingVector2(status.viewArea.rightBottomRight.toVector2()).toVector3()
+    this.bottomRight.position = status.mappingVector2(status.viewArea.bottomRight.toVector2()).toVector3()
+    this.bottomBottomRight.position = status.mappingVector2(status.viewArea.bottomBottomRight.toVector2()).toVector3()
+    this.bottom.position = status.mappingVector2(status.viewArea.bottom.toVector2()).toVector3()
+    this.bottomBottomLeft.position = status.mappingVector2(status.viewArea.bottomBottomLeft.toVector2()).toVector3()
+    this.bottomLeft.position = status.mappingVector2(status.viewArea.bottomLeft.toVector2()).toVector3()
+    this.leftBottomLeft.position = status.mappingVector2(status.viewArea.leftBottomLeft.toVector2()).toVector3()
+    this.left.position = status.mappingVector2(status.viewArea.left.toVector2()).toVector3()
+    this.leftTopLeft.position = status.mappingVector2(status.viewArea.leftTopLeft.toVector2()).toVector3()
   }
 }

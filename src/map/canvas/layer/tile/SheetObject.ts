@@ -10,7 +10,7 @@ export default class SheetObject extends GameObject {
     material: Material
   ) {
     const rotation = Quaternion.fromRadianAndVector3(0, new Vector3(0, 1, 0))
-    const scale = Vector3.one().multiply(4)
+    const scale = Vector3.one().multiply(3.8)
     super(position, rotation, scale, material)
   }
 }

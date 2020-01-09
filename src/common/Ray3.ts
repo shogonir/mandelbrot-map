@@ -30,4 +30,25 @@ export default class Ray3 {
     const dToS = Math.abs(this.start.z / this.direction.z)
     return this.start.add(this.direction.multiply(dToS))
   }
+
+  intersectsWithPlaneYEqualsParameter(y: number): Vector3 | undefined {
+    if (this.start.y === y) {
+      return this.start
+    }
+
+    if (this.direction.y === 0) {
+      return undefined
+    }
+
+    if (this.start.y < y && this.direction.y < 0) {
+      return undefined
+    }
+
+    if (this.start.y > y && this.direction.y > 0) {
+      return undefined
+    }
+
+    const coefficient = (y - this.start.y) / this.direction.y
+    return this.start.add(this.direction.multiply(coefficient))
+  }
 }

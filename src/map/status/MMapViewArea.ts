@@ -36,6 +36,8 @@ export default class MMapViewArea {
   left: Vector3 | undefined               // 14
   leftTopLeft: Vector3 | undefined        // 15
 
+  points: (Vector3 | undefined)[]
+
   constructor(status: MMapStatus) {
     this.update(status)
   }
@@ -57,6 +59,24 @@ export default class MMapViewArea {
     this.leftBottomLeft = MMapViewArea.updatePoint(status, new Vector2(-1, -0.5))
     this.left = MMapViewArea.updatePoint(status, new Vector2(-1, 0))
     this.leftTopLeft = MMapViewArea.updatePoint(status, new Vector2(-1, 0.5))
+    
+    this.points = []
+    this.points.push(this.topLeft)
+    this.points.push(this.topTopLeft)
+    this.points.push(this.top)
+    this.points.push(this.topTopRight)
+    this.points.push(this.topRight)
+    this.points.push(this.rightTopRight)
+    this.points.push(this.right)
+    this.points.push(this.rightBottomRight)
+    this.points.push(this.bottomRight)
+    this.points.push(this.bottomBottomRight)
+    this.points.push(this.bottom)
+    this.points.push(this.bottomBottomLeft)
+    this.points.push(this.bottomLeft)
+    this.points.push(this.leftBottomLeft)
+    this.points.push(this.left)
+    this.points.push(this.leftTopLeft)
   }
 
   static updatePoint(status: MMapStatus, viewPoint: Vector2): Vector3 | undefined {
@@ -74,7 +94,7 @@ export default class MMapViewArea {
       return undefined
     }
 
-    const intersection = ray.intersectsWithPlaneZ0().toVector2().add(status.center)
-    return status.mappingVector2(intersection).toVector3()
+    const intersection = mayBeIntersection
+    return intersection.toVector2().add(status.center).toVector3()
   }
 }
