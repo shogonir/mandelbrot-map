@@ -99,38 +99,27 @@ export default class ViewAreaLayer implements Layer {
   }
 
   update(status: MMapStatus) {
-    ViewAreaLayer.updatePoint(this.topLeft, status, new Vector2(-1, 1))
-    ViewAreaLayer.updatePoint(this.topTopLeft, status, new Vector2(-0.5, 1))
-    ViewAreaLayer.updatePoint(this.top, status, new Vector2(0, 1))
-    ViewAreaLayer.updatePoint(this.topTopRight, status, new Vector2(0.5, 1))
-    ViewAreaLayer.updatePoint(this.topRight, status, new Vector2(1, 1))
-    ViewAreaLayer.updatePoint(this.rightTopRight, status, new Vector2(1, 0.5))
-    ViewAreaLayer.updatePoint(this.right, status, new Vector2(1, 0))
-    ViewAreaLayer.updatePoint(this.rightBottomRight, status, new Vector2(1, -0.5))
-    ViewAreaLayer.updatePoint(this.bottomRight, status, new Vector2(1, -1))
-    ViewAreaLayer.updatePoint(this.bottomBottomRight, status, new Vector2(0.5, -1))
-    ViewAreaLayer.updatePoint(this.bottom, status, new Vector2(0, -1))
-    ViewAreaLayer.updatePoint(this.bottomBottomLeft, status, new Vector2(-0.5, -1))
-    ViewAreaLayer.updatePoint(this.bottomLeft, status, new Vector2(-1, -1))
-    ViewAreaLayer.updatePoint(this.leftBottomLeft, status, new Vector2(-1, -0.5))
-    ViewAreaLayer.updatePoint(this.left, status, new Vector2(-1, 0))
-    ViewAreaLayer.updatePoint(this.leftTopLeft, status, new Vector2(-1, 0.5))
-  }
-
-  static updatePoint(point: GameObject, status: MMapStatus, viewPoint: Vector2) {
     const ptu = CanvasUtils.calculatePixelToUnit(status.zoom)
     const side = ViewAreaLayer.PointSidePixel * ptu
-    point.scale = new Vector3(side, side, side)
+    this.gameObjects.forEach((gameObject: GameObject) => {
+      gameObject.scale = new Vector3(side, side, side)
+    })
 
-    const halfHeight = status.clientHeight * ptu / 2
-    const halfWidth = status.clientWidth * ptu / 2
-    const toTopVector = status.polar.toUpVector3().normalize().multiply(halfHeight * viewPoint.y)
-    const toRightVector = status.polar.toRightVector3().normalize().multiply(halfWidth * viewPoint.x)
-    const toTopRightVector = toTopVector.add(toRightVector)
-
-    const ray = new Ray3(status.cameraPosition, toTopRightVector.subtract(status.cameraPosition))
-    const intersection = ray.intersectsWithPlaneZ0().toVector2().add(status.center)
-
-    point.position = status.mappingVector2(intersection).toVector3()
+    this.topLeft.position = status.viewArea.topLeft
+    this.topTopLeft.position = status.viewArea.topTopLeft
+    this.top.position = status.viewArea.top
+    this.topTopRight.position = status.viewArea.topTopRight
+    this.topRight.position = status.viewArea.topRight
+    this.rightTopRight.position = status.viewArea.rightTopRight
+    this.right.position = status.viewArea.right
+    this.rightBottomRight.position = status.viewArea.rightBottomRight
+    this.bottomRight.position = status.viewArea.bottomRight
+    this.bottomBottomRight.position = status.viewArea.bottomBottomRight
+    this.bottom.position = status.viewArea.bottom
+    this.bottomBottomLeft.position = status.viewArea.bottomBottomLeft
+    this.bottomLeft.position = status.viewArea.bottomLeft
+    this.leftBottomLeft.position = status.viewArea.leftBottomLeft
+    this.left.position = status.viewArea.left
+    this.leftTopLeft.position = status.viewArea.leftTopLeft
   }
 }

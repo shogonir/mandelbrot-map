@@ -3,6 +3,7 @@ import CanvasUtils from '../../util/CanvasUtils'
 import PolarCoordinate3 from '../../common/PolarCoordinate'
 import Vector3 from '../../common/Vector3'
 import EngineMath from '../../engine/common/EngineMath'
+import MMapViewArea from './MMapViewArea'
 
 export default class MMapStatus {
 
@@ -20,6 +21,8 @@ export default class MMapStatus {
   
   verticalFov: number
   aspect: number
+
+  viewArea: MMapViewArea
 
   minUnit: Vector2  // deprecated
   maxUnit: Vector2  // deprecated
@@ -39,6 +42,8 @@ export default class MMapStatus {
     this.polar = polar
     this.cameraTarget = cameraTarget
     this.aspect = clientWidth / clientHeight
+    this.update()
+    this.viewArea = new MMapViewArea(this)
   }
 
   update() {
@@ -54,6 +59,10 @@ export default class MMapStatus {
     const toHalf = 0.5
     const halfVerticalFovRadian = Math.atan(this.clientHeight * ptu * toHalf / this.cameraPosition.magnitude())
     this.verticalFov = halfVerticalFovRadian * 2 * EngineMath.rad2Deg
+
+    if (this.viewArea !== undefined) {
+      this.viewArea.update(this)
+    }
   }
 
   mappingX(x: number): number {
