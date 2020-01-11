@@ -13,6 +13,8 @@ export default class MMap {
   public static MinZoom: number = 0
   public static MinY: number = -2
   public static MaxY: number = 2
+  public static MinX: number = -2
+  public static MaxX: number = 2
 
   status: MMapStatus
 
@@ -58,13 +60,26 @@ export default class MMap {
       let motion = motionInPixel.multiply(ptu)
       motion.x *= -1
       motion = motion.rotate(this.status.polar.phi + Math.PI / 2)
-      this.status.center = this.status.center.add(motion)
 
-      if (this.status.center.y < MMap.MinY) {
-        this.status.center.y = MMap.MinY
+      const center = this.status.center.add(motion)
+      this.status.center = center
+
+      if (center.x < MMap.MinX) {
+        const before = center.x
+        center.x = (center.x - 2) % 4 + 2
+        console.log(`x: ${before} -> ${center.x}`)
       }
-      if (this.status.center.y > MMap.MaxY) {
-        this.status.center.y = MMap.MaxY
+      if (center.x > MMap.MaxX) {
+        const before = center.x
+        center.x = (center.x + 2) % 4 - 2
+        console.log(`x: ${before} -> ${center.x}`)
+      }
+
+      if (center.y < MMap.MinY) {
+        center.y = MMap.MinY
+      }
+      if (center.y > MMap.MaxY) {
+        center.y = MMap.MaxY
       }
 
       if (this.update !== undefined) {
