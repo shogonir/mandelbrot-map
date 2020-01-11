@@ -65,14 +65,10 @@ export default class MMap {
       this.status.center = center
 
       if (center.x < MMap.MinX) {
-        const before = center.x
         center.x = (center.x - 2) % 4 + 2
-        console.log(`x: ${before} -> ${center.x}`)
       }
       if (center.x > MMap.MaxX) {
-        const before = center.x
         center.x = (center.x + 2) % 4 - 2
-        console.log(`x: ${before} -> ${center.x}`)
       }
 
       if (center.y < MMap.MinY) {
