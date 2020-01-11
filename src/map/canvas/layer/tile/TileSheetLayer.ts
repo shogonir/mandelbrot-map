@@ -11,11 +11,9 @@ import Numbers from '../../../../util/Numbers'
 import Material from '../../../../engine/object/material/Material'
 import NumberRange from '../../../../common/NumberRange'
 import Ray3 from '../../../../common/Ray3'
+import MMap from '../../../MMap'
 
 export default class TileSheetLayer implements Layer {
-
-  private static MaxY: number = 2
-  private static MinY: number = -2
 
   gameObjects: GameObject[]
 
@@ -69,24 +67,22 @@ export default class TileSheetLayer implements Layer {
 
   calculateLineSegmentRangeX(s: Vector3, t: Vector3): NumberRange | undefined {
     const xs: number[] = []
-    const minY = TileSheetLayer.MinY
-    const maxY = TileSheetLayer.MaxY
-    if (minY <= s.y && s.y <= maxY) {
+    if (MMap.MinY <= s.y && s.y <= MMap.MaxY) {
       xs.push(s.x)
     }
-    if (minY <= t.y && t.y <= maxY) {
+    if (MMap.MinY <= t.y && t.y <= MMap.MaxY) {
       xs.push(t.x)
     }
-    if ((s.y <= minY && t.y >= minY) || (s.y >= minY && t.y <= minY)) {
+    if ((s.y <= MMap.MinY && t.y >= MMap.MinY) || (s.y >= MMap.MinY && t.y <= MMap.MinY)) {
       const ray = new Ray3(s, t.subtract(s))
-      const mayBeIntersection = ray.intersectsWithPlaneYEqualsParameter(minY)
+      const mayBeIntersection = ray.intersectsWithPlaneYEqualsParameter(MMap.MinY)
       if (mayBeIntersection !== undefined) {
         xs.push(mayBeIntersection.x)
       }
     }
-    if ((s.y <= maxY && t.y >= maxY) || (s.y >= maxY && t.y <= maxY)) {
+    if ((s.y <= MMap.MaxY && t.y >= MMap.MaxY) || (s.y >= MMap.MaxY && t.y <= MMap.MaxY)) {
       const ray = new Ray3(s, t.subtract(s))
-      const mayBeIntersection = ray.intersectsWithPlaneYEqualsParameter(maxY)
+      const mayBeIntersection = ray.intersectsWithPlaneYEqualsParameter(MMap.MaxY)
       if (mayBeIntersection !== undefined) {
         xs.push(mayBeIntersection.x)
       }

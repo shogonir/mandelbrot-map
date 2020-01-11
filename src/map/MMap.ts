@@ -10,7 +10,9 @@ import Vector3 from '../common/Vector3'
 
 export default class MMap {
 
-  private static MinZoom: number = 0
+  public static MinZoom: number = 0
+  public static MinY: number = -2
+  public static MaxY: number = 2
 
   status: MMapStatus
 
@@ -57,7 +59,14 @@ export default class MMap {
       motion.x *= -1
       motion = motion.rotate(this.status.polar.phi + Math.PI / 2)
       this.status.center = this.status.center.add(motion)
-      
+
+      if (this.status.center.y < MMap.MinY) {
+        this.status.center.y = MMap.MinY
+      }
+      if (this.status.center.y > MMap.MaxY) {
+        this.status.center.y = MMap.MaxY
+      }
+
       if (this.update !== undefined) {
         this.update()
       }
