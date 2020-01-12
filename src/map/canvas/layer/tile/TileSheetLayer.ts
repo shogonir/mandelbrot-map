@@ -117,7 +117,7 @@ export default class TileSheetLayer implements Layer {
     const greenMaterial = new SingleColorMaterial(this.gl, plane, Color.green())
     const tile = new TileObject(Vector3.zero(), greenMaterial)
 
-    sheet.addChild(tile)
+    sheet.addChildTile(tile)
 
     return sheet
   }
@@ -128,7 +128,8 @@ export default class TileSheetLayer implements Layer {
     }
 
     this.sheets.forEach((sheet: SheetObject, index: number) => {
-      sheet.position = status.mappingVector2(new Vector2(xsMulti4[index], 0)).toVector3()  
+      sheet.position = status.mappingVector2(new Vector2(xsMulti4[index], 0)).toVector3()
+      sheet.mapUpdate(status)
     })
   }
 }

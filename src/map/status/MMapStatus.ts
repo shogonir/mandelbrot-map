@@ -9,6 +9,7 @@ export default class MMapStatus {
 
   center: Vector2
   zoom: number
+  zoomAsInt: number
 
   clientWidth: number
   clientHeight: number
@@ -47,6 +48,8 @@ export default class MMapStatus {
   }
 
   update() {
+    this.zoomAsInt = Math.ceil(this.zoom)
+
     const ptu = CanvasUtils.calculatePixelToUnit(this.zoom)
     const halfWidth = this.clientWidth / 2
     const halfHeight = this.clientHeight / 2
