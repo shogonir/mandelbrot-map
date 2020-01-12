@@ -120,14 +120,25 @@ export default class SingleColorProgram implements Program {
   updateUniform(gameObject: GameObject, camera: Camera) {
     // model
     const scale = mat4.create()
-    mat4.scale(scale, scale, gameObject.scale.toArray())
-
-    const rotation = gameObject.rotation.toMat4()
-    
+    const rotation = mat4.create()
     const translation = mat4.create()
-    mat4.translate(translation, translation, gameObject.position.toArray())
-    
     const model = mat4.create()
+
+    const updateModel = (object: GameObject) => {
+      mat4.scale(scale, scale, object.scale.toArray())
+      mat4.multiply(rotation, rotation, object.rotation.toMat4())
+      const localTranslation = mat4.create()
+      mat4.translate(localTranslation, localTranslation, object.position.toArray())
+      mat4.multiply(translation, translation, localTranslation)
+    }
+
+    updateModel(gameObject)
+    let parent = gameObject.parent
+    while (parent !== undefined) {
+      updateModel(parent)
+      parent = parent.parent
+    }
+
     mat4.multiply(model, model, translation)
     mat4.multiply(model, model, rotation)
     mat4.multiply(model, model, scale)
