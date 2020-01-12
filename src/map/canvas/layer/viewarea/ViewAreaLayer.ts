@@ -7,9 +7,8 @@ import SingleColorMaterial from '../../../../engine/object/material/SingleColorM
 import PlaneGeometry from '../../../../engine/object/geometry/PlaneGeometry'
 import Color from '../../../../common/Color'
 import CanvasUtils from '../../../../util/CanvasUtils'
-import Vector2 from '../../../../common/Vector2'
-import Ray3 from '../../../../common/Ray3'
 import Material from '../../../../engine/object/material/Material'
+import MMapUtils from '../../../util/MMapUtils'
 
 export default class ViewAreaLayer implements Layer {
 
@@ -105,21 +104,21 @@ export default class ViewAreaLayer implements Layer {
       gameObject.scale = new Vector3(side, side, side)
     })
 
-    this.topLeft.position = status.mappingVector2(status.viewArea.topLeft.toVector2()).toVector3()
-    this.topTopLeft.position = status.mappingVector2(status.viewArea.topTopLeft.toVector2()).toVector3()
-    this.top.position = status.mappingVector2(status.viewArea.top.toVector2()).toVector3()
-    this.topTopRight.position = status.mappingVector2(status.viewArea.topTopRight.toVector2()).toVector3()
-    this.topRight.position = status.mappingVector2(status.viewArea.topRight.toVector2()).toVector3()
-    this.rightTopRight.position = status.mappingVector2(status.viewArea.rightTopRight.toVector2()).toVector3()
-    this.right.position = status.mappingVector2(status.viewArea.right.toVector2()).toVector3()
-    this.rightBottomRight.position = status.mappingVector2(status.viewArea.rightBottomRight.toVector2()).toVector3()
-    this.bottomRight.position = status.mappingVector2(status.viewArea.bottomRight.toVector2()).toVector3()
-    this.bottomBottomRight.position = status.mappingVector2(status.viewArea.bottomBottomRight.toVector2()).toVector3()
-    this.bottom.position = status.mappingVector2(status.viewArea.bottom.toVector2()).toVector3()
-    this.bottomBottomLeft.position = status.mappingVector2(status.viewArea.bottomBottomLeft.toVector2()).toVector3()
-    this.bottomLeft.position = status.mappingVector2(status.viewArea.bottomLeft.toVector2()).toVector3()
-    this.leftBottomLeft.position = status.mappingVector2(status.viewArea.leftBottomLeft.toVector2()).toVector3()
-    this.left.position = status.mappingVector2(status.viewArea.left.toVector2()).toVector3()
-    this.leftTopLeft.position = status.mappingVector2(status.viewArea.leftTopLeft.toVector2()).toVector3()
+    this.topLeft.position = status.mapping(status.viewArea.topLeft.toVector2())
+    this.topTopLeft.position = status.mapping(status.viewArea.topTopLeft.toVector2())
+    this.top.position = status.mapping(status.viewArea.top.toVector2())
+    this.topTopRight.position = status.mapping(status.viewArea.topTopRight.toVector2())
+    this.topRight.position = status.mapping(status.viewArea.topRight.toVector2())
+    this.rightTopRight.position = status.mapping(status.viewArea.rightTopRight.toVector2())
+    this.right.position = status.mapping(status.viewArea.right.toVector2())
+    this.rightBottomRight.position = status.mapping(status.viewArea.rightBottomRight.toVector2())
+    this.bottomRight.position = status.mapping(status.viewArea.bottomRight.toVector2())
+    this.bottomBottomRight.position = status.mapping(status.viewArea.bottomBottomRight.toVector2())
+    this.bottom.position = status.mapping(status.viewArea.bottom.toVector2())
+    this.bottomBottomLeft.position = status.mapping(status.viewArea.bottomBottomLeft.toVector2())
+    this.bottomLeft.position = status.mapping(status.viewArea.bottomLeft.toVector2())
+    this.leftBottomLeft.position = status.mapping(status.viewArea.leftBottomLeft.toVector2())
+    this.left.position = status.mapping(status.viewArea.left.toVector2())
+    this.leftTopLeft.position = status.mapping(status.viewArea.leftTopLeft.toVector2())
   }
 }

@@ -1,9 +1,10 @@
 import Vector2 from '../../common/Vector2'
 import CanvasUtils from '../../util/CanvasUtils'
-import PolarCoordinate3 from '../../common/PolarCoordinate'
+import PolarCoordinate3 from '../../common/PolarCoordinate3'
 import Vector3 from '../../common/Vector3'
 import EngineMath from '../../engine/common/EngineMath'
 import MMapViewArea from './MMapViewArea'
+import MMapUtils from '../util/MMapUtils'
 
 export default class MMapStatus {
 
@@ -24,9 +25,6 @@ export default class MMapStatus {
   aspect: number
 
   viewArea: MMapViewArea
-
-  minUnit: Vector2  // deprecated
-  maxUnit: Vector2  // deprecated
 
   constructor(
     center: Vector2,
@@ -51,16 +49,13 @@ export default class MMapStatus {
     this.zoomAsInt = Math.ceil(this.zoom)
 
     const ptu = CanvasUtils.calculatePixelToUnit(this.zoom)
-    const halfWidth = this.clientWidth / 2
-    const halfHeight = this.clientHeight / 2
-    this.minUnit = new Vector2(this.center.x - (halfWidth * ptu), this.center.y - (halfHeight * ptu))
-    this.maxUnit = new Vector2(this.center.x + (halfWidth * ptu), this.center.y + (halfHeight * ptu))
 
-    this.cameraPosition = this.polar.toVector3()
+    const polarPosition = this.polar.toVector3()
+    this.cameraPosition = polarPosition.addZ(MMapUtils.SqhereRadius)
     this.cameraUp = this.polar.toUpVector3()
 
     const toHalf = 0.5
-    const halfVerticalFovRadian = Math.atan(this.clientHeight * ptu * toHalf / this.cameraPosition.magnitude())
+    const halfVerticalFovRadian = Math.atan(this.clientHeight * ptu * toHalf / polarPosition.magnitude())
     this.verticalFov = halfVerticalFovRadian * 2 * EngineMath.rad2Deg
 
     if (this.viewArea !== undefined) {
@@ -68,15 +63,7 @@ export default class MMapStatus {
     }
   }
 
-  mappingX(x: number): number {
-    return x - this.center.x
-  }
-
-  mappingY(y: number): number {
-    return y - this.center.y
-  }
-
-  mappingVector2(v: Vector2): Vector2 {
-    return new Vector2(this.mappingX(v.x), this.mappingY(v.y))
+  mapping(v: Vector2): Vector3 {
+    return new Vector3(v.x - this.center.x, v.y - this.center.y, MMapUtils.SqhereRadius)
   }
 }

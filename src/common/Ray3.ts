@@ -10,8 +10,8 @@ export default class Ray3 {
     this.direction = direction
   }
 
-  intersectsWithPlaneZ0(): Vector3 | undefined {
-    if (this.start.z === 0) {
+  intersectsWithPlaneZEqualsParameter(z: number): Vector3 | undefined {
+    if (this.start.z === z) {
       return this.start
     }
 
@@ -19,16 +19,16 @@ export default class Ray3 {
       return undefined
     }
 
-    if (this.start.z < 0 && this.direction.z < 0) {
+    if (this.start.z < z && this.direction.z < 0) {
       return undefined
     }
 
-    if (this.start.z > 0 && this.direction.z > 0) {
+    if (this.start.z > z && this.direction.z > 0) {
       return undefined
     }
 
-    const dToS = Math.abs(this.start.z / this.direction.z)
-    return this.start.add(this.direction.multiply(dToS))
+    const coefficient = (z - this.start.z) / this.direction.z
+    return this.start.add(this.direction.multiply(coefficient))
   }
 
   intersectsWithPlaneYEqualsParameter(y: number): Vector3 | undefined {

@@ -7,6 +7,7 @@ import CanvasUtils from '../../util/CanvasUtils'
 import EngineMath from '../../engine/common/EngineMath'
 import TileSheetLayer from './layer/tile/TileSheetLayer'
 import ViewAreaLayer from './layer/viewarea/ViewAreaLayer'
+import MMapUtils from '../util/MMapUtils'
 
 export default class MMapCanvasController {
 
@@ -36,7 +37,7 @@ export default class MMapCanvasController {
     const mainCamera = new PerspectiveCamera(
       this.gl,
       cameraPosition,
-      new Vector3(0, 0, 0),
+      new Vector3(0, 0, MMapUtils.SqhereRadius),
       new Vector3(0, 1, 0),
       halfVerticalFovRadian * 2 * EngineMath.rad2Deg,
       1.0,

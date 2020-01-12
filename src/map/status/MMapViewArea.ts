@@ -4,6 +4,7 @@ import MMapStatus from './MMapStatus'
 import Vector2 from '../../common/Vector2'
 import CanvasUtils from '../../util/CanvasUtils'
 import Ray3 from '../../common/Ray3'
+import MMapUtils from '../util/MMapUtils'
 
 export default class MMapViewArea {
 
@@ -81,20 +82,22 @@ export default class MMapViewArea {
 
   static updatePoint(status: MMapStatus, viewPoint: Vector2): Vector3 | undefined {
     const ptu = CanvasUtils.calculatePixelToUnit(status.zoom)
+    const z = MMapUtils.SqhereRadius
+
     const halfHeight = status.clientHeight * ptu / 2
     const halfWidth = status.clientWidth * ptu / 2
     const toTopVector = status.polar.toUpVector3().normalize().multiply(halfHeight * viewPoint.y)
     const toRightVector = status.polar.toRightVector3().normalize().multiply(halfWidth * viewPoint.x)
-    const toTopRightVector = toTopVector.add(toRightVector)
+    const toTopRightVector = toTopVector.add(toRightVector).addZ(z)
 
     const ray = new Ray3(status.cameraPosition, toTopRightVector.subtract(status.cameraPosition))
-    const mayBeIntersection: Vector3 | undefined = ray.intersectsWithPlaneZ0()
+    const mayBeIntersection: Vector3 | undefined = ray.intersectsWithPlaneZEqualsParameter(z)
 
     if (mayBeIntersection === undefined) {
       return undefined
     }
 
     const intersection = mayBeIntersection
-    return intersection.toVector2().add(status.center).toVector3()
+    return intersection.addX(status.center.x).addY(status.center.y)
   }
 }

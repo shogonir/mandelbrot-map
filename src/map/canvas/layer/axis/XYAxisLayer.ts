@@ -7,6 +7,8 @@ import SingleColorMaterial from '../../../../engine/object/material/SingleColorM
 import Color from '../../../../common/Color'
 import MMapStatus from '../../../status/MMapStatus'
 import CanvasUtils from '../../../../util/CanvasUtils'
+import Vector2 from '../../../../common/Vector2'
+import MMap from '../../../MMap'
 
 export default class XYAxisLayer implements Layer {
 
@@ -48,14 +50,14 @@ export default class XYAxisLayer implements Layer {
   }
 
   updatePosition(status: MMapStatus) {
-    this.xAxis.position.y = status.mappingY(0)
-    this.yAxis.position.x = status.mappingX(0)
+    this.xAxis.position = status.mapping(Vector2.zero())
+    this.yAxis.position = status.mapping(Vector2.zero())
   }
 
   updateScale(status: MMapStatus) {
     const ptu = CanvasUtils.calculatePixelToUnit(status.zoom)
-    const heightAsUnit = status.maxUnit.y - status.minUnit.y
-    const widthAsUnit = status.maxUnit.x - status.minUnit.x
+    const heightAsUnit = MMap.MaxY - MMap.MinY
+    const widthAsUnit = MMap.MaxX - MMap.MinX
 
     this.xAxis.scale.x = widthAsUnit
     this.xAxis.scale.y = ptu

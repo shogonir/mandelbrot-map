@@ -13,6 +13,7 @@ import NumberRange from '../../../../common/NumberRange'
 import Ray3 from '../../../../common/Ray3'
 import MMap from '../../../MMap'
 import TileObject from './TileObject'
+import MMapUtils from '../../../util/MMapUtils'
 
 export default class TileSheetLayer implements Layer {
 
@@ -128,7 +129,7 @@ export default class TileSheetLayer implements Layer {
     }
 
     this.sheets.forEach((sheet: SheetObject, index: number) => {
-      sheet.position = status.mappingVector2(new Vector2(xsMulti4[index], 0)).toVector3()
+      sheet.position = status.mapping(new Vector2(xsMulti4[index], 0))
       sheet.mapUpdate(status)
     })
   }

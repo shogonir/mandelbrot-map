@@ -4,7 +4,7 @@ import MMapStatus from './status/MMapStatus'
 import MMapEventManager from './event/MMapEventManager'
 import MMapCanvasController from './canvas/MMapCanvasController'
 import CanvasUtils from '../util/CanvasUtils'
-import PolarCoordinate3 from '../common/PolarCoordinate'
+import PolarCoordinate3 from '../common/PolarCoordinate3'
 import EngineMath from '../engine/common/EngineMath'
 import Vector3 from '../common/Vector3'
 

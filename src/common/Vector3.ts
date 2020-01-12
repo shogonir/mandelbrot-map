@@ -48,6 +48,30 @@ export default class Vector3 {
     return this.x === 0 && this.y === 0 && this.z === 0
   }
 
+  setX(x: number): Vector3 {
+    return new Vector3(x, this.y, this.z)
+  }
+
+  setY(y: number): Vector3 {
+    return new Vector3(this.x, y, this.z)
+  }
+
+  setZ(z: number): Vector3 {
+    return new Vector3(this.x, this.y, z)
+  }
+
+  addX(x: number): Vector3 {
+    return new Vector3(this.x + x, this.y, this.z)
+  }
+
+  addY(y: number): Vector3 {
+    return new Vector3(this.x, this.y + y, this.z)
+  }
+
+  addZ(z: number): Vector3 {
+    return new Vector3(this.x, this.y, this.z + z)
+  }
+
   toVector2(): Vector2 {
     return new Vector2(this.x, this.y)
   }

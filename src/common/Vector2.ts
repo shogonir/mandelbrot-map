@@ -28,6 +28,10 @@ export default class Vector2 {
     return new Vector3(this.x, this.y, 0)
   }
 
+  toVector3WithZ(z: number): Vector3 {
+    return new Vector3(this.x, this.y, z)
+  }
+
   static zero(): Vector2 {
     return new Vector2(0, 0)
   }
