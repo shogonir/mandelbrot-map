@@ -1,10 +1,12 @@
 import Vector3 from '../../common/Vector3'
-import GameObject from '../../engine/object/GameObject'
 import MMapStatus from './MMapStatus'
 import Vector2 from '../../common/Vector2'
 import CanvasUtils from '../../util/CanvasUtils'
 import Ray3 from '../../common/Ray3'
 import MMapUtils from '../util/MMapUtils'
+import NumberRange from '../../common/NumberRange'
+import TileNumber from '../../tile/TileNumber'
+import Numbers from '../../util/Numbers'
 
 export default class MMapViewArea {
 
@@ -39,7 +41,10 @@ export default class MMapViewArea {
 
   points: (Vector3 | undefined)[]
 
+  tileRange: { [yNumber: number]: NumberRange }
+
   constructor(status: MMapStatus) {
+    this.tileRange = {}
     this.update(status)
   }
 
@@ -78,6 +83,8 @@ export default class MMapViewArea {
     this.points.push(this.leftBottomLeft)
     this.points.push(this.left)
     this.points.push(this.leftTopLeft)
+
+    // this.updateTileRange()
   }
 
   static updatePoint(status: MMapStatus, viewPoint: Vector2): Vector3 | undefined {
@@ -99,5 +106,45 @@ export default class MMapViewArea {
 
     const intersection = mayBeIntersection
     return intersection.addX(status.center.x).addY(status.center.y)
+  }
+
+  updateTileRange(status: MMapStatus) {
+    const tileRange: { [yNumber: number]: NumberRange } = {}
+    Numbers.range(0, this.points.length - 1)
+      .forEach(index => {
+        const range = this.calculateTileRangeFromLineSegment(status, this.points[index].toVector2(), this.points[index + 1].toVector2())
+        Object.keys(range).forEach(y => {
+          const numberRange: NumberRange = range[y]
+          if (tileRange[y] === undefined) {
+            tileRange[y] = numberRange
+          } else {
+            tileRange[y].merge(numberRange)
+          }
+        })
+      })
+    this.tileRange = tileRange
+  }
+
+  calculateTileRangeFromLineSegment(status: MMapStatus, s: Vector2, t: Vector2): { [yNumber: number]: NumberRange } {
+    const tileRange: { [yNumber: number]: NumberRange } = {}
+    const mayBeTileS = TileNumber.fromVector2(status.zoomAsInt, s)
+    if (mayBeTileS !== undefined) {
+      const tileS: TileNumber = mayBeTileS
+      if (tileRange[tileS.y] === undefined) {
+        tileRange[tileS.y] = new NumberRange(tileS.center().x, tileS.center().x)
+      } else {
+        tileRange[tileS.y].expand(tileS.center().x)
+      }
+    }
+    const mayBeTileT = TileNumber.fromVector2(status.zoomAsInt, t)
+    if (mayBeTileT !== undefined) {
+      const tileT: TileNumber = mayBeTileT
+      if (tileRange[tileT.y] === undefined) {
+        tileRange[tileT.y] = new NumberRange(tileT.center().x, tileT.center().x)
+      } else {
+        tileRange[tileT.y].expand(tileT.center().x)
+      }
+    }
+    return tileRange
   }
 }

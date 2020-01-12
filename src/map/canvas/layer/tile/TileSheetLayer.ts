@@ -130,6 +130,7 @@ export default class TileSheetLayer implements Layer {
 
     this.sheets.forEach((sheet: SheetObject, index: number) => {
       sheet.position = status.mapping(new Vector2(xsMulti4[index], 0))
+      sheet.centerX = xsMulti4[index]
       sheet.mapUpdate(status)
     })
   }
