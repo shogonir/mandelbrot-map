@@ -10,10 +10,6 @@ export default class Vector2 {
     this.y = y
   }
 
-  clone(): Vector2 {
-    return new Vector2(this.x, this.y)
-  }
-
   add(other: Vector2): Vector2 {
     return new Vector2(this.x + other.x, this.y + other.y)
   }

@@ -8,7 +8,6 @@ import MMapStatus from '../../../status/MMapStatus'
 export default class SheetObject extends GameObject {
 
   tiles: TileObject[]
-  centerX: number
 
   constructor(
     position: Vector3,
@@ -19,7 +18,6 @@ export default class SheetObject extends GameObject {
     super(position, rotation, scale, material)
 
     this.tiles = []
-    this.centerX = position.x
   }
 
   addChildTile(tileObject: TileObject) {
