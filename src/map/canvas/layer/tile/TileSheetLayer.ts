@@ -12,8 +12,11 @@ import Material from '../../../../engine/object/material/Material'
 import NumberRange from '../../../../common/NumberRange'
 import Ray3 from '../../../../common/Ray3'
 import MMap from '../../../MMap'
+import TileObject from './TileObject'
 
 export default class TileSheetLayer implements Layer {
+
+  gl: WebGL2RenderingContext
 
   gameObjects: GameObject[]
 
@@ -21,7 +24,10 @@ export default class TileSheetLayer implements Layer {
 
   sharedMaterial: Material
 
+  tile: TileObject
+
   constructor(gl: WebGL2RenderingContext, status: MMapStatus) {
+    this.gl = gl
     this.gameObjects = []
     this.sheets = []
 
@@ -105,7 +111,15 @@ export default class TileSheetLayer implements Layer {
   }
 
   private createSheetObject(): SheetObject {
-    return new SheetObject(Vector3.zero(), this.sharedMaterial)
+    const sheet = new SheetObject(Vector3.zero(), this.sharedMaterial)
+    
+    const plane = new PlaneGeometry(1.0)
+    const greenMaterial = new SingleColorMaterial(this.gl, plane, Color.green())
+    const tile = new TileObject(Vector3.zero(), greenMaterial)
+
+    sheet.addChild(tile)
+
+    return sheet
   }
 
   updatePosition(status: MMapStatus, xsMulti4: number[]) {
