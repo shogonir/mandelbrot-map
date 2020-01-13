@@ -33,11 +33,11 @@ export default class TileNumber {
       return undefined
     }
 
-    const numberTilesInSide = 2 ** z
-    if (x < 0 || x >= numberTilesInSide) {
+    const maxXY = TileNumber.calculateMaxXY(z)
+    if (x < 0 || x > maxXY) {
       return undefined
     }
-    if (y < 0 || y >= numberTilesInSide) {
+    if (y < 0 || y > maxXY) {
       return undefined
     }
 
@@ -72,19 +72,23 @@ export default class TileNumber {
     return TileNumber.calculateHalf(z) * 2
   }
 
+  static calculateMaxXY(z: number): number {
+    return 2 ** z - 1
+  }
+
   static calculateX(z: number, xValue: number): number {
     const side = TileNumber.calculateSide(z)
-    return Math.floor(xValue / side)
+    return Math.floor((xValue - MMap.MinX) / side)
   }
 
   static calculateY(z: number, yValue: number): number {
     const side = TileNumber.calculateSide(z)
-    return Math.floor(yValue / side)
+    return Math.floor((yValue - MMap.MinY) / side)
   }
 
   static fromVector2(z: number, vector: Vector2): TileNumber | undefined {
     const x = TileNumber.calculateX(z, vector.x)
     const y = TileNumber.calculateY(z, vector.y)
-    return TileNumber.create(x, y, z)
+    return new TileNumber(x, y, z)
   }
 }

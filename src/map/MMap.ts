@@ -10,7 +10,7 @@ import Vector3 from '../common/Vector3'
 
 export default class MMap {
 
-  public static MinZoom: number = 0
+  public static MinZoom: number = 0.2
   public static MinY: number = -2
   public static MaxY: number = 2
   public static MinX: number = -2
