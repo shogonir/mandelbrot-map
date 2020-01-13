@@ -84,7 +84,7 @@ export default class MMapViewArea {
     this.points.push(this.left)
     this.points.push(this.leftTopLeft)
 
-    this.updateTileRange(status)
+    // this.updateTileRange()
   }
 
   static updatePoint(status: MMapStatus, viewPoint: Vector2): Vector3 | undefined {
@@ -118,7 +118,7 @@ export default class MMapViewArea {
           if (tileRange[y] === undefined) {
             tileRange[y] = numberRange
           } else {
-            tileRange[y] = tileRange[y].merge(numberRange)
+            tileRange[y].merge(numberRange)
           }
         })
       })
@@ -127,13 +127,10 @@ export default class MMapViewArea {
 
   calculateTileRangeFromLineSegment(status: MMapStatus, s: Vector2, t: Vector2): { [yNumber: number]: NumberRange } {
     const tileRange: { [yNumber: number]: NumberRange } = {}
-    const maxXY = TileNumber.calculateMaxXY(status.zoomAsInt)
     const mayBeTileS = TileNumber.fromVector2(status.zoomAsInt, s)
     if (mayBeTileS !== undefined) {
       const tileS: TileNumber = mayBeTileS
-      if (tileS.y < 0 || tileS.y > maxXY) {
-        // pass
-      } else if (tileRange[tileS.y] === undefined) {
+      if (tileRange[tileS.y] === undefined) {
         tileRange[tileS.y] = new NumberRange(tileS.center().x, tileS.center().x)
       } else {
         tileRange[tileS.y].expand(tileS.center().x)
@@ -142,9 +139,7 @@ export default class MMapViewArea {
     const mayBeTileT = TileNumber.fromVector2(status.zoomAsInt, t)
     if (mayBeTileT !== undefined) {
       const tileT: TileNumber = mayBeTileT
-      if (tileT.y < 0 || tileT.y > maxXY) {
-        // pass
-      } else if (tileRange[tileT.y] === undefined) {
+      if (tileRange[tileT.y] === undefined) {
         tileRange[tileT.y] = new NumberRange(tileT.center().x, tileT.center().x)
       } else {
         tileRange[tileT.y].expand(tileT.center().x)

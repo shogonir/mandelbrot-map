@@ -5,7 +5,6 @@ import Vector3 from '../../common/Vector3'
 import EngineMath from '../../engine/common/EngineMath'
 import MMapViewArea from './MMapViewArea'
 import MMapUtils from '../util/MMapUtils'
-import MMap from '../MMap'
 
 export default class MMapStatus {
 
@@ -47,9 +46,6 @@ export default class MMapStatus {
   }
 
   update() {
-    if (this.zoom < MMap.MinZoom) {
-      this.zoom = MMap.MinZoom
-    }
     this.zoomAsInt = Math.ceil(this.zoom)
 
     const ptu = CanvasUtils.calculatePixelToUnit(this.zoom)

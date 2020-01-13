@@ -28,7 +28,7 @@ export default class NumberRange {
 
   merge(other: NumberRange): NumberRange {
     const min = other.min < this.min ? other.min : this.min
-    const max = other.max > this.max ? other.max : this.max
+    const max = other.max < this.max ? other.max : this.max
     return new NumberRange(min, max)
   }
 }
