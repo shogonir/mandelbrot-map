@@ -1,4 +1,5 @@
 import Vector2 from '../common/Vector2'
+import MMap from '../map/MMap'
 
 export default class TileNumber {
 
@@ -17,7 +18,10 @@ export default class TileNumber {
 
     this.half = 2 ** (-z + 1)
     this.side = this.half * 2
-    this.centerCoord = new Vector2(x * this.side, y * this.side)
+    this.centerCoord = new Vector2(
+      MMap.MinX + x * this.side + this.half,
+      MMap.MinY + y * this.side + this.half
+    )
   }
 
   static create(x: number, y: number, z: number): TileNumber | undefined {
@@ -70,12 +74,12 @@ export default class TileNumber {
 
   static calculateX(z: number, xValue: number): number {
     const side = TileNumber.calculateSide(z)
-    return Math.floor(xValue / side)
+    return Math.floor((xValue - MMap.MinX) / side)
   }
 
   static calculateY(z: number, yValue: number): number {
     const side = TileNumber.calculateSide(z)
-    return Math.floor(yValue / side)
+    return Math.floor((yValue - MMap.MinY) / side)
   }
 
   static fromVector2(z: number, vector: Vector2): TileNumber | undefined {

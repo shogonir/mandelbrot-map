@@ -3,6 +3,7 @@ import Vector3 from '../../../../common/Vector3'
 import Material from '../../../../engine/object/material/Material'
 import Quaternion from '../../../../common/Quaternion'
 import MMapStatus from '../../../status/MMapStatus'
+import TileNumber from '../../../../tile/TileNumber'
 
 export default class TileObject extends GameObject {
 
@@ -15,11 +16,7 @@ export default class TileObject extends GameObject {
   }
 
   mapUpdate(status: MMapStatus) {
-    if (this.zoomAsInt === status.zoomAsInt) {
-      return
-    }
-
-    const side = 2 ** (-status.zoomAsInt)
+    const side = TileNumber.calculateSide(status.zoomAsInt)
     this.scale = new Vector3(side, side, 1)
     this.zoomAsInt = status.zoomAsInt
   }

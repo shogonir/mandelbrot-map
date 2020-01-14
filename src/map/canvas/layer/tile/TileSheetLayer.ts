@@ -12,8 +12,6 @@ import Material from '../../../../engine/object/material/Material'
 import NumberRange from '../../../../common/NumberRange'
 import Ray3 from '../../../../common/Ray3'
 import MMap from '../../../MMap'
-import TileObject from './TileObject'
-import MMapUtils from '../../../util/MMapUtils'
 
 export default class TileSheetLayer implements Layer {
 
@@ -24,9 +22,7 @@ export default class TileSheetLayer implements Layer {
   sheets: SheetObject[]
 
   sharedMaterial: Material
-  tileMaterial: Material
-
-  tile: TileObject
+  tileMaterialsMap: { [sheetIndex: number]: Material[]}
 
   constructor(gl: WebGL2RenderingContext, status: MMapStatus) {
     this.gl = gl
@@ -35,7 +31,7 @@ export default class TileSheetLayer implements Layer {
 
     const planeGeometry = new PlaneGeometry(1.0)
     this.sharedMaterial = new SingleColorMaterial(gl, planeGeometry, Color.blue())
-    this.tileMaterial = new SingleColorMaterial(gl, planeGeometry, Color.green())
+    this.tileMaterialsMap = {}
 
     this.update(status)
   }
@@ -45,7 +41,6 @@ export default class TileSheetLayer implements Layer {
     const minXMulti4 = 4 * Math.floor(rangeX.min / 4)
     const maxXMulti4 = 4 * Math.ceil(rangeX.max / 4)
     const xsMulti4 = Numbers.range(minXMulti4, maxXMulti4 + 4, 4)
-    this.updateNumberOfSheets(xsMulti4.length)
     this.updatePosition(status, xsMulti4)
     this.gameObjects = this.sheets
   }
@@ -102,31 +97,16 @@ export default class TileSheetLayer implements Layer {
     return new NumberRange(Math.min(...xs), Math.max(...xs))
   }
 
-  updateNumberOfSheets(targetLength: number) {
-    if (targetLength <= this.sheets.length) {
-      this.sheets.length = targetLength
-      return
-    }
-
-    while (this.sheets.length < targetLength) {
-      this.sheets.push(this.createSheetObject())
-    }
-  }
-
-  private createSheetObject(): SheetObject {
-    const sheet = new SheetObject(Vector3.zero(), this.sharedMaterial, this.tileMaterial)
-    return sheet
-  }
-
   updatePosition(status: MMapStatus, xsMulti4: number[]) {
-    if (this.sheets.length !== xsMulti4.length) {
-      return
-    }
-
-    this.sheets.forEach((sheet: SheetObject, index: number) => {
-      sheet.position = status.mapping(new Vector2(xsMulti4[index], 0))
-      sheet.index = Math.floor(xsMulti4[index] / 4)
+    this.sheets = xsMulti4.map(xMulti4 => {
+      const position = status.mapping(new Vector2(xMulti4, 0))
+      const sheetIndex = Math.floor(xMulti4 / 4)
+      if (this.tileMaterialsMap[sheetIndex] === undefined) {
+        this.tileMaterialsMap[sheetIndex] = []
+      }
+      const sheet = new SheetObject(this.gl, position, this.sharedMaterial, this.tileMaterialsMap[sheetIndex], sheetIndex)
       sheet.mapUpdate(status)
+      return sheet
     })
   }
 }

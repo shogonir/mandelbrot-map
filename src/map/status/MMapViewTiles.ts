@@ -31,6 +31,5 @@ export default class MMapViewTiles {
         this.sheetMap[sheetIndex].push(tile)
       }
     })
-    console.log(this.sheetMap)
   }
 }
