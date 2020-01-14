@@ -24,6 +24,7 @@ export default class TileSheetLayer implements Layer {
   sheets: SheetObject[]
 
   sharedMaterial: Material
+  tileMaterial: Material
 
   tile: TileObject
 
@@ -34,6 +35,7 @@ export default class TileSheetLayer implements Layer {
 
     const planeGeometry = new PlaneGeometry(1.0)
     this.sharedMaterial = new SingleColorMaterial(gl, planeGeometry, Color.blue())
+    this.tileMaterial = new SingleColorMaterial(gl, planeGeometry, Color.green())
 
     this.update(status)
   }
@@ -112,14 +114,7 @@ export default class TileSheetLayer implements Layer {
   }
 
   private createSheetObject(): SheetObject {
-    const sheet = new SheetObject(Vector3.zero(), this.sharedMaterial)
-    
-    const plane = new PlaneGeometry(1.0)
-    const greenMaterial = new SingleColorMaterial(this.gl, plane, Color.green())
-    const tile = new TileObject(Vector3.zero(), greenMaterial)
-
-    sheet.addChildTile(tile)
-
+    const sheet = new SheetObject(Vector3.zero(), this.sharedMaterial, this.tileMaterial)
     return sheet
   }
 
@@ -130,6 +125,7 @@ export default class TileSheetLayer implements Layer {
 
     this.sheets.forEach((sheet: SheetObject, index: number) => {
       sheet.position = status.mapping(new Vector2(xsMulti4[index], 0))
+      sheet.index = Math.floor(xsMulti4[index] / 4)
       sheet.mapUpdate(status)
     })
   }

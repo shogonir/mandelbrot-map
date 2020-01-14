@@ -1,10 +1,10 @@
 import Vector3 from '../../common/Vector3'
-import GameObject from '../../engine/object/GameObject'
 import MMapStatus from './MMapStatus'
 import Vector2 from '../../common/Vector2'
 import CanvasUtils from '../../util/CanvasUtils'
 import Ray3 from '../../common/Ray3'
 import MMapUtils from '../util/MMapUtils'
+import MMapViewTiles from './MMapViewTiles'
 
 export default class MMapViewArea {
 
@@ -39,7 +39,10 @@ export default class MMapViewArea {
 
   points: (Vector3 | undefined)[]
 
+  viewTiles: MMapViewTiles
+
   constructor(status: MMapStatus) {
+    this.viewTiles = new MMapViewTiles()
     this.update(status)
   }
 
@@ -78,6 +81,8 @@ export default class MMapViewArea {
     this.points.push(this.leftBottomLeft)
     this.points.push(this.left)
     this.points.push(this.leftTopLeft)
+
+    this.viewTiles.update(status)
   }
 
   static updatePoint(status: MMapStatus, viewPoint: Vector2): Vector3 | undefined {

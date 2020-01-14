@@ -10,7 +10,7 @@ export default class TileNumber {
   half: number
   centerCoord: Vector2
 
-  constructor(x: number, y: number, z: number) {
+  private constructor(x: number, y: number, z: number) {
     this.x = x
     this.y = y
     this.z = z
@@ -20,8 +20,28 @@ export default class TileNumber {
     this.centerCoord = new Vector2(x * this.side, y * this.side)
   }
 
+  static create(x: number, y: number, z: number): TileNumber | undefined {
+    if (z < 0) {
+      return undefined
+    }
+
+    const numberTilesInSide = 2 ** z
+    if (x < 0 || x >= numberTilesInSide) {
+      return undefined
+    }
+    if (y < 0 || y >= numberTilesInSide) {
+      return undefined
+    }
+
+    return new TileNumber(x, y, z)
+  }
+
+  static createWithNoCheck(x: number, y: number, z: number): TileNumber {
+    return new TileNumber(x, y, z)
+  }
+
   center(): Vector2 {
-    return this.centerCoord
+    return this.centerCoord.clone()
   }
 
   left(): number {
@@ -38,5 +58,29 @@ export default class TileNumber {
 
   top(): number {
     return this.centerCoord.y + this.half
+  }
+
+  static calculateHalf(z: number): number {
+    return 2 ** (-z + 1)
+  }
+
+  static calculateSide(z: number): number {
+    return TileNumber.calculateHalf(z) * 2
+  }
+
+  static calculateX(z: number, xValue: number): number {
+    const side = TileNumber.calculateSide(z)
+    return Math.floor(xValue / side)
+  }
+
+  static calculateY(z: number, yValue: number): number {
+    const side = TileNumber.calculateSide(z)
+    return Math.floor(yValue / side)
+  }
+
+  static fromVector2(z: number, vector: Vector2): TileNumber | undefined {
+    const x = TileNumber.calculateX(z, vector.x)
+    const y = TileNumber.calculateY(z, vector.y)
+    return TileNumber.createWithNoCheck(x, y, z)
   }
 }
