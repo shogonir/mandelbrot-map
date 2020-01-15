@@ -72,6 +72,10 @@ export default class TileNumber {
     return TileNumber.calculateHalf(z) * 2
   }
 
+  static maxXY(z: number): number {
+    return 2 ** z - 1
+  }
+
   static calculateX(z: number, xValue: number): number {
     const side = TileNumber.calculateSide(z)
     return Math.floor((xValue - MMap.MinX) / side)

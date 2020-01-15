@@ -10,24 +10,24 @@ export default class Ray3 {
     this.direction = direction
   }
 
-  intersectsWithPlaneZEqualsParameter(z: number): Vector3 | undefined {
-    if (this.start.z === z) {
+  intersectsWithPlaneXEqualsParameter(x: number): Vector3 | undefined {
+    if (this.start.x === x) {
       return this.start
     }
 
-    if (this.direction.z === 0) {
+    if (this.direction.x === 0) {
       return undefined
     }
 
-    if (this.start.z < z && this.direction.z < 0) {
+    if (this.start.x < x && this.direction.x < 0) {
       return undefined
     }
 
-    if (this.start.z > z && this.direction.z > 0) {
+    if (this.start.x > x && this.direction.x > 0) {
       return undefined
     }
 
-    const coefficient = (z - this.start.z) / this.direction.z
+    const coefficient = (x - this.start.x) / this.direction.x
     return this.start.add(this.direction.multiply(coefficient))
   }
 
@@ -49,6 +49,27 @@ export default class Ray3 {
     }
 
     const coefficient = (y - this.start.y) / this.direction.y
+    return this.start.add(this.direction.multiply(coefficient))
+  }
+
+  intersectsWithPlaneZEqualsParameter(z: number): Vector3 | undefined {
+    if (this.start.z === z) {
+      return this.start
+    }
+
+    if (this.direction.z === 0) {
+      return undefined
+    }
+
+    if (this.start.z < z && this.direction.z < 0) {
+      return undefined
+    }
+
+    if (this.start.z > z && this.direction.z > 0) {
+      return undefined
+    }
+
+    const coefficient = (z - this.start.z) / this.direction.z
     return this.start.add(this.direction.multiply(coefficient))
   }
 }

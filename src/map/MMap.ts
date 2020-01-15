@@ -11,6 +11,7 @@ import Vector3 from '../common/Vector3'
 export default class MMap {
 
   public static MinZoom: number = 0
+  public static MaxZoom: number = 19
   public static MinY: number = -2
   public static MaxY: number = 2
   public static MinX: number = -2
@@ -110,6 +111,9 @@ export default class MMap {
       this.status.zoom += delta * zoomCoeffient
       if (this.status.zoom < MMap.MinZoom) {
         this.status.zoom = MMap.MinZoom
+      }
+      if (this.status.zoom > MMap.MaxZoom) {
+        this.status.zoom = MMap.MaxZoom
       }
       
       if (this.update !== undefined) {

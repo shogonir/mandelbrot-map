@@ -1,8 +1,9 @@
 export default class Numbers {
   
-  static range(start: number, stop: number, step: number = 1): number[] {
+  static range(start: number, stop: number, step: number = 1, containsStop: boolean = false): number[] {
     const result = []
-    for (let index = start; index < stop; index += step) {
+    const check = index => (containsStop) ? index <= stop : index < stop
+    for (let index = start; check(index); index += step) {
       result.push(index)
     }
     return result
