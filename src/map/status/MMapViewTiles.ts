@@ -1,6 +1,5 @@
 import TileNumber from '../../tile/TileNumber'
 import MMapStatus from './MMapStatus'
-import MMap from '../MMap'
 import Vector3 from '../../common/Vector3'
 import Numbers from '../../util/Numbers'
 import Ray2 from '../../common/Ray2'
@@ -64,7 +63,6 @@ export default class MMapViewTiles {
         const tileX = TileNumber.calculateX(z, x)
         const bottomY = TileNumber.calculateY(z, y - half)
         const topY = bottomY + 1
-        const maxY = TileNumber.maxXY(z)
         this.addTileToYMap(TileNumber.createWithNoCheck(tileX, bottomY, z))
         this.addTileToYMap(TileNumber.createWithNoCheck(tileX, topY, z))
       })
