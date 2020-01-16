@@ -3,7 +3,6 @@ import GameObject from '../../../../engine/object/GameObject'
 import MMapStatus from '../../../status/MMapStatus'
 import Vector3 from '../../../../common/Vector3'
 import SingleColorMaterial from '../../../../engine/object/material/SingleColorMaterial'
-import PlaneGeometry from '../../../../engine/object/geometry/PlaneGeometry'
 import Color from '../../../../common/Color'
 import SheetObject from './SheetObject'
 import Vector2 from '../../../../common/Vector2'
@@ -12,6 +11,7 @@ import Material from '../../../../engine/object/material/Material'
 import NumberRange from '../../../../common/NumberRange'
 import Ray3 from '../../../../common/Ray3'
 import MMap from '../../../MMap'
+import NoneGeometry from '../../../../engine/object/geometry/NoneGeometry'
 
 export default class TileSheetLayer implements Layer {
 
@@ -29,8 +29,8 @@ export default class TileSheetLayer implements Layer {
     this.gameObjects = []
     this.sheets = []
 
-    const planeGeometry = new PlaneGeometry(1.0)
-    this.sharedMaterial = new SingleColorMaterial(gl, planeGeometry, Color.blue())
+    const noneGeometry = new NoneGeometry()
+    this.sharedMaterial = new SingleColorMaterial(gl, noneGeometry, Color.blue())
     this.tileMaterialsMap = {}
 
     this.update(status)
