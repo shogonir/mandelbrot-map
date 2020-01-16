@@ -1,7 +1,7 @@
 import { mat4 } from 'gl-matrix'
 
-import vertexShaderSource from '../shader/VertexShader.glsl'
-import fragmentShaderSource from '../shader/FragmentShader.glsl'
+import vertexShaderSource from '../shader/SingleColorVertexShader.glsl'
+import fragmentShaderSource from '../shader/SingleColorFragmentShader.glsl'
 import Geometry from '../../geometry/Geometry'
 import GameObject from '../../GameObject'
 import Program from './Program'
