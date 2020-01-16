@@ -49,7 +49,7 @@ export default class ViewAreaLayer implements Layer {
     this.gameObjects = []
 
     const plane = new PlaneGeometry(1.0)
-    const redMaterial = new SingleColorMaterial(gl, plane, Color.red())
+    const redMaterial = new SingleColorMaterial(gl, plane, Color.roseRed())
 
     this.topLeft = this.createPoint(redMaterial)
     this.topTopLeft = this.createPoint(redMaterial)

@@ -45,7 +45,7 @@ export default class SheetObject extends GameObject {
       const plane = new PlaneGeometry(1.0)
       if (index >= this.tileMaterials.length) {
         const plane = new PlaneGeometry(1.0)
-        const material = new SingleColorMaterial(this.gl, plane, Color.green())
+        const material = new SingleColorMaterial(this.gl, plane, Color.emeraldGreen())
         this.tileMaterials.push(material)
       }
       const tileObject = new TileObject(position, this.tileMaterials[index])

@@ -8,6 +8,7 @@ import EngineMath from '../../engine/common/EngineMath'
 import TileSheetLayer from './layer/tile/TileSheetLayer'
 import ViewAreaLayer from './layer/viewarea/ViewAreaLayer'
 import MMapUtils from '../util/MMapUtils'
+import Color from '../../common/Color'
 
 export default class MMapCanvasController {
 
@@ -42,7 +43,8 @@ export default class MMapCanvasController {
       halfVerticalFovRadian * 2 * EngineMath.rad2Deg,
       1.0,
       0.1,
-      100
+      100,
+      Color.midnightBlue()
     )
 
     this.viewAreaLayer = new ViewAreaLayer(this.gl, status)

@@ -3,6 +3,7 @@ import Vector3 from '../../../common/Vector3'
 import { mat4 } from 'gl-matrix'
 import EngineMath from '../../common/EngineMath'
 import Layer from '../layer/Layer'
+import Color from '../../../common/Color'
 
 export default class PerspectiveCamera implements Camera {
 
@@ -20,6 +21,8 @@ export default class PerspectiveCamera implements Camera {
   viewMatrix: mat4
   projectionMatrix: mat4
 
+  backgroundColor: Color
+
   constructor(
     gl: WebGL2RenderingContext,
     position: Vector3,
@@ -28,9 +31,11 @@ export default class PerspectiveCamera implements Camera {
     verticalFov: number,
     aspect: number,
     near: number,
-    far: number
+    far: number,
+    backgroundColor: Color
   ) {
     this.gl = gl
+    this.backgroundColor = backgroundColor
 
     this.position = position
     this.target = target
@@ -60,6 +65,8 @@ export default class PerspectiveCamera implements Camera {
   }
 
   draw(layers: Layer[]) {
+    const bg = this.backgroundColor
+    this.gl.clearColor(bg.r, bg.g, bg.b, 1.0);
     this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT)
 
     for (const layer of layers) {
