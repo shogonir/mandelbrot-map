@@ -39,7 +39,7 @@ export default class SheetObject extends GameObject {
       return
     }
 
-    this.tiles = status.viewArea.viewTiles.sheetMap[this.index].map((tile, index) => {
+    this.tiles = status.viewArea.viewTiles.sheetMap[this.index].mapToArray((tile, index) => {
       const tileCenter = tile.center()
       const position = status.mapping(tileCenter)
       const plane = new PlaneGeometry(1.0)

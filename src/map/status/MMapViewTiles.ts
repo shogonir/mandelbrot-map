@@ -3,11 +3,12 @@ import MMapStatus from './MMapStatus'
 import Vector3 from '../../common/Vector3'
 import Numbers from '../../util/Numbers'
 import Ray2 from '../../common/Ray2'
+import ArrayList from '../../common/ArrayList'
 
 export default class MMapViewTiles {
 
-  sheetMap: { [sheetIndex: number]: TileNumber[]}
-  yMap: { [y: number]: TileNumber[] }
+  sheetMap: { [sheetIndex: number]: ArrayList<TileNumber> }
+  yMap: { [y: number]: ArrayList<TileNumber> }
 
   constructor() {
     this.sheetMap = {}
@@ -74,27 +75,32 @@ export default class MMapViewTiles {
     if (tile.y < 0 || tile.y > maxY) {
       return
     }
+
     if (this.yMap[tile.y] === undefined) {
-      this.yMap[tile.y] = []
+      this.yMap[tile.y] = ArrayList.empty<TileNumber>()
     }
-    this.yMap[tile.y].push(tile)
+
+    if (this.yMap[tile.y].contains(tile) === false) {
+      this.yMap[tile.y].push(tile)
+    }
   }
 
   private listUpTilesFromFrame() {
     Object.keys(this.yMap).forEach(y => {
-      const tiles: TileNumber[] = this.yMap[y]
-      if (tiles.length === 0) {
+      const tiles: ArrayList<TileNumber> = this.yMap[y]
+      const length = tiles.size()
+      if (length === 0) {
         return
       }
-      if (tiles.length === 1) {
-        this.addTileToSheetMap(tiles[0])
+      if (length === 1) {
+        this.addTileToSheetMap(tiles.get(0))
         return
       }
-      const xs = tiles.map(tile => tile.x)
+      const xs = tiles.mapToArray(tile => tile.x)
       const minX = Math.min(...xs)
       const maxX = Math.max(...xs)
-      const yy = tiles[0].y
-      const z = tiles[0].z
+      const yy = tiles.get(0).y
+      const z = tiles.get(0).z
       Numbers.range(minX, maxX, 1, true).forEach(x => {
         this.addTileToSheetMap(TileNumber.createWithNoCheck(x, yy, z))
       })
@@ -104,9 +110,12 @@ export default class MMapViewTiles {
   private addTileToSheetMap(tile: TileNumber) {
     const x = tile.center().x
     const sheetIndex = Math.floor((x + 2) / 4)
+
     if (this.sheetMap[sheetIndex] === undefined) {
-      this.sheetMap[sheetIndex] = []
+      this.sheetMap[sheetIndex] = ArrayList.empty<TileNumber>()
     }
-    this.sheetMap[sheetIndex].push(tile)
+    if (this.sheetMap[sheetIndex].contains(tile) === false) {
+      this.sheetMap[sheetIndex].push(tile)
+    }
   }
 }

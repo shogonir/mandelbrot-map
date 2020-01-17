@@ -1,7 +1,8 @@
 import Vector2 from '../common/Vector2'
 import MMap from '../map/MMap'
+import Equalable from '../common/Equalable'
 
-export default class TileNumber {
+export default class TileNumber implements Equalable {
 
   x: number
   y: number
@@ -22,6 +23,18 @@ export default class TileNumber {
       MMap.MinX + x * this.side + this.half,
       MMap.MinY + y * this.side + this.half
     )
+  }
+
+  equals(other: any): boolean {
+    if (other instanceof Object) {
+      return false
+    }
+    if (other instanceof TileNumber === false) {
+      return false
+    }
+
+    const otherTile = other as TileNumber
+    return this.x === otherTile.x && this.y === otherTile.y && this.z === otherTile.z
   }
 
   static create(x: number, y: number, z: number): TileNumber | undefined {
