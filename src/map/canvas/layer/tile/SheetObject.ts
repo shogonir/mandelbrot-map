@@ -7,6 +7,8 @@ import MMapStatus from '../../../status/MMapStatus'
 import PlaneGeometry from '../../../../engine/object/geometry/PlaneGeometry'
 import SingleColorMaterial from '../../../../engine/object/material/SingleColorMaterial'
 import Color from '../../../../common/Color'
+import CanvasTextureMaterial from '../../../../engine/object/material/CanvasTextureMaterial'
+import TexturePlaneGeometry from '../../../../engine/object/geometry/TexturePlaneGeometry'
 
 export default class SheetObject extends GameObject {
 
@@ -16,12 +18,15 @@ export default class SheetObject extends GameObject {
   index: number
   tiles: TileObject[]
 
+  canvas: HTMLCanvasElement
+
   constructor(
     gl: WebGL2RenderingContext,
     position: Vector3,
     material: Material,
     tileMaterials: Material[],
-    index: number
+    index: number,
+    canvas: HTMLCanvasElement
   ) {
     const rotation = Quaternion.fromRadianAndVector3(0, new Vector3(0, 1, 0))
     const scale = Vector3.one().multiply(3.8)
@@ -31,6 +36,7 @@ export default class SheetObject extends GameObject {
     this.tileMaterials = tileMaterials
     this.index = index
     this.tiles = []
+    this.canvas = canvas
   }
 
   mapUpdate(status: MMapStatus) {
@@ -42,10 +48,9 @@ export default class SheetObject extends GameObject {
     this.tiles = status.viewArea.viewTiles.sheetMap[this.index].mapToArray((tile, index) => {
       const tileCenter = tile.center()
       const position = status.mapping(tileCenter)
-      const plane = new PlaneGeometry(1.0)
       if (index >= this.tileMaterials.length) {
-        const plane = new PlaneGeometry(1.0)
-        const material = new SingleColorMaterial(this.gl, plane, Color.emeraldGreen())
+        const texturePlane = new TexturePlaneGeometry(1.0)
+        const material = new CanvasTextureMaterial(this.gl, texturePlane, this.canvas)
         this.tileMaterials.push(material)
       }
       const tileObject = new TileObject(position, this.tileMaterials[index])

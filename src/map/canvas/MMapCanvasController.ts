@@ -44,7 +44,7 @@ export default class MMapCanvasController {
       1.0,
       0.1,
       100,
-      Color.midnightBlue()
+      Color.white()
     )
 
     this.viewAreaLayer = new ViewAreaLayer(this.gl, status)

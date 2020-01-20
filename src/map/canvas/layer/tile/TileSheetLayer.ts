@@ -12,6 +12,8 @@ import NumberRange from '../../../../common/NumberRange'
 import Ray3 from '../../../../common/Ray3'
 import MMap from '../../../MMap'
 import NoneGeometry from '../../../../engine/object/geometry/NoneGeometry'
+import MandelbrotSet from '../../../../mandelbrot/MandelbrotSet'
+import TileNumber from '../../../../tile/TileNumber'
 
 export default class TileSheetLayer implements Layer {
 
@@ -24,10 +26,20 @@ export default class TileSheetLayer implements Layer {
   sharedMaterial: Material
   tileMaterialsMap: { [sheetIndex: number]: Material[]}
 
+  renderedCanvas: HTMLCanvasElement
+
   constructor(gl: WebGL2RenderingContext, status: MMapStatus) {
     this.gl = gl
     this.gameObjects = []
     this.sheets = []
+
+    const canvas = document.createElement('canvas')
+    canvas.width = 256
+    canvas.height = 256
+    document.body.appendChild(canvas)
+    canvas.setAttribute('id', 'drawer')
+    MandelbrotSet.draw('drawer', TileNumber.create(0, 0, 0), 5)
+    this.renderedCanvas = canvas
 
     const noneGeometry = new NoneGeometry()
     this.sharedMaterial = new SingleColorMaterial(gl, noneGeometry, Color.blue())
@@ -104,7 +116,7 @@ export default class TileSheetLayer implements Layer {
       if (this.tileMaterialsMap[sheetIndex] === undefined) {
         this.tileMaterialsMap[sheetIndex] = []
       }
-      const sheet = new SheetObject(this.gl, position, this.sharedMaterial, this.tileMaterialsMap[sheetIndex], sheetIndex)
+      const sheet = new SheetObject(this.gl, position, this.sharedMaterial, this.tileMaterialsMap[sheetIndex], sheetIndex, this.renderedCanvas)
       sheet.mapUpdate(status)
       return sheet
     })

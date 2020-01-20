@@ -9,7 +9,8 @@ module.exports = {
       },
       {
         test: /.glsl$/,
-        use: 'ts-shader-loader',}
+        use: 'ts-shader-loader'
+      }
     ]
   },
   resolve: {
