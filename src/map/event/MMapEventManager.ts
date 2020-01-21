@@ -22,6 +22,8 @@ export default class MMapEventManager {
   onMouseMove: (event: MouseEvent) => void | undefined
   onMouseWheel: (event: WheelEvent) => void | undefined
 
+  bindedAnimation: () => void
+
   constructor(
     canvas: HTMLCanvasElement,
     onMove: (motion: Vector2) => void,
@@ -39,6 +41,8 @@ export default class MMapEventManager {
 
     this.canvas.oncontextmenu = () => false
     this.canvas.onwheel = () => false
+
+    this.bindedAnimation = this.animate.bind(this)
 
     this.setupMouseEvents()
   }
@@ -95,22 +99,7 @@ export default class MMapEventManager {
       this.isMouseDown = false
       this.isMouseDoubleDown = false
 
-      const animate = () => {
-        if (this.onMove === undefined) {
-          return
-        }
-        if (this.deltaX === undefined || this.deltaY === undefined) {
-          return
-        }
-        if (this.deltaX === 0 && this.deltaY === 0) {
-          return
-        }
-        this.onMove(new Vector2(this.deltaX, this.deltaY))
-        this.deltaX = (Math.abs(this.deltaX) <= 1) ? 0 : (this.deltaX > 0) ? this.deltaX - 2 : this.deltaX + 2
-        this.deltaY = (Math.abs(this.deltaY) <= 1) ? 0 : (this.deltaY > 0) ? this.deltaY - 2 : this.deltaY + 2
-        requestAnimationFrame(animate)  
-      }
-      animate()
+      this.bindedAnimation()
     }
 
     this.canvas.addEventListener('mouseup', this.onMouseUp)
@@ -124,6 +113,8 @@ export default class MMapEventManager {
     this.onMouseOut = () => {
       this.isMouseDown = false
       this.isMouseDoubleDown = false
+
+      this.bindedAnimation()
     }
 
     this.canvas.addEventListener('mouseout', this.onMouseOut)
@@ -174,5 +165,21 @@ export default class MMapEventManager {
     }
 
     this.canvas.addEventListener('wheel', this.onMouseWheel)
+  }
+
+  animate() {
+    if (this.onMove === undefined) {
+      return
+    }
+    if (this.deltaX === undefined || this.deltaY === undefined) {
+      return
+    }
+    if (this.deltaX === 0 && this.deltaY === 0) {
+      return
+    }
+    this.onMove(new Vector2(this.deltaX, this.deltaY))
+    this.deltaX = (Math.abs(this.deltaX) <= 1) ? 0 : (this.deltaX > 0) ? this.deltaX - 1 : this.deltaX + 1
+    this.deltaY = (Math.abs(this.deltaY) <= 1) ? 0 : (this.deltaY > 0) ? this.deltaY - 1 : this.deltaY + 1
+    requestAnimationFrame(this.bindedAnimation)
   }
 }
