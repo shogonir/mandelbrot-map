@@ -7,6 +7,8 @@ export default class MMapEventManager {
 
   previousX: number | undefined
   previousY: number | undefined
+  deltaX: number | undefined
+  deltaY: number | undefined
 
   canvas: HTMLCanvasElement
   onMove: (motion: Vector2) => void | undefined
@@ -59,6 +61,8 @@ export default class MMapEventManager {
       this.isMouseDown = true
       this.previousX = undefined
       this.previousY = undefined
+      this.deltaX = undefined
+      this.deltaY = undefined
     }
 
     this.canvas.addEventListener('mousedown', this.onMouseDown)
@@ -74,6 +78,8 @@ export default class MMapEventManager {
         this.isMouseDoubleDown = true
         this.previousX = undefined
         this.previousY = undefined
+        this.deltaX = undefined
+        this.deltaY = undefined
       }
     }
     
@@ -88,6 +94,23 @@ export default class MMapEventManager {
     this.onMouseUp = () => {
       this.isMouseDown = false
       this.isMouseDoubleDown = false
+
+      const animate = () => {
+        if (this.onMove === undefined) {
+          return
+        }
+        if (this.deltaX === undefined || this.deltaY === undefined) {
+          return
+        }
+        if (this.deltaX === 0 && this.deltaY === 0) {
+          return
+        }
+        this.onMove(new Vector2(this.deltaX, this.deltaY))
+        this.deltaX = (Math.abs(this.deltaX) <= 1) ? 0 : (this.deltaX > 0) ? this.deltaX - 2 : this.deltaX + 2
+        this.deltaY = (Math.abs(this.deltaY) <= 1) ? 0 : (this.deltaY > 0) ? this.deltaY - 2 : this.deltaY + 2
+        requestAnimationFrame(animate)  
+      }
+      animate()
     }
 
     this.canvas.addEventListener('mouseup', this.onMouseUp)
@@ -120,7 +143,9 @@ export default class MMapEventManager {
           return
         }
 
-        const motion = new Vector2(event.offsetX - this.previousX, event.offsetY - this.previousY)
+        this.deltaX = event.offsetX - this.previousX
+        this.deltaY = event.offsetY - this.previousY
+        const motion = new Vector2(this.deltaX, this.deltaY)
 
         if (this.isMouseDoubleDown && this.onRotate !== undefined) {
           this.onRotate(motion)
