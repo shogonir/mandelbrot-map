@@ -9,6 +9,7 @@ import TileSheetLayer from './layer/tile/TileSheetLayer'
 import ViewAreaLayer from './layer/viewarea/ViewAreaLayer'
 import MMapUtils from '../util/MMapUtils'
 import Color from '../../common/Color'
+import MMapTileRenderer from './render/MMapTileRenderer'
 
 export default class MMapCanvasController {
 
@@ -20,6 +21,8 @@ export default class MMapCanvasController {
   viewAreaLayer: ViewAreaLayer
   xyAxisLayer: XYAxisLayer
   tileSheetLayer: TileSheetLayer
+
+  tileRenderer: MMapTileRenderer
 
   world: World
 
@@ -56,6 +59,8 @@ export default class MMapCanvasController {
     this.xyAxisLayer = new XYAxisLayer(this.gl, status)
     this.tileSheetLayer = new TileSheetLayer(this.gl, status)
 
+    this.tileRenderer = new MMapTileRenderer()
+
     this.world = new World(mainCamera)
     this.world.addLayer(this.tileSheetLayer)
     this.world.addLayer(this.xyAxisLayer)
@@ -72,6 +77,8 @@ export default class MMapCanvasController {
     this.viewAreaLayer.update(status)
     this.xyAxisLayer.update(status)
     this.tileSheetLayer.update(status)
+
+    this.tileRenderer.update(status)
     
     this.world.update()
   }

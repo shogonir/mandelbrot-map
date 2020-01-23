@@ -1,8 +1,14 @@
 import Equalable from './Equalable'
 
-export default class ArrayList<T extends Equalable> {
+export default class ArrayList<T extends Equalable> implements Iterable<T> {
 
   private array: T[]
+
+  *[Symbol.iterator](): Iterator<T> {
+    for (let index = 0; index < this.array.length; index++) {
+      yield this.array[index]
+    }
+  }
 
   private constructor(array: T[]) {
     this.array = [...array]

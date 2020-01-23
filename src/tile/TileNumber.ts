@@ -37,6 +37,10 @@ export default class TileNumber implements Equalable {
     return this.x === otherTile.x && this.y === otherTile.y && this.z === otherTile.z
   }
 
+  toString(): string {
+    return `TileNumber(${this.x}, ${this.y}, ${this.z})`
+  }
+
   static create(x: number, y: number, z: number): TileNumber | undefined {
     if (z < 0) {
       return undefined

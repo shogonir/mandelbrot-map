@@ -10,8 +10,18 @@ module.exports = {
       {
         test: /.glsl$/,
         use: 'ts-shader-loader'
+      },
+      {
+        test: /\.worker\.js$/,
+        loader: 'worker-loader',
+        options: {
+          name: 'static/[hash].worker.js',
+        }
       }
     ]
+  },
+  output: {
+    publicPath: 'dist/'
   },
   resolve: {
     extensions: [
