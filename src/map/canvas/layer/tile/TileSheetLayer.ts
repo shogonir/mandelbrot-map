@@ -38,7 +38,14 @@ export default class TileSheetLayer implements Layer {
     canvas.height = 256
     document.body.appendChild(canvas)
     canvas.setAttribute('id', 'drawer')
-    MandelbrotSet.draw('drawer', TileNumber.create(0, 0, 0), 5)
+    const mayBeTile: TileNumber | undefined = TileNumber.create(0, 0, 0)
+    if (mayBeTile === undefined) {
+      console.error('[ERROR] TileSheetLayer.constructor() could not create tile')
+      return
+    }
+
+    const tile: TileNumber = mayBeTile
+    MandelbrotSet.draw('drawer', tile, 5)
     this.renderedCanvas = canvas
 
     const noneGeometry = new NoneGeometry()

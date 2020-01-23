@@ -91,7 +91,7 @@ export default class ViewAreaLayer implements Layer {
   createPoint(material: Material): GameObject {
     return new GameObject(
       Vector3.zero(),
-      Quaternion.fromRadianAndVector3(0, new Vector3(0, 1, 0)),
+      Quaternion.fromRadianAndAxis(0, new Vector3(0, 1, 0)),
       Vector3.one(),
       material
     )

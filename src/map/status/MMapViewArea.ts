@@ -20,24 +20,24 @@ export default class MMapViewArea {
    *   12--11--10--09--08
    */
 
-  topLeft: Vector3 | undefined            // 00
-  topTopLeft: Vector3 | undefined         // 01
-  top: Vector3 | undefined                // 02
-  topTopRight: Vector3 | undefined        // 03
-  topRight: Vector3 | undefined           // 04
-  rightTopRight: Vector3 | undefined      // 05
-  right: Vector3 | undefined              // 06
-  rightBottomRight: Vector3 | undefined   // 07
-  bottomRight: Vector3 | undefined        // 08
-  bottomBottomRight: Vector3 | undefined  // 09
-  bottom: Vector3 | undefined             // 10
-  bottomBottomLeft: Vector3 | undefined   // 11
-  bottomLeft: Vector3 | undefined         // 12
-  leftBottomLeft: Vector3 | undefined     // 13
-  left: Vector3 | undefined               // 14
-  leftTopLeft: Vector3 | undefined        // 15
+  topLeft: Vector3            // 00
+  topTopLeft: Vector3         // 01
+  top: Vector3                // 02
+  topTopRight: Vector3        // 03
+  topRight: Vector3           // 04
+  rightTopRight: Vector3      // 05
+  right: Vector3              // 06
+  rightBottomRight: Vector3   // 07
+  bottomRight: Vector3        // 08
+  bottomBottomRight: Vector3  // 09
+  bottom: Vector3             // 10
+  bottomBottomLeft: Vector3   // 11
+  bottomLeft: Vector3         // 12
+  leftBottomLeft: Vector3     // 13
+  left: Vector3               // 14
+  leftTopLeft: Vector3        // 15
 
-  points: (Vector3 | undefined)[]
+  points: Vector3[]
 
   viewTiles: MMapViewTiles
 
@@ -85,7 +85,7 @@ export default class MMapViewArea {
     this.viewTiles.update(status)
   }
 
-  static updatePoint(status: MMapStatus, viewPoint: Vector2): Vector3 | undefined {
+  static updatePoint(status: MMapStatus, viewPoint: Vector2): Vector3 {
     const ptu = CanvasUtils.calculatePixelToUnit(status.zoom)
     const z = MMapUtils.SqhereRadius
 
@@ -99,7 +99,7 @@ export default class MMapViewArea {
     const mayBeIntersection: Vector3 | undefined = ray.intersectsWithPlaneZEqualsParameter(z)
 
     if (mayBeIntersection === undefined) {
-      return undefined
+      return Vector3.zero()
     }
 
     const intersection = mayBeIntersection

@@ -26,7 +26,12 @@ export default class MMapCanvasController {
   constructor(canvas: HTMLCanvasElement, status: MMapStatus) {
     this.canvas = canvas
     this.previousZoom = -1
-    this.gl = this.canvas.getContext('webgl2')
+    const mayBeGL: WebGL2RenderingContext | null = this.canvas.getContext('webgl2')
+    if (mayBeGL === null) {
+      console.error('[ERROR] MMapCanvasController.constructor() could not getContext()')
+      return
+    }
+    this.gl = mayBeGL
     // this.gl.enable(this.gl.DEPTH_TEST);
     // this.gl.enable(this.gl.CULL_FACE);
 

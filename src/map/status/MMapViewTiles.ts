@@ -4,6 +4,7 @@ import Vector3 from '../../common/Vector3'
 import Numbers from '../../util/Numbers'
 import Ray2 from '../../common/Ray2'
 import ArrayList from '../../common/ArrayList'
+import Vector2 from '../../common/Vector2'
 
 export default class MMapViewTiles {
 
@@ -46,7 +47,11 @@ export default class MMapViewTiles {
       const side = TileNumber.calculateSide(z)
       const half = side / 2
       Numbers.range(minX, maxX, side, true).forEach(x => {
-        const y = ray2.intersectsWithLineXEqualsParameter(x).y
+        const mayBeIntersection: Vector2 | undefined = ray2.intersectsWithLineXEqualsParameter(x)
+        if (mayBeIntersection === undefined) {
+          return
+        }
+        const y = mayBeIntersection.y
         const tileY = TileNumber.calculateY(z, y)
         const leftX = TileNumber.calculateX(z, x - half)
         const rightX = leftX + 1
@@ -60,7 +65,11 @@ export default class MMapViewTiles {
       const side = TileNumber.calculateSide(z)
       const half = side / 2
       Numbers.range(minY, maxY, side, true).forEach(y => {
-        const x = ray2.intersectsWithLineYEqualsParameter(y).x
+        const mayBeIntersection: Vector2 | undefined = ray2.intersectsWithLineYEqualsParameter(y)
+        if (mayBeIntersection === undefined) {
+          return
+        }
+        const x = mayBeIntersection.x
         const tileX = TileNumber.calculateX(z, x)
         const bottomY = TileNumber.calculateY(z, y - half)
         const topY = bottomY + 1

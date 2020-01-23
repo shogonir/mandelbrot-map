@@ -57,17 +57,17 @@ export default class Quaternion {
 
   rotateX(degree: number): Quaternion {
     const radian = degree * EngineMath.deg2Rad
-    return this.multiply(Quaternion.fromRadianAndVector3(radian, new Vector3(1, 0, 0)))
+    return this.multiply(Quaternion.fromRadianAndAxis(radian, new Vector3(1, 0, 0)))
   }
 
   rotateY(degree: number): Quaternion {
     const radian = degree * EngineMath.deg2Rad
-    return this.multiply(Quaternion.fromRadianAndVector3(radian, new Vector3(0, 1, 0)))
+    return this.multiply(Quaternion.fromRadianAndAxis(radian, new Vector3(0, 1, 0)))
   }
 
   rotateZ(degree: number): Quaternion {
     const radian = degree * EngineMath.deg2Rad
-    return this.multiply(Quaternion.fromRadianAndVector3(radian, new Vector3(0, 0, 1)))
+    return this.multiply(Quaternion.fromRadianAndAxis(radian, new Vector3(0, 0, 1)))
   }
 
   toMat4(): mat4 {
@@ -86,9 +86,9 @@ export default class Quaternion {
     return matrix
   }
 
-  static fromRadianAndVector3(radian: number, vector: Vector3): Quaternion | undefined {
+  static fromRadianAndAxis(radian: number, vector: Vector3): Quaternion {
     if (vector.isZero()) {
-      return undefined
+      return new Quaternion(0, 0, 0, 1)
     }
 
     const normalized = vector.normalize()

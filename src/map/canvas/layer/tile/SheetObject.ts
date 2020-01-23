@@ -9,6 +9,7 @@ import SingleColorMaterial from '../../../../engine/object/material/SingleColorM
 import Color from '../../../../common/Color'
 import CanvasTextureMaterial from '../../../../engine/object/material/CanvasTextureMaterial'
 import TexturePlaneGeometry from '../../../../engine/object/geometry/TexturePlaneGeometry'
+import TileNumber from '../../../../tile/TileNumber'
 
 export default class SheetObject extends GameObject {
 
@@ -28,7 +29,7 @@ export default class SheetObject extends GameObject {
     index: number,
     canvas: HTMLCanvasElement
   ) {
-    const rotation = Quaternion.fromRadianAndVector3(0, new Vector3(0, 1, 0))
+    const rotation = Quaternion.fromRadianAndAxis(0, new Vector3(0, 1, 0))
     const scale = Vector3.one().multiply(3.8)
     super(position, rotation, scale, material)
 
@@ -45,7 +46,7 @@ export default class SheetObject extends GameObject {
       return
     }
 
-    this.tiles = status.viewArea.viewTiles.sheetMap[this.index].mapToArray((tile, index) => {
+    this.tiles = status.viewArea.viewTiles.sheetMap[this.index].mapToArray((tile: TileNumber, index: number) => {
       const tileCenter = tile.center()
       const position = status.mapping(tileCenter)
       if (index >= this.tileMaterials.length) {

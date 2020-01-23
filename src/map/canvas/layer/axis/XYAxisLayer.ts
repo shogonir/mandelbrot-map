@@ -24,7 +24,7 @@ export default class XYAxisLayer implements Layer {
     const blackMaterialX = new SingleColorMaterial(gl, planeX, Color.black())
     this.xAxis = new GameObject(
       Vector3.zero(),
-      Quaternion.fromRadianAndVector3(0, new Vector3(0, 1, 0)),
+      Quaternion.fromRadianAndAxis(0, new Vector3(0, 1, 0)),
       Vector3.zero(),
       blackMaterialX
     )
@@ -33,7 +33,7 @@ export default class XYAxisLayer implements Layer {
     const blackMaterialY = new SingleColorMaterial(gl, planeY, Color.black())
     this.yAxis = new GameObject(
       Vector3.zero(),
-      Quaternion.fromRadianAndVector3(0, new Vector3(0, 1, 0)),
+      Quaternion.fromRadianAndAxis(0, new Vector3(0, 1, 0)),
       Vector3.zero(),
       blackMaterialY
     )

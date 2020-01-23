@@ -99,7 +99,7 @@ export default class TileNumber implements Equalable {
     return Math.floor((yValue - MMap.MinY) / side)
   }
 
-  static fromVector2(z: number, vector: Vector2): TileNumber | undefined {
+  static fromVector2(z: number, vector: Vector2): TileNumber {
     const x = TileNumber.calculateX(z, vector.x)
     const y = TileNumber.calculateY(z, vector.y)
     return TileNumber.createWithNoCheck(x, y, z)

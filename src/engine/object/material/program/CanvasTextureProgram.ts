@@ -7,16 +7,15 @@ import Program from './Program'
 import Geometry from '../../geometry/Geometry'
 import GameObject from '../../GameObject'
 import Camera from '../../../world/camera/Camera'
-import CanvasTextureMaterial from '../CanvasTextureMaterial'
 
 export default class CanvasTextureProgram implements Program {
 
   gl: WebGL2RenderingContext
   geometry: Geometry
 
-  vertexShader: WebGLShader | null
-  fragmentShader: WebGLShader | null
-  program: WebGLProgram | null
+  vertexShader: WebGLShader
+  fragmentShader: WebGLShader
+  program: WebGLProgram
 
   canvas: HTMLCanvasElement
   texture: WebGLTexture | null
@@ -30,7 +29,12 @@ export default class CanvasTextureProgram implements Program {
   }
 
   setupProgram() {
-    this.vertexShader = this.gl.createShader(this.gl.VERTEX_SHADER)
+    const mayBeVertexShader: WebGLShader | null = this.gl.createShader(this.gl.VERTEX_SHADER)
+    if (mayBeVertexShader === null) {
+      console.error('[ERROR] CanvasTextureProgram.setupProgram() could not create vertex shader')
+      return
+    }
+    this.vertexShader = mayBeVertexShader
     this.gl.shaderSource(this.vertexShader, vertexShaderSource)
     this.gl.compileShader(this.vertexShader)
 
@@ -41,7 +45,12 @@ export default class CanvasTextureProgram implements Program {
       return
     }
 
-    this.fragmentShader = this.gl.createShader(this.gl.FRAGMENT_SHADER)
+    const mayBeFragmentShader: WebGLShader | null = this.gl.createShader(this.gl.FRAGMENT_SHADER)
+    if (mayBeFragmentShader === null) {
+      console.error('[ERROR] CanvasTextureProgram.setupProgram() could not create fragment shader')
+      return
+    }
+    this.fragmentShader = mayBeFragmentShader
     this.gl.shaderSource(this.fragmentShader, fragmentShaderSource)
     this.gl.compileShader(this.fragmentShader)
 
@@ -51,7 +60,12 @@ export default class CanvasTextureProgram implements Program {
       console.warn(info)
     }
 
-    this.program = this.gl.createProgram()
+    const mayBeProgram = this.gl.createProgram()
+    if (mayBeProgram === null) {
+      console.error('[ERROR] CanvasTextureProgram.setupProgram() could not create program')
+      return
+    }
+    this.program = mayBeProgram
     this.gl.attachShader(this.program, this.vertexShader)
     this.gl.attachShader(this.program, this.fragmentShader)
     this.gl.linkProgram(this.program)
