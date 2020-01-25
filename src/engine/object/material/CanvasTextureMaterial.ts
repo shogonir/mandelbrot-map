@@ -10,13 +10,12 @@ export default class CanvasTextureMaterial implements Material {
   program: CanvasTextureProgram
   geometry: Geometry
 
-  constructor(gl: WebGL2RenderingContext, geometry: Geometry, canvas: HTMLCanvasElement) {
+  constructor(gl: WebGL2RenderingContext, geometry: Geometry) {
     this.gl = gl
     this.geometry = geometry
 
     this.program = new CanvasTextureProgram()
     this.setup(geometry)
-    this.program.setTexture(canvas)
   }
 
   setup(geometry: Geometry) {
@@ -29,5 +28,9 @@ export default class CanvasTextureMaterial implements Material {
 
   draw() {
     this.program.draw()
+  }
+
+  setTexture(texture: ImageBitmap) {
+    this.program.setTexture(texture)
   }
 }

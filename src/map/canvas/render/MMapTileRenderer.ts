@@ -21,7 +21,7 @@ export default class MMapTileRenderer {
       const imageBitmap: ImageBitmap = event.data as ImageBitmap
       this.tileCache[this.renderingTile] = imageBitmap
       this.workerIsBusy = false
-      console.log(this.tileCache)
+      // console.log(this.tileCache)
     }
 
     this.workerIsBusy = false
@@ -49,6 +49,7 @@ export default class MMapTileRenderer {
       this.renderingTile = tile.toString()
       this.workerIsBusy = true
       this.worker.postMessage(tile)
+      break
     }
   }
 }

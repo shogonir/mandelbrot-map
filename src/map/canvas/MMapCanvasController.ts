@@ -52,18 +52,22 @@ export default class MMapCanvasController {
       1.0,
       0.1,
       100,
-      Color.white()
+      Color.blue()
     )
-
-    this.viewAreaLayer = new ViewAreaLayer(this.gl, status)
-    this.xyAxisLayer = new XYAxisLayer(this.gl, status)
-    this.tileSheetLayer = new TileSheetLayer(this.gl, status)
 
     this.tileRenderer = new MMapTileRenderer()
 
+    const getTexture: (tileName: string) => ImageBitmap | undefined =  (tileName: string) => {
+      return this.tileRenderer.tileCache[tileName]
+    }
+
+    this.viewAreaLayer = new ViewAreaLayer(this.gl, status)
+    this.xyAxisLayer = new XYAxisLayer(this.gl, status)
+    this.tileSheetLayer = new TileSheetLayer(this.gl, status, getTexture)
+
     this.world = new World(mainCamera)
     this.world.addLayer(this.tileSheetLayer)
-    this.world.addLayer(this.xyAxisLayer)
+    // this.world.addLayer(this.xyAxisLayer)
     this.world.addLayer(this.viewAreaLayer)
 
     this.updateCamera(status)

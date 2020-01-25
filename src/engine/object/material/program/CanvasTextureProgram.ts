@@ -17,7 +17,7 @@ export default class CanvasTextureProgram implements Program {
   fragmentShader: WebGLShader
   program: WebGLProgram
 
-  canvas: HTMLCanvasElement
+  imageBitmap: ImageBitmap
   texture: WebGLTexture | null
 
   setup(gl: WebGL2RenderingContext, geometry: Geometry) {
@@ -26,6 +26,7 @@ export default class CanvasTextureProgram implements Program {
     this.texture = gl.createTexture()
     this.setupProgram()
     this.setupGeometry(geometry)
+    this.initTexture()
   }
 
   setupProgram() {
@@ -114,21 +115,37 @@ export default class CanvasTextureProgram implements Program {
     this.gl.bindBuffer(this.gl.ELEMENT_ARRAY_BUFFER, indexBuffer)
   }
 
-  async setTexture(canvas: HTMLCanvasElement) {
-    this.canvas = canvas
+  setTexture(imageBitmap: ImageBitmap) {
+    this.imageBitmap = imageBitmap
 
     this.gl.useProgram(this.program)
 
-    const image: HTMLImageElement = new Image()
-    image.src = canvas.toDataURL()
-    await CanvasTextureProgram.imageToPromise(image)
-
     this.gl.bindTexture(this.gl.TEXTURE_2D, this.texture)
-    this.gl.texImage2D(this.gl.TEXTURE_2D, 0, this.gl.RGBA, this.gl.RGBA, this.gl.UNSIGNED_BYTE, image)
+    this.gl.texImage2D(this.gl.TEXTURE_2D, 0, this.gl.RGBA, this.gl.RGBA, this.gl.UNSIGNED_BYTE, imageBitmap)
     this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_MAG_FILTER, this.gl.LINEAR)
     this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_MIN_FILTER, this.gl.LINEAR_MIPMAP_NEAREST)
     this.gl.generateMipmap(this.gl.TEXTURE_2D)
     // this.gl.bindTexture(this.gl.TEXTURE_2D, null)
+  }
+
+  initTexture() {
+    const tileSize = 64
+    const canvas = new OffscreenCanvas(tileSize, tileSize)
+    const mayBeContext = canvas.getContext('2d')
+    if (mayBeContext === null) {
+      return
+    }
+
+    const context = mayBeContext
+    context.fillStyle = '#FFFFFF'
+    context.fillRect(0, 0, tileSize / 2, tileSize / 2)
+    context.fillRect(tileSize / 2, tileSize / 2, tileSize / 2, tileSize / 2)
+    context.fillStyle = '#DDDDDD'
+    context.fillRect(0, tileSize / 2, tileSize / 2, tileSize / 2)
+    context.fillRect(tileSize / 2, 0, tileSize / 2, tileSize / 2)
+
+    const imageBitmap = canvas.transferToImageBitmap()
+    this.setTexture(imageBitmap)
   }
 
   update(gameObject: GameObject, camera: Camera) {
@@ -179,7 +196,7 @@ export default class CanvasTextureProgram implements Program {
 
   draw() {
     this.setupGeometry(this.geometry)
-    this.setTexture(this.canvas)
+    this.setTexture(this.imageBitmap)
 
     this.gl.drawElements(this.gl.TRIANGLES, this.geometry.indices.length, this.gl.UNSIGNED_SHORT, 0)
 

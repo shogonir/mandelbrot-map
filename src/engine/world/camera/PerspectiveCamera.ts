@@ -56,7 +56,7 @@ export default class PerspectiveCamera implements Camera {
 
   updateProjection() {
     this.projectionMatrix = mat4.create()
-    mat4.perspective(this.projectionMatrix, this.verticalFov * EngineMath.deg2Rad * 2, this.aspect, this.near, this.far)
+    mat4.perspective(this.projectionMatrix, this.verticalFov * EngineMath.deg2Rad * 1, this.aspect, this.near, this.far)
   }
 
   update() {

@@ -12,8 +12,7 @@ import NumberRange from '../../../../common/NumberRange'
 import Ray3 from '../../../../common/Ray3'
 import MMap from '../../../MMap'
 import NoneGeometry from '../../../../engine/object/geometry/NoneGeometry'
-import MandelbrotSet from '../../../../mandelbrot/MandelbrotSet'
-import TileNumber from '../../../../tile/TileNumber'
+import CanvasTextureMaterial from '../../../../engine/object/material/CanvasTextureMaterial'
 
 export default class TileSheetLayer implements Layer {
 
@@ -24,29 +23,20 @@ export default class TileSheetLayer implements Layer {
   sheets: SheetObject[]
 
   sharedMaterial: Material
-  tileMaterialsMap: { [sheetIndex: number]: Material[]}
+  tileMaterialsMap: { [sheetIndex: number]: CanvasTextureMaterial[]}
 
-  renderedCanvas: HTMLCanvasElement
+  getTexture: (tileName: string) => ImageBitmap | undefined
 
-  constructor(gl: WebGL2RenderingContext, status: MMapStatus) {
+  constructor(
+    gl: WebGL2RenderingContext,
+    status: MMapStatus,
+    getTexture: (tileName: string) => ImageBitmap | undefined
+  ) {
     this.gl = gl
+    this.getTexture = getTexture
+
     this.gameObjects = []
     this.sheets = []
-
-    const canvas = document.createElement('canvas')
-    canvas.width = 256
-    canvas.height = 256
-    document.body.appendChild(canvas)
-    canvas.setAttribute('id', 'drawer')
-    const mayBeTile: TileNumber | undefined = TileNumber.create(0, 0, 0)
-    if (mayBeTile === undefined) {
-      console.error('[ERROR] TileSheetLayer.constructor() could not create tile')
-      return
-    }
-
-    const tile: TileNumber = mayBeTile
-    MandelbrotSet.draw('drawer', tile, 5)
-    this.renderedCanvas = canvas
 
     const noneGeometry = new NoneGeometry()
     this.sharedMaterial = new SingleColorMaterial(gl, noneGeometry, Color.blue())
@@ -123,7 +113,7 @@ export default class TileSheetLayer implements Layer {
       if (this.tileMaterialsMap[sheetIndex] === undefined) {
         this.tileMaterialsMap[sheetIndex] = []
       }
-      const sheet = new SheetObject(this.gl, position, this.sharedMaterial, this.tileMaterialsMap[sheetIndex], sheetIndex, this.renderedCanvas)
+      const sheet = new SheetObject(this.gl, position, this.sharedMaterial, this.tileMaterialsMap[sheetIndex], sheetIndex, this.getTexture)
       sheet.mapUpdate(status)
       return sheet
     })
