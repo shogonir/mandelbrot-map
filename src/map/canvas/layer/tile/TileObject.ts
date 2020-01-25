@@ -32,6 +32,7 @@ export default class TileObject extends GameObject {
 
     const mayBeTexture = this.getTexture(this.tileNumber.toString())
     if (mayBeTexture === undefined) {
+      this.material.program.initTexture()
       return
     }
     const texture: ImageBitmap = mayBeTexture
