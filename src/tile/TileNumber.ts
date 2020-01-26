@@ -41,6 +41,28 @@ export default class TileNumber implements Equalable {
     return `TileNumber(${this.x}, ${this.y}, ${this.z})`
   }
 
+  static fromString(tileName: string): TileNumber | undefined {
+    const pattern: RegExp = /^TileNumber\((\-?\d+), (\-?\d+), (\d+)\)$/
+    if (pattern.test(tileName) === false) {
+      return undefined
+    }
+
+    const mayBeMatch: RegExpMatchArray | null = pattern[Symbol.match](tileName)
+    if (mayBeMatch === null || mayBeMatch.length < 3) {
+      return undefined
+    }
+    const match: RegExpMatchArray = mayBeMatch
+
+    try {
+      const x = parseInt(match[1], 10)
+      const y = parseInt(match[2], 10)
+      const z = parseInt(match[3], 10)
+      return TileNumber.createWithNoCheck(x, y, z)
+    } catch(e) {
+      return undefined
+    }
+  }
+
   static create(x: number, y: number, z: number): TileNumber | undefined {
     if (z < 0) {
       return undefined

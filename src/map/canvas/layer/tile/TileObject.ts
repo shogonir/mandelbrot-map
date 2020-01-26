@@ -11,6 +11,8 @@ export default class TileObject extends GameObject {
   tileNumber: TileNumber
   getTexture: (tileName: string) => ImageBitmap | undefined
 
+  isSetTexture: boolean
+
   constructor(
     position: Vector3,
     material: CanvasTextureMaterial,
@@ -24,17 +26,27 @@ export default class TileObject extends GameObject {
     this.material = material
     this.tileNumber = tileNumber
     this.getTexture = getTexture
+    this.isSetTexture = false
   }
 
   mapUpdate(status: MMapStatus) {
     const side = TileNumber.calculateSide(status.zoomAsInt)
     this.scale = new Vector3(side, side, 1)
+    this.position = status.mapping(this.tileNumber.center())
+
+    this.updateTextureIfNeeded()
+  }
+
+  private updateTextureIfNeeded() {
+    if (this.isSetTexture) {
+      return
+    }
 
     const mayBeTexture = this.getTexture(this.tileNumber.toString())
     if (mayBeTexture === undefined) {
-      this.material.initTexture()
       return
     }
+
     const texture: ImageBitmap = mayBeTexture
     this.material.setTexture(texture)
   }

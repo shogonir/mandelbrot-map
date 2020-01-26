@@ -7,6 +7,7 @@ import MMapStatus from '../../../status/MMapStatus'
 import CanvasTextureMaterial from '../../../../engine/object/material/CanvasTextureMaterial'
 import TexturePlaneGeometry from '../../../../engine/object/geometry/TexturePlaneGeometry'
 import TileNumber from '../../../../tile/TileNumber'
+import CanvasTextureProgram from '../../../../engine/object/material/program/CanvasTextureProgram'
 
 export default class SheetObject extends GameObject {
 
@@ -15,8 +16,9 @@ export default class SheetObject extends GameObject {
 
   getTexture: (tileName: string) => ImageBitmap | undefined
 
-  tiles: TileObject[]
-  tileMaterials: CanvasTextureMaterial[]
+  tileMap: { [tileName: string]: TileObject }
+  tileMaterialMap: { [tileName: string]: CanvasTextureMaterial }
+  reusableMaterials: CanvasTextureMaterial[]
 
   constructor(
     gl: WebGL2RenderingContext,
@@ -33,8 +35,9 @@ export default class SheetObject extends GameObject {
     this.index = index
     this.getTexture = getTexture
 
-    this.tiles = []
-    this.tileMaterials = []
+    this.tileMap = {}
+    this.tileMaterialMap = {}
+    this.reusableMaterials = []
   }
 
   mapUpdate(status: MMapStatus) {
@@ -43,18 +46,41 @@ export default class SheetObject extends GameObject {
       return
     }
 
-    this.tiles = status.viewArea.viewTiles.sheetMap[this.index].mapToArray((tile: TileNumber, index: number) => {
-      const tileCenter = tile.center()
-      const position = status.mapping(tileCenter)
-      if (index >= this.tileMaterials.length) {
-        const texturePlane = new TexturePlaneGeometry(1.0)
-        const material = new CanvasTextureMaterial(this.gl, texturePlane)
-        this.tileMaterials.push(material)
-      }
-      const tileObject = new TileObject(position, this.tileMaterials[index], tile, this.getTexture)
+    const targetTileNames = tileNumbers.mapToArray(tile => tile.toString())
+    const currentTileNames = Object.keys(this.tileMap)
+
+    currentTileNames.forEach(tileName => {
+      const tileObject = this.tileMap[tileName]
       tileObject.mapUpdate(status)
-      return tileObject
     })
-    this.children = this.tiles
+
+    currentTileNames.forEach(tileName => {
+      if (targetTileNames.includes(tileName) === false) {
+        const material = this.tileMap[tileName].material
+        material.initTexture()
+        this.reusableMaterials.push(material)
+        delete this.tileMap[tileName]
+      }
+    })
+
+    targetTileNames.forEach(tileName => {
+      if (currentTileNames.includes(tileName) === false) {
+
+        const mayBeTileNumber = TileNumber.fromString(tileName)
+        if (mayBeTileNumber === undefined) {
+          return
+        }
+        const tileNumber: TileNumber = mayBeTileNumber
+        const position = status.mapping(tileNumber.center())
+        const material = this.reusableMaterials.pop()
+          || new CanvasTextureMaterial(this.gl, new TexturePlaneGeometry(1.0))
+        const tileObject = new TileObject(position, material, tileNumber, this.getTexture)
+        tileObject.mapUpdate(status)
+        this.tileMap[tileName] = tileObject
+        this.tileMaterialMap[tileName] = material
+      }
+    })
+
+    this.children = Object.values(this.tileMap)
   }
 }
