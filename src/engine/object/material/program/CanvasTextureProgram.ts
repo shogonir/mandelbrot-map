@@ -202,12 +202,4 @@ export default class CanvasTextureProgram implements Program {
 
     this.gl.flush()
   }
-
-  private static imageToPromise(image: HTMLImageElement): Promise<HTMLImageElement> {
-    return new Promise(reject => {
-      image.addEventListener('load', () => {
-        reject(image)
-      })
-    })
-  }
 }

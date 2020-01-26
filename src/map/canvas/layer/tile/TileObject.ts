@@ -17,7 +17,7 @@ export default class TileObject extends GameObject {
     tileNumber: TileNumber,
     getTexture: (tileName: string) => ImageBitmap | undefined
   ) {
-    const rotation = Quaternion.fromRadianAndAxis(Math.PI, new Vector3(1, 0, 0))
+    const rotation = Quaternion.fromRadianAndAxis(0, new Vector3(0, 1, 0))
     const scale = Vector3.one().multiply(0.5)
     super(position, rotation, scale, material)
 
@@ -32,7 +32,7 @@ export default class TileObject extends GameObject {
 
     const mayBeTexture = this.getTexture(this.tileNumber.toString())
     if (mayBeTexture === undefined) {
-      this.material.program.initTexture()
+      this.material.initTexture()
       return
     }
     const texture: ImageBitmap = mayBeTexture

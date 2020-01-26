@@ -30,6 +30,10 @@ export default class CanvasTextureMaterial implements Material {
     this.program.draw()
   }
 
+  initTexture() {
+    this.program.initTexture()
+  }
+
   setTexture(texture: ImageBitmap) {
     this.program.setTexture(texture)
   }
