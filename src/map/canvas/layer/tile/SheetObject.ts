@@ -11,18 +11,17 @@ import TileNumber from '../../../../tile/TileNumber'
 export default class SheetObject extends GameObject {
 
   gl: WebGL2RenderingContext
-  tileMaterials: CanvasTextureMaterial[]
-
   index: number
-  tiles: TileObject[]
 
   getTexture: (tileName: string) => ImageBitmap | undefined
+
+  tiles: TileObject[]
+  tileMaterials: CanvasTextureMaterial[]
 
   constructor(
     gl: WebGL2RenderingContext,
     position: Vector3,
     material: Material,
-    tileMaterials: CanvasTextureMaterial[],
     index: number,
     getTexture: (tileName: string) => ImageBitmap | undefined
   ) {
@@ -31,11 +30,11 @@ export default class SheetObject extends GameObject {
     super(position, rotation, scale, material)
 
     this.gl = gl
-    this.tileMaterials = tileMaterials
     this.index = index
     this.getTexture = getTexture
 
     this.tiles = []
+    this.tileMaterials = []
   }
 
   mapUpdate(status: MMapStatus) {

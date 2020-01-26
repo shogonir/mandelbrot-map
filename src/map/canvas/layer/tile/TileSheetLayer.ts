@@ -12,7 +12,6 @@ import NumberRange from '../../../../common/NumberRange'
 import Ray3 from '../../../../common/Ray3'
 import MMap from '../../../MMap'
 import NoneGeometry from '../../../../engine/object/geometry/NoneGeometry'
-import CanvasTextureMaterial from '../../../../engine/object/material/CanvasTextureMaterial'
 
 export default class TileSheetLayer implements Layer {
 
@@ -20,10 +19,9 @@ export default class TileSheetLayer implements Layer {
 
   gameObjects: GameObject[]
 
-  sheets: SheetObject[]
+  sheetMap: { [sheetIndex: number]: SheetObject }
 
   sharedMaterial: Material
-  tileMaterialsMap: { [sheetIndex: number]: CanvasTextureMaterial[]}
 
   getTexture: (tileName: string) => ImageBitmap | undefined
 
@@ -36,11 +34,10 @@ export default class TileSheetLayer implements Layer {
     this.getTexture = getTexture
 
     this.gameObjects = []
-    this.sheets = []
+    this.sheetMap = []
 
     const noneGeometry = new NoneGeometry()
     this.sharedMaterial = new SingleColorMaterial(gl, noneGeometry, Color.blue())
-    this.tileMaterialsMap = {}
 
     this.update(status)
   }
@@ -49,12 +46,12 @@ export default class TileSheetLayer implements Layer {
     const rangeX = this.calculateRangeX(status)
     const minXMulti4 = 4 * Math.floor(rangeX.min / 4)
     const maxXMulti4 = 4 * Math.ceil(rangeX.max / 4)
-    const xsMulti4 = Numbers.range(minXMulti4, maxXMulti4 + 4, 4)
+    const xsMulti4 = Numbers.range(minXMulti4, maxXMulti4, 4, true)
     this.updatePosition(status, xsMulti4)
-    this.gameObjects = this.sheets
+    this.gameObjects = Object.values(this.sheetMap)
   }
 
-  calculateRangeX(status: MMapStatus): NumberRange {
+  private calculateRangeX(status: MMapStatus): NumberRange {
     const xs: number[] = []
     const points = status.viewArea.points
     Numbers.range(0, points.length - 1).forEach((index: number) => {
@@ -78,7 +75,7 @@ export default class TileSheetLayer implements Layer {
     return new NumberRange(Math.min(...xs), Math.max(...xs))
   }
 
-  calculateLineSegmentRangeX(s: Vector3, t: Vector3): NumberRange | undefined {
+  private calculateLineSegmentRangeX(s: Vector3, t: Vector3): NumberRange | undefined {
     const xs: number[] = []
     if (MMap.MinY <= s.y && s.y <= MMap.MaxY) {
       xs.push(s.x)
@@ -106,16 +103,29 @@ export default class TileSheetLayer implements Layer {
     return new NumberRange(Math.min(...xs), Math.max(...xs))
   }
 
-  updatePosition(status: MMapStatus, xsMulti4: number[]) {
-    this.sheets = xsMulti4.map(xMulti4 => {
-      const position = status.mapping(new Vector2(xMulti4, 0))
-      const sheetIndex = Math.floor(xMulti4 / 4)
-      if (this.tileMaterialsMap[sheetIndex] === undefined) {
-        this.tileMaterialsMap[sheetIndex] = []
-      }
-      const sheet = new SheetObject(this.gl, position, this.sharedMaterial, this.tileMaterialsMap[sheetIndex], sheetIndex, this.getTexture)
+  private updatePosition(status: MMapStatus, xsMulti4: number[]) {
+    const targetSheetIndices: number[] = xsMulti4.map(x => Math.round(x / 4))
+    const currentSheetIndices: number[] = Object.keys(this.sheetMap).map(index => parseInt(index, 10))
+    
+    currentSheetIndices.forEach(sheetIndex => {
+      const sheet = this.sheetMap[sheetIndex]
       sheet.mapUpdate(status)
-      return sheet
+    })
+
+    currentSheetIndices.forEach(sheetIndex => {
+      if (targetSheetIndices.includes(sheetIndex) === false) {
+        delete this.sheetMap[sheetIndex]
+      }
+    })
+    
+    targetSheetIndices.forEach(sheetIndex => {
+      if (currentSheetIndices.includes(sheetIndex) === false) {
+        const xMulti4 = Math.round(sheetIndex * 4)
+        const position = status.mapping(new Vector2(xMulti4, 0))
+        const sheet = new SheetObject(this.gl, position, this.sharedMaterial, sheetIndex, this.getTexture)
+        sheet.mapUpdate(status)
+        this.sheetMap[sheetIndex] = sheet
+      }
     })
   }
 }
