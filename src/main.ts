@@ -5,4 +5,14 @@ import Vector2 from './common/Vector2'
 
 (() => {
   const map = new MMap('map', new Vector2(0, 0), 0)
+
+  const mayBeZoomPara = document.getElementById('zoom')
+  if (mayBeZoomPara === null) {
+    return
+  }
+  const zoomPara: HTMLElement = mayBeZoomPara
+
+  map.onZoomChanged = (zoom: number) => {
+    zoomPara.innerText = `zoom: ${zoom.toFixed(2)}`
+  }
 })()

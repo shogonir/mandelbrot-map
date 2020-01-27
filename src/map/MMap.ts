@@ -24,7 +24,9 @@ export default class MMap {
 
   canvas: HTMLCanvasElement
 
-  update: () => void | undefined
+  update: (() => void) | undefined
+
+  onZoomChanged: ((zoom: number) => void) | undefined
 
   constructor(canvasId: string, center: Vector2, zoom: number) {
     this.setupCanvas(canvasId)
@@ -39,6 +41,8 @@ export default class MMap {
       this.status.update()
       this.canvasController.update(this.status)
     }
+
+    this.onZoomChanged = undefined
 
     this.status.mapUpdate = this.update
 
@@ -110,6 +114,13 @@ export default class MMap {
         return
       }
 
+      if (this.status.zoom === MMap.MinZoom && delta < 0) {
+        return
+      }
+      if (this.status.zoom === MMap.MaxZoom && delta > 0) {
+        return
+      }
+
       this.status.zoom += delta * zoomCoeffient
       if (this.status.zoom < MMap.MinZoom) {
         this.status.zoom = MMap.MinZoom
@@ -120,6 +131,9 @@ export default class MMap {
       
       if (this.update !== undefined) {
         this.update()
+      }
+      if (this.onZoomChanged !== undefined) {
+        this.onZoomChanged(this.status.zoom)
       }
     }
 
