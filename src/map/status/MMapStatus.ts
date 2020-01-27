@@ -26,6 +26,8 @@ export default class MMapStatus {
 
   viewArea: MMapViewArea
 
+  mapUpdate: (() => void) | undefined
+
   constructor(
     center: Vector2,
     zoom: number,
@@ -43,6 +45,7 @@ export default class MMapStatus {
     this.aspect = clientWidth / clientHeight
     this.update()
     this.viewArea = new MMapViewArea(this)
+    this.mapUpdate = undefined
   }
 
   update() {

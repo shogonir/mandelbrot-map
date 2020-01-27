@@ -40,6 +40,8 @@ export default class MMap {
       this.canvasController.update(this.status)
     }
 
+    this.status.mapUpdate = this.update
+
     this.setupEventManager()
   }
 

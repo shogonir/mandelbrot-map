@@ -11,6 +11,8 @@ export default class MMapTileRenderer {
 
   tileCache: { [tileName: string]: ImageBitmap }
 
+  mapUpdate: (() => void) | undefined
+
   constructor() {
     this.worker = new MMapTileRenderingWorker()
     this.worker.onmessage = (event: MessageEvent) => {
@@ -21,15 +23,23 @@ export default class MMapTileRenderer {
       const imageBitmap: ImageBitmap = event.data as ImageBitmap
       this.tileCache[this.renderingTile] = imageBitmap
       this.workerIsBusy = false
-      // console.log(this.tileCache)
+
+      if (this.mapUpdate !== undefined) {
+        this.mapUpdate()
+      }
     }
 
     this.workerIsBusy = false
     this.renderingTile = ''
     this.tileCache = {}
+    this.mapUpdate = undefined
   }
 
   update(status: MMapStatus) {
+    if (this.mapUpdate === undefined) {
+      this.mapUpdate = status.mapUpdate
+    }
+
     if (this.workerIsBusy) {
       return
     }
