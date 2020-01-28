@@ -26,7 +26,7 @@ worker.addEventListener('message', (event: MessageEvent) => {
   for (let y = top; y > bottom; y -= tile.side / canvas.height) {
     for (let x = left; x < right; x += tile.side / canvas.width) {
       const z = new ComplexNumber(x, y)
-      const willConverge = MandelbrotSet.willConverge(z, 100)
+      const willConverge = MandelbrotSet.willConverge(z, 500)
       data[pixelIndex * 4 + 0] = 255 * willConverge  // r
       data[pixelIndex * 4 + 1] = 255 * willConverge  // g
       data[pixelIndex * 4 + 2] = 255 * willConverge  // b

@@ -8,13 +8,24 @@
 
       #map {
         border: 1px solid black;
-        margin: 50px;
+        margin-top: 50px;
+        margin-left: 50px;
+      }
+
+      #center {
+        margin-left: 50px;
+      }
+
+      #zoom {
+        margin-left: 50px;
       }
     </style>
   </head>
   <body>
     <canvas width="512" height="512" id="map"></canvas>
-    <p id="zoom">zoom: 0</p>
+    <br/>
+    <span id="center">center: (0, 0)</span>
+    <span id="zoom">zoom: 0</span>
     <script src="./dist/main.js"></script>
   </body>
 </html>

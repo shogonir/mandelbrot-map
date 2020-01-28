@@ -27,6 +27,7 @@ export default class MMap {
   update: (() => void) | undefined
 
   onZoomChanged: ((zoom: number) => void) | undefined
+  onCenterChanged: ((center: Vector2) => void) | undefined
 
   constructor(canvasId: string, center: Vector2, zoom: number) {
     this.setupCanvas(canvasId)
@@ -43,6 +44,7 @@ export default class MMap {
     }
 
     this.onZoomChanged = undefined
+    this.onCenterChanged = undefined
 
     this.status.mapUpdate = this.update
 
@@ -83,6 +85,10 @@ export default class MMap {
       }
       if (center.y > MMap.MaxY) {
         center.y = MMap.MaxY
+      }
+
+      if (this.onCenterChanged !== undefined) {
+        this.onCenterChanged(center.clone())
       }
 
       if (this.update !== undefined) {

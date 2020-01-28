@@ -15,4 +15,14 @@ import Vector2 from './common/Vector2'
   map.onZoomChanged = (zoom: number) => {
     zoomPara.innerText = `zoom: ${zoom.toFixed(2)}`
   }
+
+  const mayBeCenterPara = document.getElementById('center')
+  if (mayBeCenterPara === null) {
+    return
+  }
+  const centerPara: HTMLElement = mayBeCenterPara
+
+  map.onCenterChanged = (center: Vector2) => {
+    centerPara.innerText = `center: (${center.x.toFixed(4)}, ${center.y.toFixed(4)})`
+  }
 })()

@@ -68,7 +68,7 @@ export default class MMapCanvasController {
     this.world = new World(mainCamera)
     this.world.addLayer(this.tileSheetLayer)
     // this.world.addLayer(this.xyAxisLayer)
-    this.world.addLayer(this.viewAreaLayer)
+    // this.world.addLayer(this.viewAreaLayer)
 
     this.updateCamera(status)
 
