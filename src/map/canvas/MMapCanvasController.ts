@@ -36,7 +36,7 @@ export default class MMapCanvasController {
     }
     this.gl = mayBeGL
     // this.gl.enable(this.gl.DEPTH_TEST);
-    // this.gl.enable(this.gl.CULL_FACE);
+    this.gl.enable(this.gl.CULL_FACE);
 
     const cameraPosition = status.polar.toVector3()
     const ptu = CanvasUtils.calculatePixelToUnit(status.zoom)
