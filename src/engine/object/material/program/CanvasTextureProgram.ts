@@ -115,21 +115,6 @@ export default class CanvasTextureProgram implements Program {
     this.gl.bindBuffer(this.gl.ELEMENT_ARRAY_BUFFER, indexBuffer)
   }
 
-  setTexture(imageBitmap: ImageBitmap) {
-    this.imageBitmap = imageBitmap
-
-    this.gl.useProgram(this.program)
-
-    this.gl.bindTexture(this.gl.TEXTURE_2D, this.texture)
-    this.gl.texImage2D(this.gl.TEXTURE_2D, 0, this.gl.RGBA, this.gl.RGBA, this.gl.UNSIGNED_BYTE, imageBitmap)
-    this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_MAG_FILTER, this.gl.LINEAR)
-    this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_MIN_FILTER, this.gl.LINEAR_MIPMAP_NEAREST)
-    this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_WRAP_S, this.gl.CLAMP_TO_EDGE)
-    this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_WRAP_T, this.gl.CLAMP_TO_EDGE)
-    this.gl.generateMipmap(this.gl.TEXTURE_2D)
-    // this.gl.bindTexture(this.gl.TEXTURE_2D, null)
-  }
-
   initTexture() {
     const tileSize = 64
     const canvas = new OffscreenCanvas(tileSize, tileSize)
@@ -148,6 +133,26 @@ export default class CanvasTextureProgram implements Program {
 
     const imageBitmap = canvas.transferToImageBitmap()
     this.setTexture(imageBitmap)
+  }
+
+  setTexture(imageBitmap: ImageBitmap) {
+    this.imageBitmap = imageBitmap
+
+    this.gl.useProgram(this.program)
+
+    this.gl.bindTexture(this.gl.TEXTURE_2D, this.texture)
+    this.gl.texImage2D(this.gl.TEXTURE_2D, 0, this.gl.RGBA, this.gl.RGBA, this.gl.UNSIGNED_BYTE, imageBitmap)
+    this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_MAG_FILTER, this.gl.LINEAR)
+    this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_MIN_FILTER, this.gl.LINEAR_MIPMAP_NEAREST)
+    this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_WRAP_S, this.gl.CLAMP_TO_EDGE)
+    this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_WRAP_T, this.gl.CLAMP_TO_EDGE)
+    this.gl.generateMipmap(this.gl.TEXTURE_2D)
+    this.gl.bindTexture(this.gl.TEXTURE_2D, null)
+  }
+
+  updateTexture() {
+    this.gl.useProgram(this.program)
+    this.gl.bindTexture(this.gl.TEXTURE_2D, this.texture)
   }
 
   update(gameObject: GameObject, camera: Camera) {
@@ -198,10 +203,8 @@ export default class CanvasTextureProgram implements Program {
 
   draw() {
     this.setupGeometry(this.geometry)
-    this.setTexture(this.imageBitmap)
+    this.updateTexture()
 
     this.gl.drawElements(this.gl.TRIANGLES, this.geometry.indices.length, this.gl.UNSIGNED_SHORT, 0)
-
-    this.gl.flush()
   }
 }

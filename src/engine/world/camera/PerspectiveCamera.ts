@@ -75,5 +75,7 @@ export default class PerspectiveCamera implements Camera {
         gameObject.draw()
       }
     }
+
+    this.gl.flush()
   }
 }

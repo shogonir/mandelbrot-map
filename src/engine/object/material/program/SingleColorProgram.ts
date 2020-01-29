@@ -180,7 +180,5 @@ export default class SingleColorProgram implements Program {
     }
 
     this.gl.drawElements(this.gl.TRIANGLES, this.geometry.indices.length, this.gl.UNSIGNED_SHORT, 0)
-
-    this.gl.flush()
   }
 }
