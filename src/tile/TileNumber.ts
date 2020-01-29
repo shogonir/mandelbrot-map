@@ -103,6 +103,20 @@ export default class TileNumber implements Equalable {
     return this.centerCoord.y + this.half
   }
 
+  toChecked(): TileNumber {
+    const numberOfTilesInSide = 2 ** this.z
+
+    let x = this.x
+    while (x < 0) x += numberOfTilesInSide
+    while (x >= numberOfTilesInSide) x -= numberOfTilesInSide
+    
+    let y = this.y
+    while (y < 0) y += numberOfTilesInSide
+    while (x >= numberOfTilesInSide) y -= numberOfTilesInSide
+
+    return new TileNumber(x, y, this.z)
+  }
+
   static calculateHalf(z: number): number {
     return 2 ** (-z + 1)
   }

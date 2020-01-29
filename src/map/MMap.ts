@@ -49,6 +49,8 @@ export default class MMap {
     this.status.mapUpdate = this.update
 
     this.setupEventManager()
+
+    this.update()
   }
 
   setupCanvas(canvasId: string) {

@@ -42,7 +42,8 @@ export default class TileObject extends GameObject {
       return
     }
 
-    const mayBeTexture = this.getTexture(this.tileNumber.toString())
+    const checked = this.tileNumber.toChecked()
+    const mayBeTexture = this.getTexture(checked.toString())
     if (mayBeTexture === undefined) {
       return
     }
