@@ -33,7 +33,7 @@ export default class MMap {
     this.setupCanvas(canvasId)
 
     const polar = new PolarCoordinate3(10, -Math.PI / 2, 1 * EngineMath.deg2Rad)
-    this.status = new MMapStatus(center, zoom, this.canvas.width, this.canvas.height, polar, Vector3.zero())
+    this.status = new MMapStatus(center, zoom, this.canvas.clientWidth, this.canvas.clientHeight, polar, Vector3.zero())
     this.status.update()
 
     this.setupCanvasController()

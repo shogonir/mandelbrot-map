@@ -2,7 +2,15 @@
 <html>
   <head>
     <style>
+
+      html {
+        height: 100%;
+        margin: 0;
+        background-color: #DDDDDD;
+      }
+
       body {
+        height: 100%;
         margin: 0;
       }
 
@@ -27,10 +35,16 @@
         font-size: 24px;
       }
 
+      .content {
+        width: 800px;
+        height: 100%;
+        margin: 0 auto;
+      }
+
       #map {
-        border: 1px solid black;
-        margin-top: 50px;
-        margin-left: 50px;
+        width: 800px;
+        height: 450px;
+        margin: 0px;
       }
 
       #center {
@@ -40,6 +54,7 @@
       #zoom {
         margin-left: 50px;
       }
+
     </style>
   </head>
   <body>
@@ -49,10 +64,12 @@
       <a class="user-link" href="https://github.com/shogonir">GitHub</a>
       <a class="user-link" href="http://blog.shogonir.jp/">Blog</a>
     </div>
-    <canvas width="512" height="512" id="map"></canvas>
-    <br/>
-    <span id="center">center: (0, 0)</span>
-    <span id="zoom">zoom: 0</span>
+    <div class="content">
+      <canvas width="400" height="800" id="map"></canvas>
+      <br/>
+      <span id="center">center: (0, 0)</span>
+      <span id="zoom">zoom: 0</span>
+    </div>
     <script src="./dist/main.js"></script>
   </body>
 </html>

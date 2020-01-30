@@ -49,7 +49,7 @@ export default class MMapCanvasController {
       new Vector3(0, 0, MMapUtils.SqhereRadius),
       new Vector3(0, 1, 0),
       halfVerticalFovRadian * 2 * EngineMath.rad2Deg,
-      1.0,
+      canvas.clientWidth / canvas.clientHeight,
       0.1,
       100,
       Color.gray()
