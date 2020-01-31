@@ -26,6 +26,14 @@ export default class Vector2 {
     return new Vector2(this.x * scalar, this.y * scalar)
   }
 
+  magnitude(): number {
+    return Math.sqrt(this.squaredMagnitude())
+  }
+
+  squaredMagnitude(): number {
+    return this.x ** 2 + this.y ** 2
+  }
+
   rotate(theta: number): Vector2 {
     const x = this.x * Math.cos(theta) - this.y * Math.sin(theta)
     const y = this.x * Math.sin(theta) + this.y * Math.cos(theta)

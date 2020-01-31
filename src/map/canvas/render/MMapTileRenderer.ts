@@ -45,13 +45,16 @@ export default class MMapTileRenderer {
     }
 
     const sheetMap: { [sheetIndex: number]: ArrayList<TileNumber> } = status.viewArea.viewTiles.sheetMap
-    const mayBeTiles: ArrayList<TileNumber> | undefined = sheetMap[0]
-    if (mayBeTiles === undefined) {
-      return
-    }
-    const tiles: ArrayList<TileNumber> = mayBeTiles
+    
+    const tiles: TileNumber[] = []
+    Object.values(sheetMap).forEach((tileNumberList: ArrayList<TileNumber>) => {
+      tiles.push(...tileNumberList.toArray())
+    })
+    tiles.sort((t1: TileNumber, t2: TileNumber) => {
+      return t1.center().subtract(status.center).magnitude() - t2.center().subtract(status.center).magnitude()
+    })
 
-    for (let tile of tiles) {
+    for (let tile of tiles.map(tile => tile.toChecked())) {
       const tileName: string = tile.toString()
       if (Object.keys(this.tileCache).includes(tileName)) {
         continue

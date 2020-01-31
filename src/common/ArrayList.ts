@@ -80,4 +80,12 @@ export default class ArrayList<T extends Equalable> implements Iterable<T> {
   mapToArray<U>(mapping: (element: T, index?: number, arrayList?: ArrayList<T>) => U): U[] {
     return this.array.map((element: T, index: number) => mapping(element, index, this))
   }
+
+  forEach(callback: (currentValue: T, index: number, array: ArrayList<T>) => void) {
+    this.array.forEach((current, i) => callback(current, i, this))
+  }
+
+  toArray(): T[] {
+    return this.array
+  }
 }
