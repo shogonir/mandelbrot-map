@@ -17,6 +17,8 @@ export default class MMap {
   public static MinX: number = -2
   public static MaxX: number = 2
 
+  private static RotateRatio: number = 0.005
+
   status: MMapStatus
 
   eventManager: MMapEventManager
@@ -99,8 +101,7 @@ export default class MMap {
     }
 
     const onRotate = (motionInPixel: Vector2) => {
-      const ptu = CanvasUtils.calculatePixelToUnit(this.status.zoom)
-      const motion = motionInPixel.multiply(ptu)
+      const motion = motionInPixel.multiply(MMap.RotateRatio)
       this.status.polar.phi -= motion.x
       this.status.polar.theta -= motion.y
 
