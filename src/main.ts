@@ -3,6 +3,7 @@ import TileNumber from './tile/TileNumber'
 import MMap from './map/MMap'
 import Vector2 from './common/Vector2'
 
+
 (() => {
   const map = new MMap('map', new Vector2(0, 0), 0)
 
@@ -25,4 +26,14 @@ import Vector2 from './common/Vector2'
   map.onCenterChanged = (center: Vector2) => {
     centerPara.innerText = `center: (${center.x.toFixed(4)}, ${center.y.toFixed(4)})`
   }
+
+  const mayBeResetRotationButton = document.getElementById('reset-rotation')
+  if (mayBeResetRotationButton === null) {
+    return
+  }
+  const resetRotationButton = mayBeResetRotationButton
+
+  resetRotationButton.addEventListener('click', () => {
+    map.resetRotation()
+  })
 })()
