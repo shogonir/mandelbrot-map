@@ -153,6 +153,14 @@ export default class MMap {
     this.canvasController = new MMapCanvasController(this.canvas, this.status)
   }
 
+  setPosition(x: number, y: number, z: number) {
+    this.status.center = new Vector2(x, y)
+    this.status.zoom = z
+    if (this.update !== undefined) {
+      this.update()
+    }
+  }
+
   resetRotation() {
     this.status.polar = new PolarCoordinate3(10, -Math.PI / 2, 1 * EngineMath.deg2Rad)
     if (this.update !== undefined) {

@@ -1,12 +1,12 @@
-import MandelbrotSet from './mandelbrot/MandelbrotSet'
-import TileNumber from './tile/TileNumber'
 import MMap from './map/MMap'
 import Vector2 from './common/Vector2'
 
 
 (() => {
+  // create a map
   const map = new MMap('map', new Vector2(0, 0), 0)
 
+  // zoom changed callback
   const mayBeZoomPara = document.getElementById('zoom')
   if (mayBeZoomPara === null) {
     return
@@ -17,6 +17,7 @@ import Vector2 from './common/Vector2'
     zoomPara.innerText = `zoom: ${zoom.toFixed(2)}`
   }
 
+  // center changed callback
   const mayBeCenterPara = document.getElementById('center')
   if (mayBeCenterPara === null) {
     return
@@ -27,6 +28,7 @@ import Vector2 from './common/Vector2'
     centerPara.innerText = `center: (${center.x.toFixed(4)}, ${center.y.toFixed(4)})`
   }
 
+  // reset rotation
   const mayBeResetRotationButton = document.getElementById('reset-rotation')
   if (mayBeResetRotationButton === null) {
     return
@@ -36,4 +38,28 @@ import Vector2 from './common/Vector2'
   resetRotationButton.addEventListener('click', () => {
     map.resetRotation()
   })
+
+  // set position
+  const mayBeInputX = document.getElementById('set-x')
+  const mayBeInputY = document.getElementById('set-y')
+  const mayBeInputZ = document.getElementById('set-z')
+  const mayBeSetPositionButton = document.getElementById('set-position')
+  if (mayBeInputX === null || mayBeInputY === null || mayBeInputZ === null || mayBeSetPositionButton === null) {
+    return
+  }
+  const inputX: HTMLInputElement = mayBeInputX as HTMLInputElement
+  const inputY: HTMLInputElement = mayBeInputY as HTMLInputElement
+  const inputZ: HTMLInputElement = mayBeInputZ as HTMLInputElement
+  const setPositionButton: HTMLButtonElement = mayBeSetPositionButton as HTMLButtonElement
+  
+  setPositionButton.addEventListener('click', () => {
+    const x = parseFloat(inputX.value)
+    const y = parseFloat(inputY.value)
+    const z = parseFloat(inputZ.value)
+    if (Number.isNaN(x) || Number.isNaN(y) || Number.isNaN(z)) {
+      return
+    }
+    map.setPosition(x, y, z)
+  })
+  
 })()
