@@ -9,6 +9,7 @@ import Color from '../../../../common/Color'
 import CanvasUtils from '../../../../util/CanvasUtils'
 import Material from '../../../../engine/object/material/Material'
 import MMapUtils from '../../../util/MMapUtils'
+import CubeGeometry from '../../../../engine/object/geometry/CubeGeometry'
 
 export default class ViewAreaLayer implements Layer {
 
@@ -45,6 +46,11 @@ export default class ViewAreaLayer implements Layer {
   left: GameObject                // 14
   leftTopLeft: GameObject         // 15
 
+  centerBox: GameObject
+  centerBoxRotationX: number
+  centerBoxRotationY: number
+  centerBoxRotationZ: number
+
   constructor(gl: WebGL2RenderingContext, status: MMapStatus) {
     this.gameObjects = []
 
@@ -68,6 +74,22 @@ export default class ViewAreaLayer implements Layer {
     this.left = this.createPoint(redMaterial)
     this.leftTopLeft = this.createPoint(redMaterial)
 
+    this.centerBoxRotationX = 0
+    this.centerBoxRotationY = 0
+    this.centerBoxRotationZ = 0
+    const rotation = Quaternion.fromRadianAndAxis(0, new Vector3(0, 1, 0))
+      .rotateX(this.centerBoxRotationX)
+      .rotateY(this.centerBoxRotationY)
+      .rotateZ(this.centerBoxRotationZ)
+    const cubeGeometry = new CubeGeometry(4.0)
+    const centerBoxMaterial = new SingleColorMaterial(gl, cubeGeometry, Color.red())
+    this.centerBox = new GameObject(
+      Vector3.zero(),
+      rotation,
+      Vector3.one().multiply(4),
+      centerBoxMaterial
+    )
+
     this.gameObjects.push(this.topLeft)
     this.gameObjects.push(this.topTopLeft)
     this.gameObjects.push(this.top)
@@ -84,6 +106,8 @@ export default class ViewAreaLayer implements Layer {
     this.gameObjects.push(this.leftBottomLeft)
     this.gameObjects.push(this.left)
     this.gameObjects.push(this.leftTopLeft)
+
+    this.gameObjects.push(this.centerBox)
 
     this.update(status)
   }
@@ -120,5 +144,13 @@ export default class ViewAreaLayer implements Layer {
     this.leftBottomLeft.position = status.mapping(status.viewArea.leftBottomLeft.toVector2())
     this.left.position = status.mapping(status.viewArea.left.toVector2())
     this.leftTopLeft.position = status.mapping(status.viewArea.leftTopLeft.toVector2())
+
+    this.centerBoxRotationX += 0.2
+    this.centerBoxRotationY += 0.3
+    this.centerBoxRotationZ += 0.5
+    this.centerBox.rotation = Quaternion.fromRadianAndAxis(0, new Vector3(0, 1, 0))
+      .rotateX(this.centerBoxRotationX)
+      .rotateY(this.centerBoxRotationY)
+      .rotateZ(this.centerBoxRotationZ)
   }
 }

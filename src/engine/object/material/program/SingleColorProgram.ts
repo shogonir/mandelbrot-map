@@ -120,7 +120,7 @@ export default class SingleColorProgram implements Program {
     const colors: number[] = []
     Numbers.range(0, this.geometry.vertices.length, 3)
       .forEach(() => {
-        colors.push(...[color.r, color.g, color.b, color.a])
+        colors.push(color.r, color.g, color.b, color.a)
       })
     const typedColors = new Float32Array(colors)
 
@@ -178,6 +178,8 @@ export default class SingleColorProgram implements Program {
     if (this.color !== undefined) {
       this.setColor(this.color)
     }
+
+    this.setupGeometry(this.geometry)
 
     this.gl.drawElements(this.gl.TRIANGLES, this.geometry.indices.length, this.gl.UNSIGNED_SHORT, 0)
   }
