@@ -8,8 +8,7 @@ import PlaneGeometry from '../../../../engine/object/geometry/PlaneGeometry'
 import Color from '../../../../common/Color'
 import CanvasUtils from '../../../../util/CanvasUtils'
 import Material from '../../../../engine/object/material/Material'
-import MMapUtils from '../../../util/MMapUtils'
-import CubeGeometry from '../../../../engine/object/geometry/CubeGeometry'
+import SphereGeometry from '../../../../engine/object/geometry/SphereGeometry'
 
 export default class ViewAreaLayer implements Layer {
 
@@ -81,8 +80,8 @@ export default class ViewAreaLayer implements Layer {
       .rotateX(this.centerBoxRotationX)
       .rotateY(this.centerBoxRotationY)
       .rotateZ(this.centerBoxRotationZ)
-    const cubeGeometry = new CubeGeometry(4.0)
-    const centerBoxMaterial = new SingleColorMaterial(gl, cubeGeometry, Color.red())
+    const sphereGeometry = new SphereGeometry(4.0)
+    const centerBoxMaterial = new SingleColorMaterial(gl, sphereGeometry, Color.red())
     this.centerBox = new GameObject(
       Vector3.zero(),
       rotation,
