@@ -1,5 +1,6 @@
 import MMap from './map/MMap'
 import Vector2 from './common/Vector2'
+import { Optional } from './type/type'
 
 
 (() => {
@@ -60,6 +61,24 @@ import Vector2 from './common/Vector2'
       return
     }
     map.setPosition(x, y, z)
+  })
+
+  // save button
+  const saveButton: Optional<HTMLElement> = document.getElementById('save')
+  const mapCanvas: Optional<HTMLElement> = document.getElementById('map')
+  const saveImage: Optional<HTMLElement> = document.getElementById('save-image')
+  if ( !saveButton || !mapCanvas || !saveImage ) {
+    return
+  }
+  const save = saveButton as HTMLButtonElement
+  const canvas = mapCanvas as HTMLCanvasElement
+  const image = saveImage as HTMLImageElement
+  canvas.toBlob((blob) => {
+    const url = URL.createObjectURL(blob);
+    image.onload = function() {
+      URL.revokeObjectURL(url);
+    };
+    image.src = url;
   })
   
 })()
