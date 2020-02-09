@@ -119,10 +119,8 @@ export default class SingleColorProgram implements Program {
 
     const colors: number[] = []
     Numbers.range(0, this.geometry.vertices.length, 3)
-      .forEach((index: number) => {
-        const vertexIndex = Math.round(index / 3)
-        let c = Color.numberToColors6(vertexIndex)
-        colors.push(c.r, c.g, c.b, c.a)
+      .forEach(() => {
+        colors.push(color.r, color.g, color.b, color.a)
       })
     const typedColors = new Float32Array(colors)
 
