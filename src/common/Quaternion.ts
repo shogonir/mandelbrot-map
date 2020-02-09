@@ -72,16 +72,17 @@ export default class Quaternion {
 
   toMat4(): mat4 {
     const matrix = mat4.create()
+    const s = 2 / this.norm()
     const a = this.a
     const b = this.b
     const c = this.c
     const d = this.d
     mat4.set(
       matrix, 
-      2 * a**2 + 2 * b**2 - 1, 2 * (b * c + a * d), 2 * (b * d - a * c), 0,
-      2 * (b * c - d * a), 2 * b**2 + 2 * d**2 - 1, 2 * (a * b + c * d), 0,
-      2 * (b * d + a * c), 2 * (c * d - a * b), 2 * a**2 + 2 * d**2 - 1, 0,
-      0, 0, 0, 1
+      1 - s * (c**2 + d**2) , s * (b * c - a * d)   , s * (b * d + a * c)   , 0,
+      s * (b * c + d * a)   , 1 - s * (b**2 + d**2) , s * (c * d - a * b)   , 0,
+      s * (b * d - a * c)   , s * (c * d + a * b)   , 1 - s * (b**2 + c**2) , 0,
+      0                     , 0                     , 0                     , 1
     )
     return matrix
   }

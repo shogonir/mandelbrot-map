@@ -14,8 +14,8 @@ export default class PlaneGeometry implements Geometry {
       halfWidth, -halfWidth, 0.0,
     ]
     this.indices = [
-      0, 2, 1,
-      1, 2, 3
+      0, 1, 2,
+      1, 3, 2
     ]
   }
 }

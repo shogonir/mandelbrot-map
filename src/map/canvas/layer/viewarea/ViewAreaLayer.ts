@@ -9,6 +9,7 @@ import Color from '../../../../common/Color'
 import CanvasUtils from '../../../../util/CanvasUtils'
 import Material from '../../../../engine/object/material/Material'
 import SphereGeometry from '../../../../engine/object/geometry/SphereGeometry'
+import CubeGeometry from '../../../../engine/object/geometry/CubeGeometry'
 
 export default class ViewAreaLayer implements Layer {
 
@@ -80,12 +81,12 @@ export default class ViewAreaLayer implements Layer {
       .rotateX(this.centerBoxRotationX)
       .rotateY(this.centerBoxRotationY)
       .rotateZ(this.centerBoxRotationZ)
-    const sphereGeometry = new SphereGeometry(4.0)
-    const centerBoxMaterial = new SingleColorMaterial(gl, sphereGeometry, Color.red())
+    const geometry = new CubeGeometry(1.0)
+    const centerBoxMaterial = new SingleColorMaterial(gl, geometry, Color.red())
     this.centerBox = new GameObject(
       Vector3.zero(),
       rotation,
-      Vector3.one().multiply(4),
+      Vector3.one(),
       centerBoxMaterial
     )
 
