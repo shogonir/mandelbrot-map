@@ -10,6 +10,7 @@ import CanvasUtils from '../../../../util/CanvasUtils'
 import Material from '../../../../engine/object/material/Material'
 import SphereGeometry from '../../../../engine/object/geometry/SphereGeometry'
 import CubeGeometry from '../../../../engine/object/geometry/CubeGeometry'
+import ConeGeometry from '../../../../engine/object/geometry/ConeGeometry'
 
 export default class ViewAreaLayer implements Layer {
 
