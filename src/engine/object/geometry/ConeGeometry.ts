@@ -29,17 +29,5 @@ export default class ConeGeometry implements Geometry {
       }
     }
     this.vertices.push(0, y, 0)
-
-    console.log(`vertices(${this.vertices.length / 3})`)
-    for (let index = 0; index < this.vertices.length; index += 3) {
-      console.log(this.vertices[index], this.vertices[index + 1], this.vertices[index + 2])
-    }
-
-    console.log('')
-
-    console.log(`indices(${this.indices.length})`)
-    for (let index = 0; index < this.indices.length; index += 3) {
-      console.log(this.indices[index], this.indices[index + 1], this.indices[index + 2])
-    }
   }
 }
