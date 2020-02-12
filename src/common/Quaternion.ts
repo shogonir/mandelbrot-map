@@ -62,18 +62,15 @@ export default class Quaternion {
     return new Vector3(vec[0], vec[1], vec[2])
   }
 
-  rotateX(degree: number): Quaternion {
-    const radian = degree * EngineMath.deg2Rad
+  rotateX(radian: number): Quaternion {
     return this.multiply(Quaternion.fromRadianAndAxis(radian, new Vector3(1, 0, 0)))
   }
 
-  rotateY(degree: number): Quaternion {
-    const radian = degree * EngineMath.deg2Rad
+  rotateY(radian: number): Quaternion {
     return this.multiply(Quaternion.fromRadianAndAxis(radian, new Vector3(0, 1, 0)))
   }
 
-  rotateZ(degree: number): Quaternion {
-    const radian = degree * EngineMath.deg2Rad
+  rotateZ(radian: number): Quaternion {
     return this.multiply(Quaternion.fromRadianAndAxis(radian, new Vector3(0, 0, 1)))
   }
 
