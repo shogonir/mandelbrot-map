@@ -46,7 +46,8 @@ export default class TileSheetLayer implements Layer {
     const rangeX = this.calculateRangeX(status)
     const minXMulti4 = 4 * Math.floor(rangeX.min / 4)
     const maxXMulti4 = 4 * Math.ceil(rangeX.max / 4)
-    const xsMulti4 = Numbers.range(minXMulti4, maxXMulti4, 4, true)
+    // const xsMulti4 = Numbers.range(minXMulti4, maxXMulti4, 4, true)
+    const xsMulti4 = [0]
     this.updatePosition(status, xsMulti4)
     this.gameObjects = Object.values(this.sheetMap)
   }
@@ -106,7 +107,7 @@ export default class TileSheetLayer implements Layer {
   private updatePosition(status: MMapStatus, xsMulti4: number[]) {
     const targetSheetIndices: number[] = xsMulti4.map(x => Math.round(x / 4))
     const currentSheetIndices: number[] = Object.keys(this.sheetMap).map(index => parseInt(index, 10))
-    
+
     currentSheetIndices.forEach(sheetIndex => {
       const sheet = this.sheetMap[sheetIndex]
       sheet.mapUpdate(status)

@@ -1,4 +1,4 @@
-import { mat4 } from 'gl-matrix'
+import { mat4, vec3 } from 'gl-matrix'
 
 import Vector3 from './Vector3'
 import EngineMath from '../engine/common/EngineMath'
@@ -53,6 +53,13 @@ export default class Quaternion {
 
   inverse(): Quaternion {
     return this.conjugate().scalarTimes(1 / this.squaredNorm())
+  }
+
+  product(v: Vector3): Vector3 {
+    const mat: mat4 = this.toMat4()
+    const vec: vec3 = vec3.fromValues(v.x, v.y, v.z)
+    vec3.transformMat4(vec, vec, mat)
+    return new Vector3(vec[0], vec[1], vec[2])
   }
 
   rotateX(degree: number): Quaternion {

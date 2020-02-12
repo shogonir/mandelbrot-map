@@ -5,7 +5,7 @@ import { Optional } from './type/type'
 
 (() => {
   // create a map
-  const map = new MMap('map', new Vector2(0, 0), 0)
+  const map = new MMap('map', new Vector2(0, 0), 2.5)
 
   // zoom changed callback
   const mayBeZoomPara = document.getElementById('zoom')

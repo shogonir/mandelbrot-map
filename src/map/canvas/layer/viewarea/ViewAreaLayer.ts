@@ -75,21 +75,21 @@ export default class ViewAreaLayer implements Layer {
     this.left = this.createPoint(redMaterial)
     this.leftTopLeft = this.createPoint(redMaterial)
 
-    this.centerBoxRotationX = 0
-    this.centerBoxRotationY = 0
-    this.centerBoxRotationZ = 0
-    const rotation = Quaternion.fromRadianAndAxis(0, new Vector3(0, 1, 0))
-      .rotateX(this.centerBoxRotationX)
-      .rotateY(this.centerBoxRotationY)
-      .rotateZ(this.centerBoxRotationZ)
-    const geometry = new CubeGeometry(1.0)
-    const centerBoxMaterial = new SingleColorMaterial(gl, geometry, Color.red())
-    this.centerBox = new GameObject(
-      Vector3.zero(),
-      rotation,
-      Vector3.one(),
-      centerBoxMaterial
-    )
+    // this.centerBoxRotationX = 0
+    // this.centerBoxRotationY = 0
+    // this.centerBoxRotationZ = 0
+    // const rotation = Quaternion.fromRadianAndAxis(0, new Vector3(0, 1, 0))
+    //   .rotateX(this.centerBoxRotationX)
+    //   .rotateY(this.centerBoxRotationY)
+    //   .rotateZ(this.centerBoxRotationZ)
+    // const geometry = new CubeGeometry(1.0)
+    // const centerBoxMaterial = new SingleColorMaterial(gl, geometry, Color.red())
+    // this.centerBox = new GameObject(
+    //   Vector3.zero(),
+    //   rotation,
+    //   Vector3.one(),
+    //   centerBoxMaterial
+    // )
 
     this.gameObjects.push(this.topLeft)
     this.gameObjects.push(this.topTopLeft)
@@ -108,7 +108,7 @@ export default class ViewAreaLayer implements Layer {
     this.gameObjects.push(this.left)
     this.gameObjects.push(this.leftTopLeft)
 
-    this.gameObjects.push(this.centerBox)
+    // this.gameObjects.push(this.centerBox)
 
     this.update(status)
   }
@@ -146,12 +146,12 @@ export default class ViewAreaLayer implements Layer {
     this.left.position = status.mapping(status.viewArea.left.toVector2())
     this.leftTopLeft.position = status.mapping(status.viewArea.leftTopLeft.toVector2())
 
-    this.centerBoxRotationX += 0.2
-    this.centerBoxRotationY += 0.3
-    this.centerBoxRotationZ += 0.5
-    this.centerBox.rotation = Quaternion.fromRadianAndAxis(0, new Vector3(0, 1, 0))
-      .rotateX(this.centerBoxRotationX)
-      .rotateY(this.centerBoxRotationY)
-      .rotateZ(this.centerBoxRotationZ)
+    // this.centerBoxRotationX += 0.2
+    // this.centerBoxRotationY += 0.3
+    // this.centerBoxRotationZ += 0.5
+    // this.centerBox.rotation = Quaternion.fromRadianAndAxis(0, new Vector3(0, 1, 0))
+    //   .rotateX(this.centerBoxRotationX)
+    //   .rotateY(this.centerBoxRotationY)
+    //   .rotateZ(this.centerBoxRotationZ)
   }
 }
