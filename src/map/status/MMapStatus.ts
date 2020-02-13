@@ -78,17 +78,25 @@ export default class MMapStatus {
 
   static complexToRotation(v: Vector2): Quaternion {
     return Quaternion.fromRadianAndAxis(0, new Vector3(0, 1, 0))
-      .rotateX(v.y * Math.PI / 4)
-      .rotateY(-v.x * Math.PI / 2)
+      .rotateX(MMapStatus.yToRadian(v.y))
+      .rotateY(-MMapStatus.xToRadian(v.x))
   }
 
   private static complexToPosition(v: Vector2): Vector3 {
-    const theta = v.y * Math.PI / 4
-    const phi = v.x * Math.PI / 2
+    const theta = MMapStatus.yToRadian(v.y)
+    const phi = MMapStatus.xToRadian(v.x)
     const radius = MMapUtils.SqhereRadius
     const x = radius * Math.cos(theta) * Math.sin(phi)
     const y = radius * Math.sin(theta)
     const z = radius * Math.cos(theta) * Math.cos(phi)
     return new Vector3(x, y, z)
+  }
+
+  private static xToRadian(x: number): number {
+    return x * Math.PI / 2
+  }
+
+  private static yToRadian(y: number): number {
+    return 0.95 * y * Math.PI / 4
   }
 }

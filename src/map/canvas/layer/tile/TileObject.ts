@@ -30,7 +30,7 @@ export default class TileObject extends GameObject {
   }
 
   mapUpdate(status: MMapStatus) {
-    const side = TileNumber.calculateSide(status.zoomAsInt) * 0.1
+    const side = TileNumber.calculateSide(status.zoomAsInt) * 0.3
     this.scale = new Vector3(side, side, 1)
     this.position = status.mapping(this.tileNumber.center())
     this.rotation = MMapStatus.complexToRotation(this.tileNumber.center()).multiply(
