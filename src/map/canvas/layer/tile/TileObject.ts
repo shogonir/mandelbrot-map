@@ -33,6 +33,9 @@ export default class TileObject extends GameObject {
     const side = TileNumber.calculateSide(status.zoomAsInt) * 0.1
     this.scale = new Vector3(side, side, 1)
     this.position = status.mapping(this.tileNumber.center())
+    this.rotation = MMapStatus.complexToRotation(this.tileNumber.center()).multiply(
+      MMapStatus.complexToRotation(status.center).inverse()
+    )
 
     this.updateTextureIfNeeded()
   }

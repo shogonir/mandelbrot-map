@@ -69,13 +69,17 @@ export default class MMapStatus {
 
   mapping(v: Vector2): Vector3 {
     const centerPosition = MMapStatus.complexToPosition(this.center.clone())
-    const centerRotation = Quaternion.fromRadianAndAxis(0, new Vector3(0, 1, 0))
-      .rotateX(this.center.y * Math.PI / 4)
-      .rotateY(-this.center.x * Math.PI / 2)
+    const centerRotation = MMapStatus.complexToRotation(this.center)
     const inverseRotation = centerRotation.inverse()
     const targetPosition = MMapStatus.complexToPosition(v.clone())
     const result = inverseRotation.product(targetPosition.subtract(centerPosition))
     return result
+  }
+
+  static complexToRotation(v: Vector2): Quaternion {
+    return Quaternion.fromRadianAndAxis(0, new Vector3(0, 1, 0))
+      .rotateX(v.y * Math.PI / 4)
+      .rotateY(-v.x * Math.PI / 2)
   }
 
   private static complexToPosition(v: Vector2): Vector3 {
