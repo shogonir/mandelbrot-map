@@ -20,7 +20,7 @@ export default class TileObject extends GameObject {
     getTexture: (tileName: string) => ImageBitmap | undefined
   ) {
     const rotation = Quaternion.fromRadianAndAxis(0, new Vector3(0, 1, 0))
-    const scale = Vector3.one().multiply(0.5)
+    const scale = Vector3.one()
     super(position, rotation, scale, material)
 
     this.material = material
@@ -30,12 +30,26 @@ export default class TileObject extends GameObject {
   }
 
   mapUpdate(status: MMapStatus) {
-    const side = TileNumber.calculateSide(status.zoomAsInt) * 0.3
-    this.scale = new Vector3(side, side, 1)
     this.position = status.mapping(this.tileNumber.center())
-    this.rotation = MMapStatus.complexToRotation(this.tileNumber.center()).multiply(
-      MMapStatus.complexToRotation(status.center).inverse()
+    const bottomLeftPosition = status.mapping(this.tileNumber.bottomLeft()).subtract(this.position)
+    const topRightPosition = status.mapping(this.tileNumber.topRight()).subtract(this.position)
+    this.material.geometry.vertices = [
+      -topRightPosition.x, topRightPosition.y, 0,
+      0.0, 0.0,
+      bottomLeftPosition.x, bottomLeftPosition.y, 0,
+      0.0, 1.0,
+      topRightPosition.x, topRightPosition.y, 0,
+      1.0, 0.0,
+      -bottomLeftPosition.x, bottomLeftPosition.y, 0,
+      1.0, 1.0
+    ]
+
+    this.rotation = MMapStatus.complexToRotationForTile(
+      this.tileNumber.center()
+    ).multiply(
+      MMapStatus.complexToRotationForTile(status.center).inverse()
     )
+
 
     this.updateTextureIfNeeded()
   }

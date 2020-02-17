@@ -103,6 +103,14 @@ export default class TileNumber implements Equalable {
     return this.centerCoord.y + this.half
   }
 
+  bottomLeft(): Vector2 {
+    return new Vector2(this.left(), this.bottom())
+  }
+
+  topRight(): Vector2 {
+    return new Vector2(this.right(), this.top())
+  }
+
   toChecked(): TileNumber {
     const numberOfTilesInSide = 2 ** this.z
 

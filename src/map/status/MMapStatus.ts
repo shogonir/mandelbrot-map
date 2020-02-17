@@ -82,6 +82,11 @@ export default class MMapStatus {
       .rotateY(-MMapStatus.xToRadian(v.x))
   }
 
+  static complexToRotationForTile(v: Vector2): Quaternion {
+    return Quaternion.fromRadianAndAxis(0, new Vector3(0, 1, 0))
+      .rotateY(-MMapStatus.xToRadian(v.x))
+  }
+
   private static complexToPosition(v: Vector2): Vector3 {
     const theta = MMapStatus.yToRadian(v.y)
     const phi = MMapStatus.xToRadian(v.x)

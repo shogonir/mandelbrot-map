@@ -156,19 +156,6 @@ export default class CanvasTextureProgram implements Program {
   }
 
   update(gameObject: GameObject, camera: Camera) {
-    const min = 0.5
-    const diff = 1.0 - min
-    this.geometry.vertices = [
-      -(min + diff * Math.random()), (min + diff * Math.random()), 0.0,
-      0.0, 0.0,
-      -(min + diff * Math.random()), -(min + diff * Math.random()), 0.0,
-      0.0, 1.0,
-      (min + diff * Math.random()), (min + diff * Math.random()), 0.0,
-      1.0, 0.0,
-      (min + diff * Math.random()), -(min + diff * Math.random()), 0.0,
-      1.0, 1.0
-    ]
-    
     this.updateUniform(gameObject, camera)
   }
 
