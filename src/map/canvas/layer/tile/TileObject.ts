@@ -31,25 +31,27 @@ export default class TileObject extends GameObject {
 
   mapUpdate(status: MMapStatus) {
     this.position = status.mapping(this.tileNumber.center())
+    this.position = Vector3.zero()
     const bottomLeftPosition = status.mapping(this.tileNumber.bottomLeft()).subtract(this.position)
+    const bottomRightPosition = status.mapping(this.tileNumber.bottomRight()).subtract(this.position)
+    const topLeftPosition = status.mapping(this.tileNumber.topLeft()).subtract(this.position)
     const topRightPosition = status.mapping(this.tileNumber.topRight()).subtract(this.position)
     this.material.geometry.vertices = [
-      -topRightPosition.x, topRightPosition.y, 0,
+      topLeftPosition.x, topLeftPosition.y, topLeftPosition.z,
       0.0, 0.0,
-      bottomLeftPosition.x, bottomLeftPosition.y, 0,
+      bottomLeftPosition.x, bottomLeftPosition.y, bottomLeftPosition.z,
       0.0, 1.0,
-      topRightPosition.x, topRightPosition.y, 0,
+      topRightPosition.x, topRightPosition.y, topRightPosition.z,
       1.0, 0.0,
-      -bottomLeftPosition.x, bottomLeftPosition.y, 0,
+      bottomRightPosition.x, bottomRightPosition.y, bottomRightPosition.z,
       1.0, 1.0
     ]
 
-    this.rotation = MMapStatus.complexToRotationForTile(
-      this.tileNumber.center()
-    ).multiply(
-      MMapStatus.complexToRotationForTile(status.center).inverse()
-    )
-
+    // this.rotation = MMapStatus.complexToRotationForTile(
+    //   this.tileNumber.center()
+    // ).multiply(
+    //   MMapStatus.complexToRotationForTile(status.center).inverse()
+    // )
 
     this.updateTextureIfNeeded()
   }

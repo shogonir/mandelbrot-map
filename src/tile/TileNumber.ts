@@ -107,6 +107,14 @@ export default class TileNumber implements Equalable {
     return new Vector2(this.left(), this.bottom())
   }
 
+  bottomRight(): Vector2 {
+    return new Vector2(this.right(), this.bottom())
+  }
+
+  topLeft(): Vector2 {
+    return new Vector2(this.left(), this.top())
+  }
+
   topRight(): Vector2 {
     return new Vector2(this.right(), this.top())
   }
