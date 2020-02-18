@@ -63,22 +63,13 @@ import { Optional } from './type/type'
     map.setPosition(x, y, z)
   })
 
-  // save button
-  const saveButton: Optional<HTMLElement> = document.getElementById('save')
-  const mapCanvas: Optional<HTMLElement> = document.getElementById('map')
-  const saveImage: Optional<HTMLElement> = document.getElementById('save-image')
-  if ( !saveButton || !mapCanvas || !saveImage ) {
+  const mayBeEarthModeButton = document.getElementById('e-mode')
+  if (mayBeEarthModeButton === null) {
     return
   }
-  const save = saveButton as HTMLButtonElement
-  const canvas = mapCanvas as HTMLCanvasElement
-  const image = saveImage as HTMLImageElement
-  canvas.toBlob((blob) => {
-    const url = URL.createObjectURL(blob);
-    image.onload = function() {
-      URL.revokeObjectURL(url);
-    };
-    image.src = url;
+  const earthModeButton: HTMLButtonElement = mayBeEarthModeButton as HTMLButtonElement
+
+  earthModeButton.addEventListener('click', () => {
+    map.setEarthMode(!map.isEarthMode())
   })
-  
 })()

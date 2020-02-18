@@ -25,6 +25,8 @@ export default class MMapStatus {
   verticalFov: number
   aspect: number
 
+  isEarthMode: boolean
+
   viewArea: MMapViewArea
 
   mapUpdate: (() => void) | undefined
@@ -44,6 +46,7 @@ export default class MMapStatus {
     this.polar = polar
     this.cameraTarget = cameraTarget
     this.aspect = clientWidth / clientHeight
+    this.isEarthMode = false
     this.update()
     this.viewArea = new MMapViewArea(this)
     this.mapUpdate = undefined

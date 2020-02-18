@@ -167,4 +167,19 @@ export default class MMap {
       this.update()
     }
   }
+
+  isEarthMode(): boolean {
+    if (this.status === undefined) {
+      return false
+    }
+    return this.status.isEarthMode
+  }
+
+  setEarthMode(enable: boolean) {
+    console.log(enable)
+    if (this.status === undefined) {
+      return
+    }
+    this.status.isEarthMode = enable
+  }
 }
