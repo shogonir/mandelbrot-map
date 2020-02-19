@@ -1,9 +1,14 @@
 import MMap from './map/MMap'
 import Vector2 from './common/Vector2'
 import { Optional } from './type/type'
+import Sphere3 from './common/Sphere3'
+import Vector3 from './common/Vector3'
+import Ray3 from './common/Ray3'
 
 
 (() => {
+  console.log(new Sphere3(Vector3.zero(), 1).intersectsWithRay3(new Ray3(new Vector3(1, 1, 1), new Vector3(-1, -1, -1))))
+
   // create a map
   const map = new MMap('map', new Vector2(0, 0), 2.5)
 
