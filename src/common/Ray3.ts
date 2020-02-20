@@ -1,4 +1,5 @@
 import Vector3 from './Vector3'
+import Plane3 from './Plane3'
 
 export default class Ray3 {
 
@@ -71,5 +72,18 @@ export default class Ray3 {
 
     const coefficient = (z - this.start.z) / this.direction.z
     return this.start.add(this.direction.multiply(coefficient))
+  }
+
+  intersectsWithPlane3(plane: Plane3): Vector3 | undefined {
+    const p = plane.point
+    const n = plane.normal
+    const s = this.start
+    const d = this.direction
+    const t = n.x * (p.x - s.x) + n.y * (p.y - s.y) + n.z * (p.z - s.z)
+      / (n.x * d.x + n.y * d.y + n.z * d.z)
+    if (t < 0) {
+      return undefined
+    }
+    return this.start.add(this.direction.multiply(t))
   }
 }
