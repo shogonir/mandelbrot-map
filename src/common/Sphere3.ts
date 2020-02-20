@@ -1,6 +1,8 @@
 import Vector3 from './Vector3'
 import Ray3 from './Ray3'
 import MathUtil from './MathUtil'
+import Plane3 from './Plane3'
+import Circle3 from './Circle3'
 
 export default class Sphere3 {
 
@@ -38,5 +40,33 @@ export default class Sphere3 {
       intersections.push(new Vector3(x, y, z))
     }
     return intersections
+  }
+
+  intersectsWithPlane3(plane: Plane3): Circle3 | Vector3 | undefined {
+    const ray1 = new Ray3(this.center.clone(), plane.normal.clone())
+    const ray2 = new Ray3(this.center.clone(), plane.normal.multiply(-1))
+
+    let intersection: Vector3
+    let mayBeIntersection = ray1.intersectsWithPlane3(plane)
+    if (mayBeIntersection !== undefined) {
+      intersection = mayBeIntersection
+    } else {
+      mayBeIntersection = ray2.intersectsWithPlane3(plane)
+      if (mayBeIntersection !== undefined) {
+        intersection = mayBeIntersection
+      } else {
+        return undefined
+      }
+    }
+
+    const distance = intersection.subtract(this.center).magnitude()
+    if (distance > this.radius) {
+      return undefined
+    }
+    if (distance === this.radius) {
+      return intersection
+    }
+    const radius = Math.sqrt(this.radius ** 2 - distance ** 2)
+    return new Circle3(plane.clone(), intersection, radius)
   }
 }
