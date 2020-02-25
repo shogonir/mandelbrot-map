@@ -106,4 +106,8 @@ export default class Quaternion {
       normalized.z * sinHalfRadian
     )
   }
+
+  static zero(): Quaternion {
+    return Quaternion.fromRadianAndAxis(0, new Vector3(0, 1, 0))
+  }
 }
